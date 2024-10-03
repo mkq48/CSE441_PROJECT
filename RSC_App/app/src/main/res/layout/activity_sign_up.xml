@@ -21,7 +21,6 @@
         android:layout_gravity="center"
         android:layout_marginTop="20dp"
         android:drawableEnd="@drawable/ic_person"
-        android:hint="@string/ten_dang_nhap"
         android:importantForAutofill="no"
         android:inputType="text"
         android:minHeight="48dp" />

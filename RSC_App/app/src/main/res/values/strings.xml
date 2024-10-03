@@ -1,8 +1,9 @@
 <resources>
     <string name="app_name">RCS</string>
-    <string name="dang_nhap">Dang nhap</string>
-    <string name="dang_ki">Dang ki</string>
-    <string name="ten_dang_nhap">Ten dang nhap</string>
-    <string name="mat_khau">Mat khau</string>
+
+    <string name="dang_ki_tk">ĐĂNG KÝ TÀI KHOẢN</string>
+
+
+
     <string name="user_profile">User profile</string>
 </resources>
