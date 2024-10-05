@@ -4,13 +4,15 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.rcs.databinding.ActivitySignInBinding;
-import com.example.rcs.viewmodel.AuthViewModel;
+import com.example.rcs.viewmodel.SignInViewModel;
 
 public class SignInActivity extends AppCompatActivity {
 
@@ -21,12 +23,32 @@ public class SignInActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         //inflate layout
-        ActivitySignInBinding binding = ActivitySignInBinding.inflate(getLayoutInflater());
+        ActivitySignInBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_sign_in);
 
         //create view model
-        AuthViewModel viewModel = new ViewModelProvider(this).get(AuthViewModel.class);
-        binding.setAuthViewModel(viewModel);
+        SignInViewModel viewModel = new ViewModelProvider(this).get(SignInViewModel.class);
+        binding.setSignInViewModel(viewModel);
         binding.setLifecycleOwner(this);
+
+        //set lifecycle owner
+        binding.setLifecycleOwner(this);
+
+        //set error message
+        viewModel.emailError.observe(this, s -> {
+            binding.dnEmail.requestFocus();
+            binding.dnEmail.setError(s);
+        });
+        viewModel.passwordError.observe(this, s ->{
+            binding.dnMatKhau.requestFocus();
+            binding.dnMatKhau.setError(s);
+        });
+        viewModel.isLoginSuccess.observe(this, aBoolean -> {
+            if(aBoolean){
+                //go to main activity
+                Intent intent = new Intent(this, MainActivity.class);
+                startActivity(intent);
+            }else Toast.makeText(this, "Đăng nhập thất bại", Toast.LENGTH_SHORT).show();
+        });
 
         //event handler
         binding.toggle.setOnClickListener(view -> {
@@ -50,12 +72,13 @@ public class SignInActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-        binding.btnDangNhap.setOnClickListener(view ->{
-
+        binding.quenMk.setOnClickListener(view ->{
+            //go to reset password activity
+            Intent intent = new Intent(this, ResetPasswordActivity.class);
+            startActivity(intent);
         });
 
-        //set layout
-        setContentView(binding.getRoot());
+
     }
 
 }

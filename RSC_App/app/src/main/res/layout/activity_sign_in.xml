@@ -4,8 +4,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
         <variable
-            name="authViewModel"
-            type="com.example.rcs.viewmodel.AuthViewModel" />
+            name="signInViewModel"
+            type="com.example.rcs.viewmodel.SignInViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -63,6 +63,7 @@
             app:layout_constraintGuide_begin="320dp" />
 
         <EditText
+            android:text="@={signInViewModel.email}"
             android:id="@+id/dn_email"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -80,6 +81,7 @@
             tools:ignore="VisualLintTextFieldSize" />
 
         <EditText
+            android:text="@={signInViewModel.password}"
             android:id="@+id/dn_mat_khau"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -121,6 +123,7 @@
             app:layout_constraintTop_toTopOf="@+id/guideline3" />
 
         <Button
+            android:onClick="@{()->signInViewModel.dangNhap()}"
             android:id="@+id/btn_dang_nhap"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

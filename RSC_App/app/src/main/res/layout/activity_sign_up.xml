@@ -4,186 +4,186 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
         <variable
-            name="authViewModel"
-            type="com.example.rcs.viewmodel.AuthViewModel" />
+            name="signUpViewModel"
+            type="com.example.rcs.viewmodel.SignUpViewModel" />
     </data>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:padding="20dp">
+        android:layout_height="match_parent">
 
-        <ImageView
-            android:id="@+id/logo"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:layout_marginStart="70dp"
-            android:contentDescription="@string/app_name"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/logo_app"
-            tools:ignore="ImageContrastCheck" />
-
-        <TextView
-            android:id="@+id/textView3"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:gravity="center"
-            android:text="@string/app_name"
-            android:textColor="#689F38"
-            android:textSize="60sp"
-            app:layout_constraintBottom_toBottomOf="@id/logo"
-            app:layout_constraintStart_toEndOf="@id/logo"
-            app:layout_constraintTop_toTopOf="@+id/logo" />
-
-        <TextView
-            android:id="@+id/textView4"
-            android:layout_width="wrap_content"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="60dp"
-            android:text="@string/dang_ki_tk"
-            android:textSize="18sp"
-            app:layout_constraintEnd_toEndOf="@+id/textView3"
-            app:layout_constraintStart_toStartOf="@+id/logo"
-            app:layout_constraintTop_toBottomOf="@+id/logo" />
+            android:orientation="vertical"
+            android:padding="20dp">
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_begin="260dp" />
+            <ImageView
+                android:id="@+id/logo"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginStart="70dp"
+                android:contentDescription="@string/app_name"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/logo_app"
+                tools:ignore="ImageContrastCheck" />
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_begin="320dp" />
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:gravity="center"
+                android:text="@string/app_name"
+                android:textColor="#689F38"
+                android:textSize="60sp"
+                app:layout_constraintBottom_toBottomOf="@id/logo"
+                app:layout_constraintStart_toEndOf="@id/logo"
+                app:layout_constraintTop_toTopOf="@+id/logo" />
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline6"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_begin="380dp" />
+            <TextView
+                android:id="@+id/textView4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="60dp"
+                android:text="@string/dang_ki_tk"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="@+id/textView3"
+                app:layout_constraintStart_toStartOf="@+id/logo"
+                app:layout_constraintTop_toBottomOf="@+id/logo" />
 
-        <EditText
-            android:id="@+id/ten_dang_nhap"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:drawableEnd="@drawable/ic_person"
-            android:ems="10"
-            android:hint="@string/ten_tai_khoan"
-            android:importantForAutofill="no"
-            android:inputType="text"
-            android:minHeight="48dp"
-            android:textColorHint="#546E7A"
-            app:layout_constraintBottom_toBottomOf="@id/guideline"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_begin="260dp" />
 
-        <EditText
-            android:id="@+id/ngay_sinh"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:drawableEnd="@drawable/calendar_month_24"
-            android:editable="false"
-            android:ems="10"
-            android:hint="@string/ngay_sinh"
-            android:importantForAutofill="no"
-            android:minHeight="48dp"
-            android:textColorHint="#546E7A"
-            app:layout_constraintBottom_toTopOf="@+id/guideline4"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            tools:ignore="Deprecated,TextFields" />
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_begin="320dp" />
 
-        <EditText
-            android:id="@+id/email_dk"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:drawableEnd="@drawable/alternate_email_24"
-            android:ems="10"
-            android:hint="@string/email_dk"
-            android:importantForAutofill="no"
-            android:inputType="text|textEmailAddress"
-            android:minHeight="48dp"
-            android:textColorHint="#546E7A"
-            app:layout_constraintBottom_toTopOf="@+id/guideline6"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_begin="380dp" />
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline7"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_begin="440dp" />
+            <EditText
+                android:id="@+id/ten_dang_nhap"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:drawableEnd="@drawable/ic_person"
+                android:ems="10"
+                android:hint="@string/ten_tai_khoan"
+                android:importantForAutofill="no"
+                android:inputType="text"
+                android:minHeight="48dp"
+                android:text="@={signUpViewModel.tenTaiKhoan}"
+                android:textColorHint="#546E7A"
+                app:layout_constraintBottom_toBottomOf="@id/guideline"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
 
-        <EditText
-            android:id="@+id/password_dk"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:drawableEnd="@drawable/ic_passworddoc"
-            android:ems="10"
-            android:hint="@string/mat_khau_dk"
-            android:importantForAutofill="no"
-            android:inputType="text|textPassword"
-            android:minHeight="48dp"
-            android:textColorHint="#546E7A"
-            app:layout_constraintBottom_toTopOf="@+id/guideline7"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            <EditText
+                android:id="@+id/ngay_sinh"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:drawableEnd="@drawable/calendar_month_24"
+                android:editable="false"
+                android:ems="10"
+                android:hint="@string/ngay_sinh"
+                android:importantForAutofill="no"
+                android:minHeight="48dp"
+                android:text="@={signUpViewModel.ngaySinh}"
+                android:textColorHint="#546E7A"
+                app:layout_constraintBottom_toTopOf="@+id/guideline4"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:ignore="Deprecated,TextFields" />
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline8"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_begin="500dp" />
+            <EditText
+                android:id="@+id/email_dk"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:drawableEnd="@drawable/alternate_email_24"
+                android:ems="10"
+                android:hint="@string/email_dk"
+                android:importantForAutofill="no"
+                android:inputType="text|textEmailAddress"
+                android:minHeight="48dp"
+                android:text="@={signUpViewModel.email}"
+                android:textColorHint="#546E7A"
+                app:layout_constraintBottom_toTopOf="@+id/guideline6"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
 
-        <EditText
-            android:id="@+id/xac_nhan_mk"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:drawableEnd="@drawable/ic_passworddoc"
-            android:ems="10"
-            android:hint="@string/xac_nhan_mat_khau"
-            android:importantForAutofill="no"
-            android:inputType="text|textPassword"
-            android:textColorHint="#546E7A"
-            app:layout_constraintBottom_toTopOf="@+id/guideline8"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline7"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_begin="440dp" />
 
-        <CheckBox
-            android:id="@+id/checkBox"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="40dp"
-            android:layout_marginTop="40dp"
-            android:text="@string/policy"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/guideline8" />
+            <EditText
+                android:id="@+id/password_dk"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:drawableEnd="@drawable/ic_passworddoc"
+                android:ems="10"
+                android:hint="@string/mat_khau_dk"
+                android:importantForAutofill="no"
+                android:inputType="text|textPassword"
+                android:minHeight="48dp"
+                android:text="@={signUpViewModel.matKhau}"
+                android:textColorHint="#546E7A"
+                app:layout_constraintBottom_toTopOf="@+id/guideline7"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
 
-        <Button
-            android:id="@+id/btn_dang_ki"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:backgroundTint="@android:color/holo_red_light"
-            android:text="@string/dang_ki"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/checkBox" />
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline8"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_begin="500dp" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <EditText
+                android:id="@+id/xac_nhan_mk"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:drawableEnd="@drawable/ic_passworddoc"
+                android:ems="10"
+                android:hint="@string/xac_nhan_mat_khau"
+                android:importantForAutofill="no"
+                android:inputType="text|textPassword"
+                android:text="@={signUpViewModel.xacNhanMatKhau}"
+                android:textColorHint="#546E7A"
+                app:layout_constraintBottom_toTopOf="@+id/guideline8"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <Button
+                android:id="@+id/btn_dang_ki"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:backgroundTint="@android:color/holo_red_light"
+                android:text="@string/dang_ki"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/guideline8" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
 </layout>

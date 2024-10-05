@@ -1,9 +1,5 @@
 <resources>
     <string name="app_name">RCS</string>
-
     <string name="dang_ki_tk">ĐĂNG KÝ TÀI KHOẢN</string>
-
-
-
     <string name="user_profile">User profile</string>
 </resources>
