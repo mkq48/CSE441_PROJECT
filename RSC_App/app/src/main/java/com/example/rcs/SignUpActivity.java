@@ -1,61 +1,47 @@
 package com.example.rcs;
 
-import android.app.ProgressDialog;
-import android.content.Intent;
+import android.app.DatePickerDialog;
 import android.os.Bundle;
-import android.util.Log;
+import android.widget.DatePicker;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.DialogFragment;
 
 import com.example.rcs.databinding.ActivitySignUpBinding;
-import com.google.firebase.auth.FirebaseAuth;
+import com.example.rcs.fragment.DatePickerFragment;
 
-public class SignUpActivity extends AppCompatActivity {
+import java.util.Calendar;
 
-    private FirebaseAuth auth;
+public class SignUpActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
 
-    //create auth
-    @Override
-    protected void onStart() {
-        super.onStart();
-        auth = FirebaseAuth.getInstance();
-    }
+    private ActivitySignUpBinding binding;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //create progress dialog
-        ProgressDialog progressDialog = new ProgressDialog(this);
-
         //inflate layout
-        ActivitySignUpBinding binding = ActivitySignUpBinding.inflate(getLayoutInflater());
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_sign_up);
 
-        //event handler
-        binding.btnDangKi.setOnClickListener(view -> {
-            String email = binding.tenDangNhap.getText().toString();
-            String password = binding.matKhau.getText().toString();
-            progressDialog.setMessage("Creating account...");
-            progressDialog.show();
-            auth.createUserWithEmailAndPassword(email, password)
-                    .addOnCompleteListener(this, task -> {
-                        if (task.isSuccessful()) {
-                            progressDialog.dismiss();
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d("status", "createUserWithEmail:success");
-                            startActivity(new Intent(this, SignInActivity.class));
-                            finishAffinity();
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Log.w("status", "createUserWithEmail:failure", task.getException());
-                        }
-                    });
-        });
+        //handle date picker
+        binding.ngaySinh.setOnClickListener(v -> showDatePicker());
+    }
 
-        //set layout
-        setContentView(binding.getRoot());
+    @Override
+    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+        //handle the selected date
+        Calendar selectedDate = Calendar.getInstance();
+        selectedDate.set(year, month, dayOfMonth);
 
-
+        //use the selected date
+        //format: dd/MM/yyyy
+        String date = String.format("%02d/%02d/%04d", dayOfMonth, month + 1, year);
+        binding.ngaySinh.setText(date);
+    }
+    public void showDatePicker() {
+        DialogFragment newFragment = DatePickerFragment.newInstance(this);
+        newFragment.show(getSupportFragmentManager(), "datePicker");
     }
 }
