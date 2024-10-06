@@ -39,14 +39,8 @@ public class SignInActivity extends AppCompatActivity {
         binding.setLifecycleOwner(this);
 
         //set error message
-        viewModel.emailError.observe(this, s -> {
-            binding.dnEmail.requestFocus();
-            binding.dnEmail.setError(s);
-        });
-        viewModel.passwordError.observe(this, s ->{
-            binding.dnMatKhau.requestFocus();
-            binding.dnMatKhau.setError(s);
-        });
+        viewModel.emailError.observe(this, s -> binding.dnEmail.setError(s));
+        viewModel.passwordError.observe(this, s -> binding.dnMatKhau.setError(s));
 
         //event handler
         binding.toggle.setOnClickListener(view -> {
@@ -72,7 +66,7 @@ public class SignInActivity extends AppCompatActivity {
 
         binding.quenMk.setOnClickListener(view ->{
             //go to forget password activity
-            Intent intent = new Intent(SignInActivity.this, ForgetPasswordActivity.class);
+            Intent intent = new Intent(SignInActivity.this, ResetPasswordActivity.class);
             startActivity(intent);
         });
 
