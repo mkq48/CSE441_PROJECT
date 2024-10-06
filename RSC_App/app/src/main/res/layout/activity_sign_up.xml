@@ -81,7 +81,7 @@
                 android:ems="10"
                 android:hint="@string/ten_tai_khoan"
                 android:importantForAutofill="no"
-                android:inputType="text"
+                android:inputType="text|textPersonName"
                 android:minHeight="48dp"
                 android:text="@={signUpViewModel.tenTaiKhoan}"
                 android:textColorHint="#546E7A"
