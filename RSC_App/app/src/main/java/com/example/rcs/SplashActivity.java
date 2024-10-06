@@ -11,20 +11,20 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class SplashActivity extends AppCompatActivity {
 
-    private FirebaseAuth auth;
+    private FirebaseAuth auth=FirebaseAuth.getInstance();
 
     @Override
     protected void onStart() {
         super.onStart();
-        auth = FirebaseAuth.getInstance();
+        Handler handler = new Handler();
+        handler.postDelayed(this::checkUser,2000);
+
     }
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-
-        Handler handler = new Handler();
-        handler.postDelayed(this::checkUser,2000);
     }
 
     private void checkUser() {
@@ -35,5 +35,6 @@ public class SplashActivity extends AppCompatActivity {
             //user is not signed in
             startActivity(new Intent(this, SignInActivity.class));
         }
+        finish();
     }
 }

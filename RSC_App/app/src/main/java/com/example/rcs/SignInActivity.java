@@ -16,7 +16,6 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.rcs.databinding.ActivitySignInBinding;
 import com.example.rcs.viewmodel.SignInViewModel;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 public class SignInActivity extends AppCompatActivity {
 
@@ -72,8 +71,8 @@ public class SignInActivity extends AppCompatActivity {
         });
 
         binding.quenMk.setOnClickListener(view ->{
-            //go to reset password activity
-            Intent intent = new Intent(this, ResetPasswordActivity.class);
+            //go to forget password activity
+            Intent intent = new Intent(SignInActivity.this, ForgetPasswordActivity.class);
             startActivity(intent);
         });
 
@@ -85,10 +84,11 @@ public class SignInActivity extends AppCompatActivity {
                     progressDialog.dismiss();
                     if (task.isSuccessful()) {
                         Toast.makeText(SignInActivity.this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
+                        Log.d("status", "onCreate: " + auth.getCurrentUser().getEmail());
                         //go to user activity
                         Intent intent = new Intent(SignInActivity.this, UserActivity.class);
                         startActivity(intent);
-                        finishAffinity();
+                        finish();
                     } else {
                         Toast.makeText(SignInActivity.this, "Đăng nhập thất bại", Toast.LENGTH_SHORT).show();
                     }

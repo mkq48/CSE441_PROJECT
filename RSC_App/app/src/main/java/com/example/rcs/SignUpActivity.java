@@ -4,7 +4,6 @@ import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.DatePicker;
 import android.widget.Toast;
 
@@ -18,7 +17,6 @@ import com.example.rcs.databinding.ActivitySignUpBinding;
 import com.example.rcs.fragment.DatePickerFragment;
 import com.example.rcs.viewmodel.SignUpViewModel;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 import java.util.Calendar;
 
@@ -62,8 +60,7 @@ public class SignUpActivity extends AppCompatActivity implements DatePickerDialo
                             progressDialog.dismiss();
                             if (task.isSuccessful()) {
                                 Toast.makeText(this, "Đăng ký thành công", Toast.LENGTH_SHORT).show();
-                                startActivity(new Intent(this, SignInActivity.class));
-                                finishAffinity();
+                                finish();
                             } else {
                                 Toast.makeText(this, "Đăng ký thất bại", Toast.LENGTH_SHORT).show();
                             }
