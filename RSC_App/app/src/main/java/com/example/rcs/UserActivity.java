@@ -11,7 +11,7 @@ import com.bumptech.glide.Glide;
 import com.example.rcs.databinding.ActivityHomeBinding;
 import com.google.firebase.auth.FirebaseAuth;
 
-public class HomeActivity extends AppCompatActivity {
+public class UserActivity extends AppCompatActivity {
 
     private ActivityHomeBinding binding;
 

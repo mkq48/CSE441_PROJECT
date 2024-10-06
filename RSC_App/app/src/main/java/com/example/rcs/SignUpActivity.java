@@ -1,12 +1,13 @@
 package com.example.rcs;
 
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.DatePicker;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
@@ -16,21 +17,19 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.rcs.databinding.ActivitySignUpBinding;
 import com.example.rcs.fragment.DatePickerFragment;
 import com.example.rcs.viewmodel.SignUpViewModel;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import java.util.Calendar;
-import java.util.concurrent.Executor;
 
 public class SignUpActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
 
     private ActivitySignUpBinding binding;
-
+    private final FirebaseAuth auth=FirebaseAuth.getInstance();
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ProgressDialog progressDialog = new ProgressDialog(this);
 
         //inflate layout
         binding = DataBindingUtil.setContentView(this, R.layout.activity_sign_up);
@@ -56,25 +55,20 @@ public class SignUpActivity extends AppCompatActivity implements DatePickerDialo
 
         //
         binding.btnDangKi.setOnClickListener(v -> {
-           if (signUpViewModel.isValidInput()){
-               auth.createUserWithEmailAndPassword(email, matKhau)
-                       .addOnCompleteListener((Executor) this, new OnCompleteListener<AuthResult>() {
-                           @Override
-                           public void onComplete(@NonNull Task<AuthResult> task) {
-                               if (task.isSuccessful()) {
-                                   // Sign in success, update UI with the signed-in user's information
-                                   Log.d("status", "createUserWithEmail:success");
-                                   FirebaseUser user = auth.getCurrentUser();
-                               } else {
-                                   // If sign in fails, display a message to the user.
-                                   Log.w("status", "createUserWithEmail:failure", task.getException());
-//                                Toast.makeText(this, "Authentication failed.",
-//                                        Toast.LENGTH_SHORT).show();
-                                   //updateUI(null);
-                               }
-                           }
-                       });
-           }
+            if (signUpViewModel.isValidInput()) {
+                progressDialog.show();
+                auth.createUserWithEmailAndPassword(signUpViewModel.email, signUpViewModel.matKhau)
+                        .addOnCompleteListener(this, task -> {
+                            progressDialog.dismiss();
+                            if (task.isSuccessful()) {
+                                Toast.makeText(this, "Đăng ký thành công", Toast.LENGTH_SHORT).show();
+                                startActivity(new Intent(this, SignInActivity.class));
+                                finishAffinity();
+                            } else {
+                                Toast.makeText(this, "Đăng ký thất bại", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+            }
         });
     }
 
@@ -88,10 +82,6 @@ public class SignUpActivity extends AppCompatActivity implements DatePickerDialo
         //format: dd/MM/yyyy
         String date = String.format("%02d/%02d/%04d", dayOfMonth, month + 1, year);
         binding.ngaySinh.setText(date);
-
-        //hide the keyboard
-        binding.ngaySinh.clearFocus();
-
         binding.ngaySinh.setError(null);
     }
     public void showDatePicker() {

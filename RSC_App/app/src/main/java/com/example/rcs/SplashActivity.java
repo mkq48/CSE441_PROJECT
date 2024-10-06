@@ -30,7 +30,7 @@ public class SplashActivity extends AppCompatActivity {
     private void checkUser() {
         if(auth.getCurrentUser() != null){
             //user is signed in
-            startActivity(new Intent(this, HomeActivity.class));
+            startActivity(new Intent(this, UserActivity.class));
         }else{
             //user is not signed in
             startActivity(new Intent(this, SignInActivity.class));
