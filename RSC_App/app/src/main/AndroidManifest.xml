@@ -13,7 +13,13 @@
         android:theme="@style/Theme.RCS"
         tools:targetApi="31">
         <activity
-            android:name=".QuenPasswordActivity"
+            android:name=".ForgetPasswordActivity"
+            android:exported="false" />
+        <activity
+            android:name=".MainActivity"
+            android:exported="false" />
+        <activity
+            android:name=".MainActivity2"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -25,7 +31,6 @@
         <activity android:name=".SignUpActivity" />
         <activity android:name=".SignInActivity" />
         <activity android:name=".SplashActivity" />
-
     </application>
 
 </manifest>
