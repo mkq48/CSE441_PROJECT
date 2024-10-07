@@ -66,7 +66,7 @@ public class SignInActivity extends AppCompatActivity {
 
         binding.quenMk.setOnClickListener(view ->{
             //go to forget password activity
-            Intent intent = new Intent(SignInActivity.this, QuenPasswordActivity.class);
+            Intent intent = new Intent(SignInActivity.this, ForgetPasswordActivity.class);
             startActivity(intent);
         });
 

@@ -1,24 +1,41 @@
 package com.example.rcs;
 
 import android.os.Bundle;
+import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
+
+import com.example.rcs.databinding.ActivityForgetPasswordBinding;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class ForgetPasswordActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_forget_password);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
+
+        //inflate layout
+        ActivityForgetPasswordBinding binding = ActivityForgetPasswordBinding.inflate(getLayoutInflater());
+
+        //handle event
+        binding.btnXacNhan.setOnClickListener(view -> {
+            //send email to reset password
+            String email = binding.resetEmail.getText().toString().trim();
+            if (email.isEmpty()) {
+                binding.resetEmail.setError("Vui lòng nhập địa chỉ email");
+                binding.resetEmail.requestFocus();
+            } else {
+                FirebaseAuth auth = FirebaseAuth.getInstance();
+                auth.sendPasswordResetEmail(email)
+                        .addOnCompleteListener(task -> {
+                            if (task.isSuccessful()) {
+                                Toast.makeText(this, "Kiểm tra mail của bạn để đặt lại mật khẩu", Toast.LENGTH_SHORT).show();
+                                finish();
+                            }
+                            else Toast.makeText(this, "Lỗi", Toast.LENGTH_SHORT).show();
+                        });
+            }
         });
+        setContentView(binding.getRoot());
     }
 }
