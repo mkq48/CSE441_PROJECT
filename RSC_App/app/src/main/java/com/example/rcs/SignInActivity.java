@@ -3,24 +3,22 @@ package com.example.rcs;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
-import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.databinding.DataBindingUtil;
-import androidx.lifecycle.ViewModelProvider;
 
 import com.example.rcs.databinding.ActivitySignInBinding;
-import com.example.rcs.viewmodel.SignInViewModel;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class SignInActivity extends AppCompatActivity {
 
     private boolean passwordVisible = false;
     private final FirebaseAuth auth=FirebaseAuth.getInstance();
+    private ActivitySignInBinding binding;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -28,19 +26,8 @@ public class SignInActivity extends AppCompatActivity {
         ProgressDialog progressDialog = new ProgressDialog(this);
 
         //inflate layout
-        ActivitySignInBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_sign_in);
-
-        //create view model
-        SignInViewModel viewModel = new ViewModelProvider(this).get(SignInViewModel.class);
-        binding.setSignInViewModel(viewModel);
-        binding.setLifecycleOwner(this);
-
-        //set lifecycle owner
-        binding.setLifecycleOwner(this);
-
-        //set error message
-        viewModel.emailError.observe(this, s -> binding.dnEmail.setError(s));
-        viewModel.passwordError.observe(this, s -> binding.dnMatKhau.setError(s));
+        binding = ActivitySignInBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         //event handler
         binding.toggle.setOnClickListener(view -> {
@@ -71,14 +58,15 @@ public class SignInActivity extends AppCompatActivity {
         });
 
         binding.btnDangNhap.setOnClickListener(view -> {
-            if (viewModel.isValidEmail()) {
+            String email = binding.dnEmail.getText().toString();
+            String password = binding.dnMatKhau.getText().toString();
+            if (isValidInput(email, password)) {
                 //sign in with firebase
                 progressDialog.show();
-                auth.signInWithEmailAndPassword(viewModel.email, viewModel.password).addOnCompleteListener(this, task -> {
+                auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this, task -> {
                     progressDialog.dismiss();
                     if (task.isSuccessful()) {
                         Toast.makeText(SignInActivity.this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
-                        Log.d("status", "onCreate: " + auth.getCurrentUser().getEmail());
                         //go to user activity
                         Intent intent = new Intent(SignInActivity.this, UserActivity.class);
                         startActivity(intent);
@@ -89,6 +77,22 @@ public class SignInActivity extends AppCompatActivity {
                 });
             }
         });
+    }
+
+    private boolean isValidInput(String email, String password) {
+        boolean check=true;
+        if (TextUtils.isEmpty(email)) {
+            binding.dnEmail.setError("Vui lòng nhập email");
+            check = false;
+        } else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            binding.dnEmail.setError("Email không hợp lệ");
+            check = false;
+        }
+        if(password.isEmpty()){
+            binding.dnMatKhau.setError("Vui lòng nhập mật khẩu");
+            check=false;
+        }
+        return check;
     }
 
 }

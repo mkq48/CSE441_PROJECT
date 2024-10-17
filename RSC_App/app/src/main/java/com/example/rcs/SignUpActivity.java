@@ -1,21 +1,18 @@
 package com.example.rcs;
 
+import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.widget.DatePicker;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.DialogFragment;
-import androidx.lifecycle.ViewModelProvider;
 
 import com.example.rcs.databinding.ActivitySignUpBinding;
 import com.example.rcs.fragment.DatePickerFragment;
-import com.example.rcs.viewmodel.SignUpViewModel;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.Calendar;
@@ -30,32 +27,23 @@ public class SignUpActivity extends AppCompatActivity implements DatePickerDialo
         ProgressDialog progressDialog = new ProgressDialog(this);
 
         //inflate layout
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_sign_up);
+        binding = ActivitySignUpBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         //handle date picker
         binding.ngaySinh.setOnClickListener(v -> showDatePicker());
 
-        //provide view model
-        SignUpViewModel signUpViewModel = new ViewModelProvider(this).get(SignUpViewModel.class);
-        binding.setSignUpViewModel(signUpViewModel);
-
-        //reset error message
-        signUpViewModel.resetErrorMessage();
-        //handle error message
-        signUpViewModel.tenTaiKhoanError.observe(this, s -> binding.tenDangNhap.setError(s));
-        signUpViewModel.ngaySinhError.observe(this, s -> binding.ngaySinh.setError(s));
-        signUpViewModel.emailError.observe(this, s -> binding.emailDk.setError(s));
-        signUpViewModel.matKhauError.observe(this, s -> binding.passwordDk.setError(s));
-        signUpViewModel.xacNhanMatKhauError.observe(this, s -> binding.xacNhanMk.setError(s));
-
-        //set lifecycle owner
-        binding.setLifecycleOwner(binding.getLifecycleOwner());
-
         //
         binding.btnDangKi.setOnClickListener(v -> {
-            if (signUpViewModel.isValidInput()) {
+            String tenDangNhap = binding.tenDangNhap.getText().toString();
+            String email = binding.emailDk.getText().toString();
+            String matKhau = binding.passwordDk.getText().toString();
+            String ngaySinh = binding.ngaySinh.getText().toString();
+            String xacNhanMatKhau = binding.xacNhanMk.getText().toString();
+
+            if (isValidInput(tenDangNhap, email, matKhau, ngaySinh, xacNhanMatKhau)) {
                 progressDialog.show();
-                auth.createUserWithEmailAndPassword(signUpViewModel.email, signUpViewModel.matKhau)
+                auth.createUserWithEmailAndPassword(email, matKhau)
                         .addOnCompleteListener(this, task -> {
                             progressDialog.dismiss();
                             if (task.isSuccessful()) {
@@ -69,6 +57,40 @@ public class SignUpActivity extends AppCompatActivity implements DatePickerDialo
         });
     }
 
+    private boolean isValidInput(String tenDangNhap, String email, String matKhau, String ngaySinh, String xacNhanMatKhau) {
+        boolean check=true;
+        if(tenDangNhap.isEmpty()){
+            binding.tenDangNhap.setError("Vui lòng nhập tên đăng nhập");
+            check=false;
+        }
+        if (ngaySinh.isEmpty()){
+            binding.ngaySinh.setError("Vui lòng nhập ngày sinh");
+            check=false;
+        }
+        if(email.isEmpty()){
+            binding.emailDk.setError("Vui lòng nhập email");
+            check=false;
+        }else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()){
+            binding.emailDk.setError("Email không hợp lệ");
+            check=false;
+        }
+        if(matKhau.isEmpty()){
+            binding.passwordDk.setError("Vui lòng nhập mật khẩu");
+            check=false;
+        }else if (matKhau.length()<6){
+            binding.passwordDk.setError("Mật khẩu phải có ít nhất 6 ký tự");
+            check=false;
+        }
+        if(xacNhanMatKhau.isEmpty()){
+            binding.xacNhanMk.setError("Vui lòng nhập lại mật khẩu");
+            check=false;
+        }else if(!matKhau.equals(xacNhanMatKhau)){
+            binding.xacNhanMk.setError("Mật khẩu không khớp");
+            check=false;
+        }
+        return check;
+    }
+
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
         //handle the selected date
@@ -77,7 +99,7 @@ public class SignUpActivity extends AppCompatActivity implements DatePickerDialo
 
         //use the selected date
         //format: dd/MM/yyyy
-        String date = String.format("%02d/%02d/%04d", dayOfMonth, month + 1, year);
+        @SuppressLint("DefaultLocale") String date = String.format("%02d/%02d/%04d", dayOfMonth, month + 1, year);
         binding.ngaySinh.setText(date);
         binding.ngaySinh.setError(null);
     }
