@@ -30,6 +30,9 @@ android {
 
 dependencies {
 
+//    apply plugin: 'com.google.gms.google-services'
+//    implementation 'com.google.firebase:firebase-analytics:21.4.0'
+
     implementation libs.appcompat
     implementation libs.material
     implementation libs.activity
@@ -37,4 +40,6 @@ dependencies {
     testImplementation libs.junit
     androidTestImplementation libs.ext.junit
     androidTestImplementation libs.espresso.core
+
+
 }
