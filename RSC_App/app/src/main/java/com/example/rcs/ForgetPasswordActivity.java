@@ -3,6 +3,7 @@ package com.example.rcs;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.rcs.databinding.ActivityForgetPasswordBinding;
@@ -10,12 +11,15 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class ForgetPasswordActivity extends AppCompatActivity {
 
+    private ActivityForgetPasswordBinding binding;
+    private FirebaseAuth auth;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         //inflate layout
-        ActivityForgetPasswordBinding binding = ActivityForgetPasswordBinding.inflate(getLayoutInflater());
+        binding = ActivityForgetPasswordBinding.inflate(getLayoutInflater());
 
         //handle event
         binding.btnXacNhan.setOnClickListener(view -> {
@@ -25,7 +29,7 @@ public class ForgetPasswordActivity extends AppCompatActivity {
                 binding.resetEmail.setError("Vui lòng nhập địa chỉ email");
                 binding.resetEmail.requestFocus();
             } else {
-                FirebaseAuth auth = FirebaseAuth.getInstance();
+                auth = FirebaseAuth.getInstance();
                 auth.sendPasswordResetEmail(email)
                         .addOnCompleteListener(task -> {
                             if (task.isSuccessful()) {
