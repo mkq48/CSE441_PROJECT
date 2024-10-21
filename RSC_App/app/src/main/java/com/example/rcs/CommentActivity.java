@@ -12,6 +12,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.gson.Gson;
 
 public class CommentActivity extends AppCompatActivity {
 
@@ -39,9 +40,12 @@ public class CommentActivity extends AppCompatActivity {
         comments.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Gson gson = new Gson();
                 //handle comments with loop through snapshot and print to logcat
                 for (DataSnapshot ds : snapshot.getChildren()){
-                    Log.d("Comments", ds.getValue().toString());
+                    String jsonString = ds.getValue(String.class);
+                    Comment comment = gson.fromJson(jsonString, Comment.class);
+                    Log.d("comment", comment.toString());
                 }
             }
 
