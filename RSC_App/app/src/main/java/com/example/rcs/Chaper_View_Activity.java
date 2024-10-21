@@ -36,7 +36,7 @@ public class Chaper_View_Activity extends AppCompatActivity {
     private PDFView pdfView;
     private String pdfUrl,storyId;
     int currentPage,chapId,chapCount;
-    Button previous_btn,next_btn;
+    Button previous_btn,next_btn, comment_btn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,6 +97,15 @@ public class Chaper_View_Activity extends AppCompatActivity {
             }
         });
 //        new DownloadPdf().execute(pdfUrl);
+
+        //go to comment section
+        comment_btn = findViewById(R.id.comment_btn);
+        comment_btn.setOnClickListener(view -> {
+            Intent i1 = new Intent(Chaper_View_Activity.this, CommentActivity.class);
+            i1.putExtra("storyID",storyId);
+            i1.putExtra("chapID",chapId);
+            startActivity(i1);
+        });
     }
     class DownloadPdf extends AsyncTask<String, Void, InputStream> {
         @Override

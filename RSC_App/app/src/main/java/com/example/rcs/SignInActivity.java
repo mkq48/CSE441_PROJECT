@@ -69,7 +69,7 @@ public class SignInActivity extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         Toast.makeText(SignInActivity.this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
                         //go to user activity
-                        Intent intent = new Intent(SignInActivity.this, UserActivity.class);
+                        Intent intent = new Intent(SignInActivity.this, MainActivity.class);
                         startActivity(intent);
                         finish();
                     } else {

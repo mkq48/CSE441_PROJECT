@@ -47,12 +47,9 @@ public class AllStoryActivity extends AppCompatActivity {
         recyclerview.setLayoutManager(new GridLayoutManager(this,2));
         // test favoriteActivity
         Button btn_test = findViewById(R.id.btn_test);
-        btn_test.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(AllStoryActivity.this,FavoriteListActivity.class);
-                startActivity(i);
-            }
+        btn_test.setOnClickListener(view -> {
+            Intent i = new Intent(AllStoryActivity.this,FavoriteListActivity.class);
+            startActivity(i);
         });
     }
 

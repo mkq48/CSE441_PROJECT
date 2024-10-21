@@ -7,10 +7,14 @@
     android:layout_height="match_parent"
     tools:context=".Chaper_View_Activity"
     android:padding="20dp">
+
     <com.github.barteksc.pdfviewer.PDFView
         android:id="@+id/pdfView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent">
+
+    </com.github.barteksc.pdfviewer.PDFView>
+
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -25,4 +29,14 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
         android:text="sau"/>
+
+    <Button
+        android:id="@+id/comment_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_toStartOf="@+id/next_btn"
+        android:layout_toEndOf="@+id/previous_btn"
+        android:text="@string/binh_luan" />
+
 </RelativeLayout>
