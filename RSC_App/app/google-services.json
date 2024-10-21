@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "907737819279",
+    "project_id": "rscapp-1f435",
+    "storage_bucket": "rscapp-1f435.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:907737819279:android:eb3d23d1cf03ac994628fa",
+        "android_client_info": {
+          "package_name": "com.example.rcs"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAY33NY2nRrsoVQVNKJMMnr4oSmmdf2bq4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

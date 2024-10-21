@@ -1,8 +1,18 @@
 plugins {
-    alias(libs.plugins.android.application)
+//    alias(libs.plugins.android.application)
+    id 'com.android.application'
+    id 'com.google.gms.google-services'
 }
 
 android {
+    signingConfigs {
+        rsc {
+            storeFile file('D:\\MKQ\\Study\\Dev\\Android\\RSC\\KeyStore\\rsc_keystore.jks')
+            storePassword '123456'
+            keyAlias 'MKQ'
+            keyPassword '123456'
+        }
+    }
     namespace 'com.example.rcs'
     compileSdk 34
 
@@ -20,6 +30,7 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.rsc
         }
     }
     compileOptions {
@@ -30,8 +41,16 @@ android {
 
 dependencies {
 
-//    apply plugin: 'com.google.gms.google-services'
-//    implementation 'com.google.firebase:firebase-analytics:21.4.0'
+    implementation platform('com.google.firebase:firebase-bom:33.4.0')
+    implementation 'com.google.firebase:firebase-analytics'
+
+    implementation 'com.google.firebase:firebase-auth:21.3.0' // Firebase Authentication
+    implementation 'com.google.firebase:firebase-database:20.2.0' // Firebase Realtime Database
+    implementation 'com.google.firebase:firebase-firestore:24.7.0' // Firebase Firestore
+
+    implementation 'com.github.bumptech.glide:glide:4.15.1'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.15.1'
+
 
     implementation libs.appcompat
     implementation libs.material

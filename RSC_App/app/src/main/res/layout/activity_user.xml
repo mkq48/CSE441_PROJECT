@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".UserActivity">
+
+    <Toolbar
+        android:id="@+id/Header"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:layout_alignParentBottom="true"
+        android:elevation="4dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        tools:ignore="MissingConstraints"
+        android:background="@drawable/shadow">
+
+        <ImageView
+            android:id="@+id/Logo"
+            android:layout_width="100dp"
+            android:layout_height="60dp"
+            android:layout_alignParentStart="true"
+            android:contentDescription="logo"
+            android:src="@drawable/logo"
+            tools:layout_editor_absoluteX="60dp"
+            tools:layout_editor_absoluteY="45dp" />
+
+        <ImageView
+            android:id="@+id/bell"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginLeft="220dp"
+            android:contentDescription="Bell"
+            android:src="@drawable/bell" />
+
+        />
+
+    </Toolbar>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/Header"
+        app:layout_constraintVertical_bias="0.33">
+
+
+        <Button
+            android:id="@+id/btnProfile"
+            android:layout_width="300dp"
+            android:layout_height="40dp"
+            android:layout_margin="10dp"
+            android:background="@drawable/border"
+            android:backgroundTint="#EEEEEE"
+            android:drawableEnd="@drawable/chevron_right"
+            android:gravity="left"
+            android:paddingLeft="30dp"
+            android:paddingTop="12dp"
+            android:text="Tài khoản và bảo mật"
+            android:textAllCaps="false"
+            android:textSize="12sp" />
+
+        <Button
+            android:layout_width="300dp"
+            android:layout_height="40dp"
+            android:layout_margin="10dp"
+            android:background="@drawable/border"
+            android:backgroundTint="#EEEEEE"
+            android:text="Giới thiệu bạn bè"
+            android:textSize="12sp"
+            android:gravity="left"
+            android:paddingLeft="30dp"
+            android:paddingTop="12dp"
+            android:textAllCaps="false"
+            android:drawableEnd="@drawable/chevron_right"
+            />
+
+        <Button
+            android:layout_width="300dp"
+            android:layout_height="40dp"
+            android:layout_margin="10dp"
+            android:background="@drawable/border"
+            android:backgroundTint="#EEEEEE"
+            android:text="Phản hồi ý kiến"
+            android:textSize="12sp"
+            android:gravity="left"
+            android:paddingLeft="30dp"
+            android:paddingTop="12dp"
+            android:textAllCaps="false"
+            android:drawableEnd="@drawable/chevron_right"
+            />
+
+        <Button
+            android:layout_width="300dp"
+            android:layout_height="40dp"
+            android:layout_margin="10dp"
+            android:background="@drawable/border"
+            android:backgroundTint="#EEEEEE"
+            android:text="Điều khoản dịch vụ"
+            android:textSize="12sp"
+            android:gravity="left"
+            android:paddingLeft="30dp"
+            android:paddingTop="12dp"
+            android:textAllCaps="false"
+            android:drawableEnd="@drawable/chevron_right"
+            />
+
+        <Button
+            android:layout_width="300dp"
+            android:layout_height="40dp"
+            android:layout_margin="10dp"
+            android:background="@drawable/border"
+            android:backgroundTint="#EEEEEE"
+            android:text="Chính sách bảo mật"
+            android:textSize="12sp"
+            android:gravity="left"
+            android:paddingLeft="30dp"
+            android:paddingTop="12dp"
+            android:textAllCaps="false"
+            android:drawableEnd="@drawable/chevron_right"/>
+
+        <Button
+            android:layout_width="300dp"
+            android:layout_height="40dp"
+            android:layout_margin="10dp"
+            android:background="@drawable/border"
+            android:backgroundTint="#EEEEEE"
+            android:text="Về chúng tôi"
+            android:textSize="12sp"
+            android:gravity="left"
+            android:paddingLeft="30dp"
+            android:paddingTop="12dp"
+            android:textAllCaps="false"
+            android:drawableEnd="@drawable/chevron_right"/>
+
+        <Button
+            android:id="@+id/btnLogout"
+            android:layout_width="300dp"
+            android:layout_height="40dp"
+            android:layout_margin="10dp"
+            android:background="@drawable/border"
+            android:backgroundTint="#EEEEEE"
+            android:text="Đăng xuất"
+            android:textSize="12sp"
+            android:gravity="left"
+            android:paddingLeft="30dp"
+            android:paddingTop="12dp"
+            android:textAllCaps="false"
+            android:drawableEnd="@drawable/logout"/>
+    </LinearLayout>
+
+    <Toolbar
+        android:id="@+id/Footer"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:layout_alignParentBottom="true"
+        android:elevation="4dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0"
+        tools:ignore="MissingConstraints"
+        android:background="@drawable/shadow">
+
+        <GridLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:columnCount="4"
+            android:orientation="horizontal"
+            android:rowCount="2">
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_row="0"
+                android:layout_column="0"
+                android:layout_gravity="center"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:src="@drawable/home" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_row="1"
+                android:layout_column="0"
+                android:layout_gravity="center"
+                android:text="Trang chủ"
+                android:textStyle="bold"
+                android:textSize="12sp"
+                />
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_row="0"
+                android:layout_column="1"
+                android:layout_gravity="center"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:src="@drawable/search" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_row="1"
+                android:layout_column="1"
+                android:layout_gravity="center"
+                android:text="Tìm kiếm"
+                android:textStyle="bold"
+                android:textSize="12sp"
+
+                />
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_row="0"
+                android:layout_column="2"
+                android:layout_gravity="center"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:src="@drawable/bookmark" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_row="1"
+                android:layout_column="2"
+                android:layout_gravity="center"
+                android:text="Yêu thích"
+                android:textStyle="bold"
+                android:textSize="12sp"
+
+                />
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_row="0"
+                android:layout_column="3"
+                android:layout_gravity="center"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:src="@drawable/account_sl" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_row="1"
+                android:layout_column="3"
+                android:layout_gravity="center"
+                android:textColor="@color/red"
+                android:text="Tôi"
+                android:textStyle="bold"
+                android:textSize="12sp"
+                />
+
+
+        </GridLayout>
+
+
+    </Toolbar>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
