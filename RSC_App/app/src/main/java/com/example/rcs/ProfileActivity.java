@@ -18,6 +18,9 @@ import androidx.core.view.WindowInsetsCompat;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+
 public class ProfileActivity extends AppCompatActivity {
 
     private ImageView avartar, btnBack;
@@ -65,7 +68,6 @@ public class ProfileActivity extends AppCompatActivity {
 
         }
         else {
-            // Không có người dùng nào đăng nhập
             System.out.println("No user is currently signed in.");
         }
 
@@ -83,7 +85,6 @@ public class ProfileActivity extends AppCompatActivity {
             avartar.setImageResource(R.drawable.avartar_default);
         }
     }
-
 
 
 }

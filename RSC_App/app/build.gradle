@@ -48,6 +48,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-database:20.2.0' // Firebase Realtime Database
     implementation 'com.google.firebase:firebase-firestore:24.7.0' // Firebase Firestore
 
+
     implementation 'com.github.bumptech.glide:glide:4.15.1'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.15.1'
 

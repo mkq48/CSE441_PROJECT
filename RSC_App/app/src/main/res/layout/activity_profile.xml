@@ -262,7 +262,8 @@
                 android:layout_gravity="center"
                 android:layout_marginLeft="30dp"
                 android:layout_marginRight="30dp"
-                android:src="@drawable/account" />
+                android:src="@drawable/account_sl"
+                />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -273,6 +274,7 @@
                 android:text="Tôi"
                 android:textStyle="bold"
                 android:textSize="12sp"
+                android:textColor="@color/red"
                 />
 
 

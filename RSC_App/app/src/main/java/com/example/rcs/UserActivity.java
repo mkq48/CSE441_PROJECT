@@ -15,6 +15,9 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import android.content.SharedPreferences;
+import android.content.Context;
+
 
 public class UserActivity extends AppCompatActivity {
 
@@ -57,9 +60,6 @@ public class UserActivity extends AppCompatActivity {
                 logoutUser();
             }
         });
-
-
-
     }
 
     private void logoutUser() {
@@ -69,15 +69,29 @@ public class UserActivity extends AppCompatActivity {
                 .setPositiveButton("Có", (dialog, which) -> {
                     mAuth.signOut();
                     Toast.makeText(UserActivity.this, "Đăng xuất thành công", Toast.LENGTH_SHORT).show();
-                    navigateToLogin();
+                    clearSharedPreferences();
                 })
                 .setNegativeButton("Không", null)
                 .show();
     }
 
+
+    private void clearSharedPreferences() {
+        SharedPreferences sharedPreferences = getSharedPreferences("RSC", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.remove("userEmail");
+        editor.remove("isLoggedIn");
+        editor.apply();
+
+        navigateToLogin();
+    }
+
     private void navigateToLogin() {
         Intent intent = new Intent(UserActivity.this, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
         finish();
     }
+
+
 }
