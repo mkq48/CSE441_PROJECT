@@ -6,5 +6,8 @@
 	<string name="thich">Thích</string>
 	<string name="ngay_dang">Ngày đăng</string>
 	<string name="nha_binh_luan">Bình luận của bạn</string>
-	<string name="binh_luan">Binh luan</string>
+	<string name="binh_luan">Bình luận</string>
+	<string name="ok">Thêm bình luận thành công</string>
+	<string name="empty">Vui lòng nhập bình luận</string>
+	<string name="like">Like</string>
 </resources>

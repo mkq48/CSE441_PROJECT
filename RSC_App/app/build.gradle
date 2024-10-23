@@ -48,4 +48,5 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:4.15.0' // Phiên bản mới nhất có thể thay đổi
     annotationProcessor 'com.github.bumptech.glide:compiler:4.15.0'
     implementation 'com.google.code.gson:gson:2.10'
+    implementation("androidx.cardview:cardview:1.0.0")
 }

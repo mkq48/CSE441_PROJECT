@@ -9,7 +9,7 @@
     tools:context=".CommentActivity">
 
     <EditText
-        android:id="@+id/comment"
+        android:id="@+id/comment_edt"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
@@ -19,26 +19,26 @@
         android:importantForAutofill="no"
         android:inputType="text"
         android:minHeight="48dp"
-        app:layout_constraintBottom_toTopOf="@+id/comment_section"
+        app:layout_constraintBottom_toTopOf="@+id/comment_section_re"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/push_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text="@string/dang"
-        app:layout_constraintStart_toStartOf="@+id/comment"
-        app:layout_constraintTop_toBottomOf="@+id/comment" />
+        app:layout_constraintStart_toStartOf="@+id/comment_edt"
+        app:layout_constraintTop_toBottomOf="@+id/comment_edt" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/comment_section"
+        android:id="@+id/comment_section_re"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/comment" />
+        app:layout_constraintTop_toBottomOf="@+id/comment_edt" />
 </androidx.constraintlayout.widget.ConstraintLayout>
