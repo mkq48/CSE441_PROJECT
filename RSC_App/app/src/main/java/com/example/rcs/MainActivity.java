@@ -87,7 +87,6 @@ public class MainActivity extends AppCompatActivity {
     private void navigateToHome() {
         Intent intent = new Intent(MainActivity.this, UserActivity.class);
         startActivity(intent);
-        finish();
     }
 
     private void checkUserLoginState() {

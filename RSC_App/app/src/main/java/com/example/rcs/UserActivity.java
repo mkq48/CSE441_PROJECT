@@ -39,12 +39,13 @@ public class UserActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
 
-        if (currentUser == null) {
-            navigateToLogin();
-        }
+//        if (currentUser == null) {
+//            navigateToLogin();
+//        }
 
         btnProfile = findViewById(R.id.btnProfile);
         btnLogout = findViewById(R.id.btnLogout);
+
 
         btnProfile.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -66,6 +67,7 @@ public class UserActivity extends AppCompatActivity {
         new AlertDialog.Builder(this)
                 .setTitle("Xác nhận đăng xuất")
                 .setMessage("Bạn có chắc chắn muốn đăng xuất?")
+                .setIcon(R.drawable.alert)
                 .setPositiveButton("Có", (dialog, which) -> {
                     mAuth.signOut();
                     Toast.makeText(UserActivity.this, "Đăng xuất thành công", Toast.LENGTH_SHORT).show();
@@ -90,7 +92,7 @@ public class UserActivity extends AppCompatActivity {
         Intent intent = new Intent(UserActivity.this, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
-        finish();
+        //finish();
     }
 
 

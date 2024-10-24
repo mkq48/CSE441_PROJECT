@@ -3,6 +3,7 @@ package com.example.rcs;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.net.Uri;
 import android.widget.ImageView;
@@ -25,6 +26,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     private ImageView avartar, btnBack;
     private EditText edtName, edtEmail;
+    private Button btnChangepass;
     FirebaseAuth mAuth;
     FirebaseUser currentUser;
 
@@ -39,14 +41,15 @@ public class ProfileActivity extends AppCompatActivity {
             return insets;
         });
 
+
+
         avartar = findViewById(R.id.avatar);
         edtName = findViewById(R.id.edtName);
         edtEmail = findViewById(R.id.edtEmail);
         btnBack = findViewById(R.id.btnBack);
+        btnChangepass = findViewById(R.id.btnChangePass);
 
-        mAuth = FirebaseAuth.getInstance();
-        currentUser = mAuth.getCurrentUser();
-
+        loadPrile();
 
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -57,23 +60,29 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
 
+        btnChangepass.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(ProfileActivity.this, ChangePassActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+    }
+
+    private void loadPrile(){
+
+        mAuth = FirebaseAuth.getInstance();
+        currentUser = mAuth.getCurrentUser();
+
         if (currentUser != null) {
             String uid = currentUser.getUid();
             String email = currentUser.getEmail();
             String displayName = currentUser.getDisplayName();
-
+            Uri photoUrl = currentUser.getPhotoUrl();
 
             edtName.setText(displayName);
             edtEmail.setText(email);
-
-        }
-        else {
-            System.out.println("No user is currently signed in.");
-        }
-
-        if (currentUser != null) {
-            Uri photoUrl = currentUser.getPhotoUrl();
-
             if (photoUrl != null) {
                 Glide.with(avartar.getContext())
                         .load(photoUrl)
@@ -81,10 +90,6 @@ public class ProfileActivity extends AppCompatActivity {
             } else {
                 avartar.setImageResource(R.drawable.avartar_default);
             }
-        } else {
-            avartar.setImageResource(R.drawable.avartar_default);
         }
     }
-
-
 }
