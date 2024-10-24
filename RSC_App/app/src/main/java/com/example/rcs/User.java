@@ -1,14 +1,13 @@
 package com.example.rcs;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 public class User {
-    private String userId;
     private String imageUrl;
     private String userName;
-    private String passWord;
-    private String email;
 
     public String getCurrentUserId() {
-        return "user1";
+        return FirebaseAuth.getInstance().getCurrentUser().getUid();
     }
     public User getUserById(String id){
 
@@ -17,15 +16,13 @@ public class User {
     public User getCurrentUser(){
         return new User();
     }
-    public void addNewUser(){
-
+    public void addNewUser(String userId, String imageUrl, String userName){
+        // khi đăng nhập :
+        // khi đăng nhập, check user đã tồn tại trong db hay chưa,
+        // nếu chưa tồn tại thêm bản ghi mới gồm tên, imgUrl vào db, nếu đã có bỏ qua
     }
 
     public User() {
-    }
-
-    public String getUserId() {
-        return userId;
     }
 
     public String getImageUrl() {
@@ -37,15 +34,16 @@ public class User {
         return userName;
     }
 
-    public String getPassWord() {
-        return passWord;
-    }
 
-
-    public String getEmail() {
-        return email;
+    public void updateImageOfCurrentUser(){
+        // up anh len storage
+        // lay url update len auth
+        // cap nhat url len bang user trong cloud firestore
     }
-    public void UpdateCurrentUser(){
+    public void updateCurrentUser(String name, String email){
+
+    }
+    public void updatePassWordOfCurrentUser(String passWord){
 
     }
 }
