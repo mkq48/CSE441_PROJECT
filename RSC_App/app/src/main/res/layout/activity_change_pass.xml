@@ -28,7 +28,6 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="1.0"
             tools:ignore="MissingConstraints"
-
             >
 
             <ImageView
@@ -78,10 +77,36 @@
                     android:text="Mật khẩu hiện tại"
                     android:textSize="12sp" />
 
-                <EditText
-                    android:id="@+id/edtPassOld"
-                    android:layout_width="300dp"
-                    android:layout_height="wrap_content" />
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <EditText
+                        android:id="@+id/edtPassOld"
+                        android:layout_width="300dp"
+                        android:layout_height="wrap_content"
+                        android:inputType="textPassword"/>
+
+                    <ImageView
+                        android:id="@+id/btnShowOld"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:src="@drawable/eye"
+                        android:layout_marginStart="270dp"/>
+
+                    <ImageView
+                        android:id="@+id/btnHideOld"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:src="@drawable/eye_off"
+                        android:layout_marginStart="270dp"
+                        android:visibility="gone"/>
+
+                </RelativeLayout>
+
 
 
             </LinearLayout>
@@ -100,10 +125,35 @@
                     android:text="Mật khẩu mới"
                     android:textSize="12sp" />
 
-                <EditText
-                    android:id="@+id/edtPassNew"
-                    android:layout_width="300dp"
-                    android:layout_height="wrap_content" />
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <EditText
+                        android:id="@+id/edtPassNew"
+                        android:layout_width="300dp"
+                        android:layout_height="wrap_content"
+                        android:inputType="textPassword"/>
+
+                    <ImageView
+                        android:id="@+id/btnShowNew"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:src="@drawable/eye"
+                        android:layout_marginStart="270dp"/>
+
+                    <ImageView
+                        android:id="@+id/btnHideNew"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:src="@drawable/eye_off"
+                        android:layout_marginStart="270dp"
+                        android:visibility="gone"/>
+
+                </RelativeLayout>
 
             </LinearLayout>
 
@@ -121,10 +171,35 @@
                     android:text="Xác nhận mật khẩu mới"
                     android:textSize="12sp" />
 
-                <EditText
-                    android:id="@+id/edtConfirm"
-                    android:layout_width="300dp"
-                    android:layout_height="wrap_content" />
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <EditText
+                        android:id="@+id/edtConfirm"
+                        android:layout_width="300dp"
+                        android:layout_height="wrap_content"
+                        android:inputType="textPassword"/>
+
+                    <ImageView
+                        android:id="@+id/btnShowConfirm"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:src="@drawable/eye"
+                        android:layout_marginStart="270dp"/>
+
+                    <ImageView
+                        android:id="@+id/btnHideConfirm"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:src="@drawable/eye_off"
+                        android:layout_marginStart="270dp"
+                        android:visibility="gone"/>
+
+                </RelativeLayout>
 
             </LinearLayout>
 
