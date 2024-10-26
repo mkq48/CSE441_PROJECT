@@ -10,4 +10,12 @@ public class UserProfile {
         this.name = name;
         this.imageUrl = imageUrl;
     }
+
+    @Override
+    public String toString() {
+        return "UserProfile{" +
+                "name='" + name + '\'' +
+                ", imageUrl='" + imageUrl + '\'' +
+                '}';
+    }
 }
