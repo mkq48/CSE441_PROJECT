@@ -2,6 +2,8 @@ package com.example.rcs;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -14,6 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -34,23 +37,35 @@ import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.nex3z.flowlayout.FlowLayout;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class Detail_story extends AppCompatActivity {
-    private TextView tv_name, tv_author, tv_category, tv_content, tv_favorites, tv_views;
+    private TextView tv_name, tv_author, tv_category, tv_content, tv_favorites,
+            tv_views, tv_chap_count, tv_show_more, tv_collapse, tv_show_more_chap,
+            tv_collapse_chap,
+            tv_latest, tv_oldest;
     private ImageView btn_favorite, img;
     private String storyId, name, imageUrl;
     private boolean isfavorited, initial_favorite_status;
     private List<String> categoryList;
-    private long chapCount;
+    private List<Integer> chapList, allList, subList;
+    private boolean isCollapseChapterList, isLastestChapterList;
     private RecyclerView chapter_rv, categories_rv;
     private ChapterAdapter chapterAdapter;
     private CategoryAdapter categoryAdapter;
     private String userId = new User().getCurrentUserId();
     private Button btn_read;
     private int currentChap, currentPage;
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed(); // Trở lại Activity trước đó
+        return true;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,7 +108,7 @@ public class Detail_story extends AppCompatActivity {
                 } else {
                     total_like = snapshot.child("favorites").getValue(Integer.class);
                 }
-                tv_favorites.setText("Yêu thích: " + total_like);
+                tv_favorites.setText(total_like + "");
                 // hien thi so luot xem
                 tv_views.setText(snapshot.child("views").getValue(Integer.class) + "");
 
@@ -108,6 +123,7 @@ public class Detail_story extends AppCompatActivity {
 
     public void initView() {
         img = findViewById(R.id.img);
+        tv_chap_count = findViewById(R.id.tv_chap_count);
         tv_name = findViewById(R.id.tv_name);
         tv_author = findViewById(R.id.tv_author);
         tv_category = findViewById(R.id.tv_category);
@@ -130,15 +146,27 @@ public class Detail_story extends AppCompatActivity {
         imageUrl = intent.getStringExtra("imageUrl");
         userId = new User().getCurrentUserId();
         chapter_rv = findViewById(R.id.chapter_rv);
+        // hien thi toolbar
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        toolbar.setTitle(name);
         // hien thi cac chap len recycler
-        chapterAdapter = new ChapterAdapter(chapCount, storyId, this);
+        chapList = new ArrayList<>();
+        allList = new ArrayList<>();
+        subList = allList.subList(0, Math.min(5, allList.size()));
+//        isCollapseChapterList = true;
+        isLastestChapterList = true;
+        chapterAdapter = new ChapterAdapter(chapList, storyId, this);
         chapter_rv.setAdapter(chapterAdapter);
-        chapter_rv.setLayoutManager(new GridLayoutManager(this, 4));
+        chapter_rv.setLayoutManager(new GridLayoutManager(this, 5));
         // hien thi the loai truyen len recycler
         categoryList = new ArrayList<>();
         categoryAdapter = new CategoryAdapter(categoryList);
+        categoryAdapter.notifyDataSetChanged();
         categories_rv.setAdapter(categoryAdapter);
-        categories_rv.setLayoutManager(new GridLayoutManager(this, 2, GridLayoutManager.HORIZONTAL, false));
+        categories_rv.setLayoutManager(new GridLayoutManager(this, 2));
         //gán sự kien cho nut yeu thich:
         btn_favorite.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -151,7 +179,7 @@ public class Detail_story extends AppCompatActivity {
                         // so luong da thich truyen = sl - 1
 //                        cap nhat lại biến isfavorites va giao dien
                         isfavorited = false;
-                        tv_favorites.setText("Yêu thích: " + (favorites - 1) + "");
+                        tv_favorites.setText((favorites - 1) + "");
                         btn_favorite.setImageResource(R.drawable.white_heart);
 
                     } else {
@@ -159,12 +187,82 @@ public class Detail_story extends AppCompatActivity {
 //                        sl da thich truyen +=1
 //                        cap nhat lại biến isfavorites va giao dien
                         isfavorited = true;
-                        tv_favorites.setText("Yêu thích: " + (favorites + 1) + "");
+                        tv_favorites.setText((favorites + 1) + "");
                         btn_favorite.setImageResource(R.drawable.red_heart);
                     }
                 } catch (Exception e) {
 
                 }
+            }
+        });
+        tv_show_more = findViewById(R.id.tv_show_more);
+        tv_collapse = findViewById(R.id.tv_collapse);
+        tv_show_more.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                tv_show_more.setVisibility(View.GONE);
+                tv_content.setMaxLines(Integer.MAX_VALUE);
+                tv_collapse.setVisibility(View.VISIBLE);
+            }
+        });
+        tv_collapse.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                tv_collapse.setVisibility(View.GONE);
+                tv_content.setMaxLines(1);
+                tv_show_more.setVisibility(View.VISIBLE);
+            }
+        });
+        // su kien xu ly cac btn voi chapList
+        tv_show_more_chap = findViewById(R.id.tv_show_more_chap);
+        tv_collapse_chap = findViewById(R.id.tv_collapse_chap);
+        tv_latest = findViewById(R.id.tv_latest);
+        tv_oldest = findViewById(R.id.tv_oldest);
+        tv_show_more_chap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                tv_show_more_chap.setVisibility(View.GONE);
+                chapterAdapter.expand();
+                tv_collapse_chap.setVisibility(View.VISIBLE);
+//                if(isLastestChapterList){
+//                    chapterAdapter.sortDesc();
+//                }else {
+//                    chapterAdapter.sortIncrease();
+//                }
+            }
+        });
+        tv_collapse_chap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                tv_collapse_chap.setVisibility(View.GONE);
+                chapterAdapter.collapse();
+                tv_show_more_chap.setVisibility(View.VISIBLE);
+//                if(isLastestChapterList){
+//                    chapterAdapter.sortDesc();
+//                }else {
+//                    chapterAdapter.sortIncrease();
+//                }
+            }
+        });
+        tv_latest.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                tv_latest.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.orange)));
+                tv_latest.setTextColor(getResources().getColor(R.color.white));
+                tv_oldest.setTextColor(getResources().getColor(R.color.black));
+                tv_oldest.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.grey)));
+                chapterAdapter.sortDesc();
+
+            }
+        });
+        tv_oldest.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                tv_oldest.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.orange)));
+                tv_oldest.setTextColor(getResources().getColor(R.color.white));
+                tv_latest.setTextColor(getResources().getColor(R.color.black));
+                tv_latest.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.grey)));
+                chapterAdapter.sortIncrease();
             }
         });
 //        nut doc tiep
@@ -175,7 +273,7 @@ public class Detail_story extends AppCompatActivity {
                 showDialog();
             }
         });
-        show_btn_read();
+        show_read_and_show_more_chap();
     }
 
     @Override
@@ -244,7 +342,8 @@ public class Detail_story extends AppCompatActivity {
                             Intent i = new Intent(Detail_story.this, Chaper_View_Activity.class);
                             i.putExtra("chapId", currentChap);
                             i.putExtra("storyId", storyId);
-                            i.putExtra("currentPage", currentPage);startActivity(i);
+                            i.putExtra("currentPage", currentPage);
+                            startActivity(i);
                         }
                     });
 
@@ -277,27 +376,18 @@ public class Detail_story extends AppCompatActivity {
     }
 
     public void loadChapters() {
-        FirebaseDatabase.getInstance().getReference("story_chapters/" + storyId).addChildEventListener(new ChildEventListener() {
+        FirebaseDatabase.getInstance().getReference("story_chapters/" + storyId).addValueEventListener(new ValueEventListener() {
             @Override
-            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                chapterAdapter.addNewChap();
-                chapCount = chapterAdapter.getItemCount();
-                Toast.makeText(Detail_story.this, chapCount+"", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                chapList.clear();
+                for (DataSnapshot storySnapshot : snapshot.getChildren()) {
+                    chapList.add(chapList.size()+1);
+                }
+                if(isLastestChapterList){
+                    chapterAdapter.sortDesc();
+                }else {
+                    chapterAdapter.sortIncrease();
+                }
             }
 
             @Override
@@ -349,14 +439,19 @@ public class Detail_story extends AppCompatActivity {
             }
         });
     }
-    public void show_btn_read(){
-        FirebaseDatabase.getInstance().getReference("story_chapters/"+storyId).addValueEventListener(new ValueEventListener() {
+
+    public void show_read_and_show_more_chap() {
+        FirebaseDatabase.getInstance().getReference("story_chapters/" + storyId).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 long chapCount = snapshot.getChildrenCount();
-                if(chapCount>0){
+                tv_chap_count.setText(chapCount + " Chapter");
+                if (chapCount > 0) {
                     btn_read.setVisibility(View.VISIBLE);
-                }else {
+                    if (chapCount > 5) {
+                        tv_show_more_chap.setVisibility(View.VISIBLE);
+                    }
+                } else {
                     btn_read.setVisibility(View.GONE);
                 }
             }
@@ -367,4 +462,5 @@ public class Detail_story extends AppCompatActivity {
             }
         });
     }
+
 }

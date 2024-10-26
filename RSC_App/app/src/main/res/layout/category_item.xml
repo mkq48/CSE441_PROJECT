@@ -1,20 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginLeft="10dp"
-    android:paddingBottom="10dp"
-    xmlns:app="http://schemas.android.com/apk/res-auto" >
-    <TextView
-        android:id="@+id/tv_category"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Tu tien"
-        android:textSize="17sp"
-        android:background="@drawable/background_category_item"
-        android:paddingHorizontal="13dp"
-        android:textStyle="bold"
-        android:textColor="#090D0C"
-        android:paddingVertical="5dp"
-        />
-</RelativeLayout>
+    android:text="@string/app_name"
+    android:textSize="12sp"
+    android:id="@+id/tv_category"
+    android:textColor="#666666"
+    android:paddingHorizontal="8dp"
+    android:paddingVertical="4dp"
+    android:background="@drawable/background_category_item"
+    android:layout_marginStart="10dp"
+    android:layout_marginTop="10dp" />
