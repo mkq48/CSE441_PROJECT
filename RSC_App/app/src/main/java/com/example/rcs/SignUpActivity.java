@@ -3,7 +3,9 @@ package com.example.rcs;
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.DatePicker;
 import android.widget.Toast;
 
@@ -14,6 +16,10 @@ import androidx.fragment.app.DialogFragment;
 import com.example.rcs.databinding.ActivitySignUpBinding;
 import com.example.rcs.fragment.DatePickerFragment;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Calendar;
 
@@ -48,10 +54,35 @@ public class SignUpActivity extends AppCompatActivity implements DatePickerDialo
                             progressDialog.dismiss();
                             if (task.isSuccessful()) {
                                 Toast.makeText(this, "Đăng ký thành công", Toast.LENGTH_SHORT).show();
+                                FirebaseUser user = auth.getCurrentUser();
+                                if (user != null) {
+                                    UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                                            .setDisplayName(tenDangNhap)
+                                            .setPhotoUri(Uri.parse("https://icons.iconarchive.com/icons/martin-berube/character/128/Devil-icon.png"))
+                                            .build();
+                                    user.updateProfile(profileUpdates).addOnCompleteListener(task1 -> {
+                                        if (task1.isSuccessful()) {
+                                            Log.d("onUpdate", "user profile updated");
+                                        }else Log.d("onUpdate", "user profile not updated");
+                                    });
+                                    FirebaseFirestore db = FirebaseFirestore.getInstance();
+                                    CollectionReference usersRef = db.collection("users");
+                                    UserProfile userProfile = new UserProfile(tenDangNhap, "https://icons.iconarchive.com/icons/martin-berube/character/128/Devil-icon.png");
+                                    usersRef.document(user.getUid()).set(userProfile)
+                                            .addOnSuccessListener(aVoid -> {
+                                                // Data written successfully
+                                                Log.d("onPush", "User profile stored in Firestore.");
+                                            })
+                                            .addOnFailureListener(e -> {
+                                                // Handle error
+                                                Log.w("onPush", "Error storing user profile", e);
+                                            });
+                                }else Log.d("isNull", "user null");
                                 finish();
                             } else {
                                 Toast.makeText(this, "Đăng ký thất bại", Toast.LENGTH_SHORT).show();
                             }
+
                         });
             }
         });
