@@ -7,7 +7,8 @@ public class User {
     private String userName;
 
     public String getCurrentUserId() {
-        return FirebaseAuth.getInstance().getCurrentUser().getUid();
+//        return FirebaseAuth.getInstance().getCurrentUser().getUid();
+        return "user1";
     }
     public User getUserById(String id){
 

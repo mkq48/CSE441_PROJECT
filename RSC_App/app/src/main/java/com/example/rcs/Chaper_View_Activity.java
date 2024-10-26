@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -35,7 +36,8 @@ import java.net.URL;
 public class Chaper_View_Activity extends AppCompatActivity {
     private PDFView pdfView;
     private String pdfUrl,storyId;
-    int currentPage,chapId,chapCount;
+    int currentPage,chapId;
+    long chapCount;
     Button previous_btn,next_btn;
 
     @Override
@@ -59,7 +61,6 @@ public class Chaper_View_Activity extends AppCompatActivity {
                     Intent i = new Intent(Chaper_View_Activity.this, Chaper_View_Activity.class);
                     i.putExtra("chapId",chapId+1);
                     i.putExtra("storyId",storyId);
-                    i.putExtra("chapCount",chapCount);
                     startActivity(i);
                 }
             }
@@ -73,17 +74,27 @@ public class Chaper_View_Activity extends AppCompatActivity {
                     Intent i = new Intent(Chaper_View_Activity.this, Chaper_View_Activity.class);
                     i.putExtra("chapId",chapId-1);
                     i.putExtra("storyId",storyId);
-                    i.putExtra("chapCount",chapCount);
                     startActivity(i);
                 }
             }
         });
-
         Intent i = getIntent();
         chapId = i.getIntExtra("chapId",0);
-        chapCount = i.getIntExtra("chapCount",0);
         storyId = i.getStringExtra("storyId");
         currentPage = i.getIntExtra("currentPage",0);
+        // get chapCount
+        FirebaseDatabase.getInstance().getReference("story_chapters/"+storyId).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                chapCount = snapshot.getChildrenCount();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+        // lay pdfUrl de tai len pdfViewer
         FirebaseDatabase.getInstance().getReference("story_chapters/"+storyId+"/chap"+chapId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -138,7 +149,7 @@ public class Chaper_View_Activity extends AppCompatActivity {
                             public void run() {
                                 next_btn.setVisibility(View.GONE); // Ẩn nút
                             }
-                        }, 2000); // Thời gian hiển thị là 3 giây
+                        }, 3000); // Thời gian hiển thị là 3 giây
                     }
 
                     if(chapId>1){
@@ -150,7 +161,7 @@ public class Chaper_View_Activity extends AppCompatActivity {
                             public void run() {
                                 previous_btn.setVisibility(View.GONE); // Ẩn nút
                             }
-                        }, 2000); // Thời gian hiển thị là 3 giây
+                        }, 3000); // Thời gian hiển thị là 3 giây
                     }
                     return true;
                 }
@@ -170,14 +181,16 @@ public class Chaper_View_Activity extends AppCompatActivity {
                         @NonNull
                         @Override
                         public Transaction.Result doTransaction(@NonNull MutableData currentData) {
-                            int views = currentData.getValue(Integer.class)+1;
+                            long views = currentData.getValue(Long.class)+1;
                             currentData.setValue(views);
                                 return Transaction.success(currentData);
                         }
 
                         @Override
                         public void onComplete(@Nullable DatabaseError error, boolean committed, @Nullable DataSnapshot currentData) {
-
+                            String userId = new User().getCurrentUserId();
+                            FirebaseDatabase.getInstance().getReference("history/"+userId+"/"+storyId+"/currentChap").setValue(chapId);
+                            FirebaseDatabase.getInstance().getReference("history/"+userId+"/"+storyId+"/currentPage").setValue(pdfView.getCurrentPage());
                         }
                     });
                 }
@@ -188,9 +201,6 @@ public class Chaper_View_Activity extends AppCompatActivity {
 
             }
         });
-        String userId = new User().getCurrentUserId();
-        FirebaseDatabase.getInstance().getReference("history/"+userId+"/"+storyId+"/currentChap").setValue(chapId);
-        FirebaseDatabase.getInstance().getReference("history/"+userId+"/"+storyId+"/currentPage").setValue(pdfView.getCurrentPage());
 
     }
 }

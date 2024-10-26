@@ -17,10 +17,14 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 
@@ -52,21 +56,32 @@ public class AllStoryActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent i = new Intent(AllStoryActivity.this,FavoriteListActivity.class);
                 startActivity(i);
+//                Intent i = new Intent(AllStoryActivity.this,SearchActivity.class);
+//                startActivity(i);
             }
         });
     }
 
     private void getData() {
         FirebaseDatabase.getInstance().getReference("stories").addChildEventListener(new ChildEventListener() {
-            @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 String id = snapshot.getKey();
-                String imgUrl = snapshot.child("imageUrl").getValue(String.class);
-                String name = snapshot.child("name").getValue(String.class);
-                Story story = new Story(id,name,imgUrl);
-                stories.add(new Story(id,name,imgUrl));
-                adapter.notifyDataSetChanged();
+                FirebaseFirestore.getInstance().document("stories/" + id).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (document.exists()) {
+                                String name = (String)document.get("name");
+                                String imgUrl = (String)document.get("imageUrl");;
+                                Story story = new Story(id,name,imgUrl);
+                                stories.add(new Story(id,name,imgUrl));
+                                adapter.notifyItemInserted(stories.size()-1);
+                            }
+                        }
+                    }
+                });
             }
 
             @Override

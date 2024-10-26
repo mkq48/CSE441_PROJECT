@@ -12,19 +12,28 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.Inflater;
 
 public class ChapterAdapter extends RecyclerView.Adapter<ChapterAdapter.ChapterViewHoder>{
-    private List<String> chapters;
+    private long chapterCount;
+    private List<Integer> chapterList;
     private String storyId;
     private Context context;
 
 
-    public ChapterAdapter(List<String> chapters, String storyId, Context context) {
-        this.chapters = chapters;
+    public ChapterAdapter(long chaptersCount, String storyId, Context context) {
+        chapterList = new ArrayList<>();
+        for (int i = 0; i < chaptersCount; i++) {
+            chapterList.add(i+1);
+        }
         this.storyId = storyId;
         this.context = context;
+    }
+    public void addNewChap(){
+        chapterList.add(getItemCount()+1);
+        notifyItemInserted(getItemCount()-1);
     }
 
     @NonNull
@@ -43,7 +52,6 @@ public class ChapterAdapter extends RecyclerView.Adapter<ChapterAdapter.ChapterV
                 Intent i = new Intent(context, Chaper_View_Activity.class);
                 i.putExtra("chapId",holder.getAdapterPosition()+1);
                 i.putExtra("storyId",storyId);
-                i.putExtra("chapCount",getItemCount());
                 context.startActivity(i);
             }
         });
@@ -51,7 +59,7 @@ public class ChapterAdapter extends RecyclerView.Adapter<ChapterAdapter.ChapterV
 
     @Override
     public int getItemCount() {
-        return chapters.size();
+        return chapterList.size();
     }
 
     public class ChapterViewHoder extends RecyclerView.ViewHolder{

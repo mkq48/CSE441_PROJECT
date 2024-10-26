@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">RCS</string>
+    <string-array name="searchBy">
+        <item>Tên truyện</item>
+        <item>Tên tác giả</item>
+        <item>Tên thể loại</item>
+    </string-array>
 </resources>

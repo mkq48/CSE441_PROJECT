@@ -12,11 +12,15 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 
@@ -48,20 +52,22 @@ public class FavoriteListActivity extends AppCompatActivity {
         FirebaseDatabase.getInstance().getReference("user_favorites/" + new User().getCurrentUserId()).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                    FirebaseDatabase.getInstance().getReference("stories/"+snapshot.getKey()).addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            String name = snapshot.child("name").getValue(String.class);
-                            String imageUrl = snapshot.child("imageUrl").getValue(String.class);
-                            favoriteList.add(new Story(snapshot.getKey(),name,imageUrl));
-                            adapter.notifyItemInserted(favoriteList.size());
+                String id = snapshot.getKey();
+                FirebaseFirestore.getInstance().document("stories/" + id).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (document.exists()) {
+                                String name = (String)document.get("name");
+                                String imgUrl = (String)document.get("imageUrl");;
+                                Story story = new Story(id,name,imgUrl);
+                                favoriteList.add(new Story(id,name,imgUrl));
+                                adapter.notifyItemInserted(favoriteList.size()-1);
+                            }
                         }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
-
-                        }
-                    });
+                    }
+                });
             }
 
             @Override

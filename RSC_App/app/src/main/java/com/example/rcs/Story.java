@@ -86,4 +86,12 @@ public class Story {
     public void setName(String name) {
         this.name = name;
     }
+
+    @Override
+    public String toString() {
+        return "Story{" +
+                "storyId='" + storyId + '\''+
+                ", name='" + name+
+                '}';
+    }
 }
