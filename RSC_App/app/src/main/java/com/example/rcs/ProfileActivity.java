@@ -54,7 +54,7 @@ public class ProfileActivity extends AppCompatActivity {
 
         initUI();
         initListener();
-        loadPrile();
+        loadProfile();
 
 
     }
@@ -139,7 +139,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     }
 
-    private void loadPrile(){
+    private void loadProfile(){
 
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
@@ -173,22 +173,35 @@ public class ProfileActivity extends AppCompatActivity {
                     .setDisplayName(newDisplayName)
                     .build();
 
-            currentUser.updateProfile(profileUpdates)
-                    .addOnCompleteListener(task -> {
-                        if (task.isSuccessful()) {
-                            // Cập nhật email
-                            currentUser.updateEmail(newEmail)
-                                    .addOnCompleteListener(emailTask -> {
-                                        if (emailTask.isSuccessful()) {
-                                            Toast.makeText(ProfileActivity.this, "Cập nhật thông tin tài khoản thành công.", Toast.LENGTH_SHORT).show();
-                                        } else {
-                                            Toast.makeText(ProfileActivity.this, "Cập nhật thông tin tài khoản lỗi: " + emailTask.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                                        }
-                                    });
-                        } else {
-                            Toast.makeText(ProfileActivity.this, "Cập nhật thông tin tài khoản lỗi: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+            currentUser.updateEmail(newEmail)
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                Toast.makeText(ProfileActivity.this, "Cập nhật thông tin tài khoản thành công.", Toast.LENGTH_SHORT).show();
+                            }
+                            else {
+                                Toast.makeText(ProfileActivity.this, "Cập nhật thông tin tài khoản lỗi: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                            }
                         }
                     });
+
+//            currentUser.updateProfile(profileUpdates)
+//                    .addOnCompleteListener(task -> {
+//                        if (task.isSuccessful()) {
+//                            // Cập nhật email
+//                            currentUser.updateEmail(newEmail)
+//                                    .addOnCompleteListener(emailTask -> {
+//                                        if (emailTask.isSuccessful()) {
+//                                            Toast.makeText(ProfileActivity.this, "Cập nhật thông tin tài khoản thành công.", Toast.LENGTH_SHORT).show();
+//                                        } else {
+//                                            Toast.makeText(ProfileActivity.this, "Cập nhật thông tin tài khoản lỗi: " + emailTask.getException().getMessage(), Toast.LENGTH_SHORT).show();
+//                                        }
+//                                    });
+//                        } else {
+//                            Toast.makeText(ProfileActivity.this, "Cập nhật thông tin tài khoản lỗi: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+//                        }
+//                    });
         }
     }
 
@@ -213,12 +226,6 @@ public class ProfileActivity extends AppCompatActivity {
 
     private void deleteUser() {
         if (currentUser != null) {
-            // Reauthenticate if necessary
-            String email = currentUser.getEmail();
-            String password = "user_password"; // Get the user's password from input
-
-            reauthenticateUser(email, password);
-
             new AlertDialog.Builder(this)
                     .setTitle("Xác nhận xóa")
                     .setMessage("Bạn có chắc chắn muốn xóa tài khoản?")
@@ -228,25 +235,10 @@ public class ProfileActivity extends AppCompatActivity {
                     })
                     .setNegativeButton("Không", null)
                     .show();
-        } else {
-            Toast.makeText(this, "No user is currently signed in.", Toast.LENGTH_SHORT).show();
         }
     }
 
-    private void reauthenticateUser(String email, String password) {
-        AuthCredential credential = EmailAuthProvider.getCredential(email, password);
-        currentUser.reauthenticate(credential)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            deleteAccount();
-                        } else {
-                            Toast.makeText(ProfileActivity.this, "Reauthentication failed.", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-    }
+
 
     private void deleteAccount() {
         currentUser.delete()
