@@ -1,7 +1,9 @@
 package com.example.rcs;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -37,6 +39,9 @@ public class ProfileActivity extends AppCompatActivity {
     private ImageView avartar, btnBack;
     private EditText edtName, edtEmail;
     private Button btnChangepass, btnUpdateProfile, btnDel;
+
+    private ProgressDialog progressDialog;
+
     FirebaseAuth mAuth;
     FirebaseUser currentUser;
 
@@ -55,6 +60,8 @@ public class ProfileActivity extends AppCompatActivity {
         initUI();
         initListener();
         loadProfile();
+
+
 
 
     }
@@ -132,7 +139,31 @@ public class ProfileActivity extends AppCompatActivity {
         btnDel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                deleteUser();
+//                deleteUser();
+
+                String newEmail = edtEmail.getText().toString().trim();
+                showPasswordDialogAndReauthenticate(newEmail);
+
+//                if (currentUser.isEmailVerified()) {
+//                    Toast.makeText(ProfileActivity.this, "Tài khoản đã được xác minh.", Toast.LENGTH_SHORT).show();
+//                } else {
+//                    Toast.makeText(ProfileActivity.this, "Tài khoản chưa được xác minh.", Toast.LENGTH_SHORT).show();
+//                    if (currentUser != null) {
+//                        currentUser.sendEmailVerification()
+//                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+//                                    @Override
+//                                    public void onComplete(@NonNull Task<Void> task) {
+//                                        if (task.isSuccessful()) {
+//                                            Toast.makeText(ProfileActivity.this, "Email xác minh đã được gửi. Vui lòng kiểm tra hộp thư.", Toast.LENGTH_SHORT).show();
+//                                        } else {
+//                                            Toast.makeText(ProfileActivity.this, "Gửi email xác minh thất bại. Vui lòng thử lại.", Toast.LENGTH_SHORT).show();
+//                                        }
+//                                    }
+//                                });
+//                    }
+//                }
+
+
             }
         });
 
@@ -145,7 +176,6 @@ public class ProfileActivity extends AppCompatActivity {
         currentUser = mAuth.getCurrentUser();
 
         if (currentUser != null) {
-            String uid = currentUser.getUid();
             String email = currentUser.getEmail();
             String displayName = currentUser.getDisplayName();
             Uri photoUrl = currentUser.getPhotoUrl();
@@ -168,60 +198,102 @@ public class ProfileActivity extends AppCompatActivity {
             String newDisplayName = edtName.getText().toString().trim();
             String newEmail = edtEmail.getText().toString().trim();
 
+            progressDialog = new ProgressDialog(ProfileActivity.this);
+            progressDialog.setMessage("Đang cập nhật ...");
+            progressDialog.setCancelable(false);
+            progressDialog.show();
 
             UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
                     .setDisplayName(newDisplayName)
                     .build();
 
-            currentUser.updateEmail(newEmail)
+            currentUser.updateProfile(profileUpdates)
                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
+                            progressDialog.dismiss();
                             if (task.isSuccessful()) {
                                 Toast.makeText(ProfileActivity.this, "Cập nhật thông tin tài khoản thành công.", Toast.LENGTH_SHORT).show();
-                            }
-                            else {
-                                Toast.makeText(ProfileActivity.this, "Cập nhật thông tin tài khoản lỗi: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    });
-
-//            currentUser.updateProfile(profileUpdates)
-//                    .addOnCompleteListener(task -> {
-//                        if (task.isSuccessful()) {
-//                            // Cập nhật email
-//                            currentUser.updateEmail(newEmail)
-//                                    .addOnCompleteListener(emailTask -> {
-//                                        if (emailTask.isSuccessful()) {
-//                                            Toast.makeText(ProfileActivity.this, "Cập nhật thông tin tài khoản thành công.", Toast.LENGTH_SHORT).show();
-//                                        } else {
-//                                            Toast.makeText(ProfileActivity.this, "Cập nhật thông tin tài khoản lỗi: " + emailTask.getException().getMessage(), Toast.LENGTH_SHORT).show();
-//                                        }
-//                                    });
-//                        } else {
-//                            Toast.makeText(ProfileActivity.this, "Cập nhật thông tin tài khoản lỗi: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-//                        }
-//                    });
-        }
-    }
-
-    private void updateEmail(String newEmail) {
-        if (currentUser != null) {
-            currentUser.updateEmail(newEmail)
-                    .addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            if (task.isSuccessful()) {
-                                // Cập nhật email thành công
-                                Toast.makeText(ProfileActivity.this, "Email updated successfully!", Toast.LENGTH_SHORT).show();
                             } else {
-                                // Cập nhật email thất bại
-                                Toast.makeText(ProfileActivity.this, "Failed to update email.", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(ProfileActivity.this, "Cập nhật thông tin tài khoản thất bại.", Toast.LENGTH_SHORT).show();
                             }
                         }
                     });
+
         }
     }
+
+    private void showPasswordDialogAndReauthenticate(String newEmail) {
+        // Tạo một AlertDialog với một EditText để nhập mật khẩu
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Xác thực lại");
+        builder.setMessage("Vui lòng nhập mật khẩu để xác thực lại:");
+
+        // Tạo EditText cho việc nhập mật khẩu
+        final EditText inputPassword = new EditText(this);
+        inputPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        builder.setView(inputPassword);
+
+        // Thiết lập nút Xác nhận
+        builder.setPositiveButton("Xác nhận", (dialog, which) -> {
+            String password = inputPassword.getText().toString().trim();
+            if (!password.isEmpty()) {
+                updateEmail(newEmail, password);
+            } else {
+                Toast.makeText(ProfileActivity.this, "Mật khẩu không được bỏ trống", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        // Thiết lập nút Hủy
+        builder.setNegativeButton("Hủy", (dialog, which) -> dialog.cancel());
+
+        // Hiển thị hộp thoại
+        builder.show();
+    }
+
+    private void updateEmail(String newEmail, String password) {
+        if (currentUser == null) {
+            Toast.makeText(ProfileActivity.this, "User is not logged in.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+
+
+        String currentEmail = currentUser.getEmail();
+        if (currentEmail == null) {
+            Toast.makeText(ProfileActivity.this, "Current email is not available.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        AuthCredential credential = EmailAuthProvider.getCredential(currentEmail, password); // Xác thực lại với mật khẩu hiện tại
+
+        // Bắt đầu xác thực lại người dùng
+        currentUser.reauthenticate(credential).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+                    // Xác thực lại thành công, tiến hành cập nhật email
+                    currentUser.updateEmail(newEmail)
+                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful()) {
+                                        Toast.makeText(ProfileActivity.this, "Email updated successfully!", Toast.LENGTH_SHORT).show();
+                                        edtEmail.setText(newEmail);
+                                    } else {
+                                        String errorMessage = task.getException() != null ? task.getException().getMessage() : "Unknown error occurred.";
+                                        Toast.makeText(ProfileActivity.this, "Failed to update email: " + errorMessage, Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
+                } else {
+                    String errorMessage = task.getException() != null ? task.getException().getMessage() : "Re-authentication failed.";
+                    Toast.makeText(ProfileActivity.this, "Re-authentication failed: " + errorMessage, Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
 
 
     private void deleteUser() {

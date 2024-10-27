@@ -1,5 +1,6 @@
 package com.example.rcs;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
@@ -25,6 +26,7 @@ public class ChangePassActivity extends AppCompatActivity {
     private EditText edtPassOld, edtPassNew, edtConfirm;
     private Button btnChange;
     private ImageView btnBack, btnShowOld, btnHideOld, btnShowNew, btnHideNew, btnShowConfirm, btnHideConfirm;
+    private ProgressDialog progressDialog;
 
     FirebaseAuth mAuth;
     FirebaseUser currentUser;
@@ -162,6 +164,10 @@ public class ChangePassActivity extends AppCompatActivity {
 
 
         if (currentUser != null) {
+            progressDialog = new ProgressDialog(ChangePassActivity.this);
+            progressDialog.setMessage("Đang cập nhật mật khẩu...");
+            progressDialog.setCancelable(false);
+            progressDialog.show();
             AuthCredential credential = EmailAuthProvider
                     .getCredential(currentUser.getEmail(), passOld);
 
@@ -171,6 +177,7 @@ public class ChangePassActivity extends AppCompatActivity {
                             currentUser.updatePassword(newPass)
                                     .addOnCompleteListener(task1 -> {
                                         if (task1.isSuccessful()) {
+                                            progressDialog.dismiss();
                                             Toast.makeText(this, "Đổi mật khẩu thành công", Toast.LENGTH_SHORT).show();
                                             navigatetoProfile();
                                         } else {

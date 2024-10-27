@@ -63,7 +63,9 @@
                     android:textSize="12sp"
                     android:textStyle="bold"
                     android:layout_marginLeft="40dp"
-                    android:visibility="gone"/>
+                    android:padding="15dp"
+                    android:visibility="gone"
+                    />
 
             </LinearLayout>
 

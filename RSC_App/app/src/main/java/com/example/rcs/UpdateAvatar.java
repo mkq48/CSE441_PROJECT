@@ -1,6 +1,8 @@
 package com.example.rcs;
 
 import android.Manifest;
+import android.app.ActionBar;
+import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -57,6 +59,8 @@ public class UpdateAvatar extends AppCompatActivity {
     private CircleImageView avartar;
     private Button btnCamera, btnGallery;
     private TextView btnSave;
+
+    private ProgressDialog progressDialog;
 
     FirebaseAuth mAuth;
     FirebaseUser currentUser;
@@ -151,6 +155,12 @@ public class UpdateAvatar extends AppCompatActivity {
     }
 
     private void updateAvatar(){
+
+        progressDialog = new ProgressDialog(UpdateAvatar.this);
+        progressDialog.setMessage("Đang cập nhật ảnh...");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+
         UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
                 .setPhotoUri(imageUri)
                 .build();
@@ -159,6 +169,7 @@ public class UpdateAvatar extends AppCompatActivity {
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
+                        progressDialog.dismiss();
                         if (task.isSuccessful()) {
                             Toast.makeText(UpdateAvatar.this, "Cập nhật ảnh đại diện thành công", Toast.LENGTH_SHORT).show();
                             navigateToProfile();
@@ -198,7 +209,7 @@ public class UpdateAvatar extends AppCompatActivity {
 
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
 
-                String savedImagePath = saveImageToInternalStorage(bitmap);
+                String saveImageToInternalStorage = saveImageToInternalStorage(bitmap);
 
 
                 Glide.with(UpdateAvatar.this)
