@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="home">Trang chủ</string>
+	<string name="tim_kiem">Tìm kiếm</string>
+    <string name="yeu_thich">Yêu thích</string>
+    <string name="toi">Tôi</string>
+</resources>

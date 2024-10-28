@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="dang_nhap_tk">ĐĂNG NHẬP TÀI KHOẢN</string>
+    <string name="email">E-mail</string>
+    <string name="mat_khau">Mật khẩu</string>
+    <string name="quen_mk">Quên mật khẩu ?</string>
+    <string name="dang_nhap">Đăng nhập</string>
+    <string name="new_user">Bạn chưa có tài khoản?</string>
+    <string name="dang_ki">Đăng ký</string>
+    <string name="toggle_on">Hiện mật khẩu</string>
+    <string name="toggle_off">Ẩn mật khẩu</string>
+
+</resources>
