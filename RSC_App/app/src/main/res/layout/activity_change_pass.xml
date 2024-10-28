@@ -210,7 +210,7 @@
                 android:text="Xác nhận"
                 android:textSize="12sp"
                 android:background="@drawable/border_btn"
-                android:backgroundTint="@color/red"
+                android:backgroundTint="@color/red_btn"
                 android:textColor="@color/white"
                 android:layout_marginTop="20dp"
                 android:textAllCaps="false"

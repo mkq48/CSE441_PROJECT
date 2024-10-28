@@ -1,7 +1,9 @@
 package com.example.rcs;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.View;
@@ -31,8 +33,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import com.google.firebase.auth.UserProfileChangeRequest;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
+
 
 public class ProfileActivity extends AppCompatActivity {
 
@@ -60,9 +61,6 @@ public class ProfileActivity extends AppCompatActivity {
         initUI();
         initListener();
         loadProfile();
-
-
-
 
     }
 
@@ -107,7 +105,6 @@ public class ProfileActivity extends AppCompatActivity {
         edtName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                edtName.setFocusable(true);
                 edtName.setFocusableInTouchMode(true);
                 edtName.requestFocus();
             }
@@ -116,7 +113,6 @@ public class ProfileActivity extends AppCompatActivity {
         edtEmail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                edtEmail.setFocusable(true);
                 edtEmail.setFocusableInTouchMode(true);
                 edtEmail.requestFocus();
             }
@@ -125,12 +121,10 @@ public class ProfileActivity extends AppCompatActivity {
         btnUpdateProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                edtName.setFocusable(false);
                 edtName.setFocusableInTouchMode(false);
 
-                edtEmail.setFocusable(false);
                 edtEmail.setFocusableInTouchMode(false);
-                updateProfile();
+                updateProfileUser();
 
 
             }
@@ -139,30 +133,7 @@ public class ProfileActivity extends AppCompatActivity {
         btnDel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                deleteUser();
-
-                String newEmail = edtEmail.getText().toString().trim();
-                showPasswordDialogAndReauthenticate(newEmail);
-
-//                if (currentUser.isEmailVerified()) {
-//                    Toast.makeText(ProfileActivity.this, "Tài khoản đã được xác minh.", Toast.LENGTH_SHORT).show();
-//                } else {
-//                    Toast.makeText(ProfileActivity.this, "Tài khoản chưa được xác minh.", Toast.LENGTH_SHORT).show();
-//                    if (currentUser != null) {
-//                        currentUser.sendEmailVerification()
-//                                .addOnCompleteListener(new OnCompleteListener<Void>() {
-//                                    @Override
-//                                    public void onComplete(@NonNull Task<Void> task) {
-//                                        if (task.isSuccessful()) {
-//                                            Toast.makeText(ProfileActivity.this, "Email xác minh đã được gửi. Vui lòng kiểm tra hộp thư.", Toast.LENGTH_SHORT).show();
-//                                        } else {
-//                                            Toast.makeText(ProfileActivity.this, "Gửi email xác minh thất bại. Vui lòng thử lại.", Toast.LENGTH_SHORT).show();
-//                                        }
-//                                    }
-//                                });
-//                    }
-//                }
-
+                deleteUser();
 
             }
         });
@@ -193,102 +164,100 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
 
-    private void updateProfile(){
+    private void updateProfileUser(){
         if (currentUser != null) {
             String newDisplayName = edtName.getText().toString().trim();
             String newEmail = edtEmail.getText().toString().trim();
 
-            progressDialog = new ProgressDialog(ProfileActivity.this);
-            progressDialog.setMessage("Đang cập nhật ...");
-            progressDialog.setCancelable(false);
-            progressDialog.show();
-
-            UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                    .setDisplayName(newDisplayName)
-                    .build();
-
-            currentUser.updateProfile(profileUpdates)
-                    .addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            progressDialog.dismiss();
-                            if (task.isSuccessful()) {
-                                Toast.makeText(ProfileActivity.this, "Cập nhật thông tin tài khoản thành công.", Toast.LENGTH_SHORT).show();
-                            } else {
-                                Toast.makeText(ProfileActivity.this, "Cập nhật thông tin tài khoản thất bại.", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    });
+            confirmUpdate(newEmail, newDisplayName);
 
         }
     }
 
-    private void showPasswordDialogAndReauthenticate(String newEmail) {
-        // Tạo một AlertDialog với một EditText để nhập mật khẩu
+    private void confirmUpdate(String newEmail, String newDisplayName) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Xác thực lại");
         builder.setMessage("Vui lòng nhập mật khẩu để xác thực lại:");
 
-        // Tạo EditText cho việc nhập mật khẩu
         final EditText inputPassword = new EditText(this);
         inputPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
         builder.setView(inputPassword);
 
-        // Thiết lập nút Xác nhận
         builder.setPositiveButton("Xác nhận", (dialog, which) -> {
             String password = inputPassword.getText().toString().trim();
             if (!password.isEmpty()) {
-                updateEmail(newEmail, password);
+                updateProfile(newEmail, password, newDisplayName);
             } else {
                 Toast.makeText(ProfileActivity.this, "Mật khẩu không được bỏ trống", Toast.LENGTH_SHORT).show();
             }
         });
 
-        // Thiết lập nút Hủy
         builder.setNegativeButton("Hủy", (dialog, which) -> dialog.cancel());
 
-        // Hiển thị hộp thoại
         builder.show();
     }
 
-    private void updateEmail(String newEmail, String password) {
+    private void updateDisplayName(String newDisplayName){
+        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                .setDisplayName(newDisplayName)
+                .build();
+
+        currentUser.updateProfile(profileUpdates)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Toast.makeText(ProfileActivity.this, "Cập nhật thông tin tài khoản thành công.", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(ProfileActivity.this, "Cập nhật thông tin tài khoản thất bại.", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+    }
+
+    private void updateProfile(String newEmail, String password, String newDisplayName) {
+        progressDialog = new ProgressDialog(ProfileActivity.this);
+        progressDialog.setMessage("Đang cập nhật ...");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+
         if (currentUser == null) {
-            Toast.makeText(ProfileActivity.this, "User is not logged in.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(ProfileActivity.this, "Vui lòng đăng nhập tài khoản.", Toast.LENGTH_SHORT).show();
             return;
         }
-
-
 
         String currentEmail = currentUser.getEmail();
         if (currentEmail == null) {
-            Toast.makeText(ProfileActivity.this, "Current email is not available.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(ProfileActivity.this, "Email hiện tại không có sẵn.", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        AuthCredential credential = EmailAuthProvider.getCredential(currentEmail, password); // Xác thực lại với mật khẩu hiện tại
+        AuthCredential credential = EmailAuthProvider.getCredential(currentEmail, password);
 
-        // Bắt đầu xác thực lại người dùng
+
         currentUser.reauthenticate(credential).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
-                    // Xác thực lại thành công, tiến hành cập nhật email
                     currentUser.updateEmail(newEmail)
                             .addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
                                     if (task.isSuccessful()) {
-                                        Toast.makeText(ProfileActivity.this, "Email updated successfully!", Toast.LENGTH_SHORT).show();
+                                        updateDisplayName(newDisplayName);
                                         edtEmail.setText(newEmail);
+                                        progressDialog.dismiss();
                                     } else {
+                                        progressDialog.dismiss();
                                         String errorMessage = task.getException() != null ? task.getException().getMessage() : "Unknown error occurred.";
-                                        Toast.makeText(ProfileActivity.this, "Failed to update email: " + errorMessage, Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(ProfileActivity.this, "Cập nhật thất bại: " + errorMessage, Toast.LENGTH_SHORT).show();
                                     }
                                 }
                             });
                 } else {
-                    String errorMessage = task.getException() != null ? task.getException().getMessage() : "Re-authentication failed.";
-                    Toast.makeText(ProfileActivity.this, "Re-authentication failed: " + errorMessage, Toast.LENGTH_SHORT).show();
+                    progressDialog.dismiss();
+                    String errorMessage = task.getException() != null ? task.getException().getMessage() : "Re-authentication lỗi.";
+                    Toast.makeText(ProfileActivity.this, "Re-authentication lỗi: " + errorMessage, Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -318,14 +287,30 @@ public class ProfileActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
-                            Toast.makeText(ProfileActivity.this, "Account deleted successfully.", Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(ProfileActivity.this, MainActivity.class);
-                            startActivity(intent);
-                            finish();
+                            clearSharedPreferences();
+                            Toast.makeText(ProfileActivity.this, "Xóa tài khoản thành công.", Toast.LENGTH_SHORT).show();
+
                         } else {
-                            Toast.makeText(ProfileActivity.this, "Failed to delete account: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ProfileActivity.this, "Xóa tài khoản thất bại: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
+    }
+
+    private void clearSharedPreferences() {
+        SharedPreferences sharedPreferences = getSharedPreferences("RSC", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.remove("userEmail");
+        editor.remove("isLoggedIn");
+        editor.apply();
+
+        navigateToLogin();
+    }
+
+    private void navigateToLogin() {
+        Intent intent = new Intent(ProfileActivity.this, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        finish();
     }
 }

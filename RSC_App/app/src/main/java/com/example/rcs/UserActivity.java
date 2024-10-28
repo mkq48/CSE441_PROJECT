@@ -39,9 +39,9 @@ public class UserActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
 
-//        if (currentUser == null) {
-//            navigateToLogin();
-//        }
+        if (currentUser == null) {
+            navigateToLogin();
+        }
 
         btnProfile = findViewById(R.id.btnProfile);
         btnLogout = findViewById(R.id.btnLogout);
@@ -92,7 +92,7 @@ public class UserActivity extends AppCompatActivity {
         Intent intent = new Intent(UserActivity.this, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
-        //finish();
+        finish();
     }
 
 
