@@ -20,6 +20,14 @@ public class Story {
         return views;
     }
 
+    public Story(int favorites, String imageUrl, String storyId, String author, String name) {
+        this.favorites = favorites;
+        this.storyId = storyId;
+        this.author = author;
+        this.name = name;
+        this.imageUrl = imageUrl;
+    }
+
     public void setViews(int views) {
         this.views = views;
     }

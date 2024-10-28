@@ -40,6 +40,8 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.StoryViewHol
     @Override
     public void onBindViewHolder(@NonNull StoryViewHolder holder, int position) {
         holder.tv_name.setText(storiesList.get(holder.getAdapterPosition()).getName());
+        holder.tv_author.setText(storiesList.get(holder.getAdapterPosition()).getAuthor());
+        holder.tv_like_count.setText(storiesList.get(holder.getAdapterPosition()).getFavorites()+"");
         Glide.with(context).asBitmap().load(storiesList.get(holder.getAdapterPosition()).getImageUrl()).into(holder.img);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,13 +67,15 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.StoryViewHol
     }
 
     static class StoryViewHolder extends RecyclerView.ViewHolder{
-        private TextView tv_name;
-        private ImageView img;
+        private TextView tv_name, tv_author, tv_like_count;
+        private ImageView img, img_heart;
 //        private CardView cardview;
         public StoryViewHolder(@NonNull View itemView) {
             super(itemView);
             tv_name=itemView.findViewById(R.id.tv_name);
             img=itemView.findViewById(R.id.img);
+            tv_author=itemView.findViewById(R.id.tv_author);
+            tv_like_count=itemView.findViewById(R.id.tv_like_count);
         }
     }
 }
