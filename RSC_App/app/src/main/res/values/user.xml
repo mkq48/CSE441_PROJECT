@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="policy">Tài khoản và bảo mật</string>
+    <string name="invite">Giới thiệu bạn bè</string>
+    <string name="policy1">Điều khoản dịch vụ</string>
+    <string name="history">Lịch sử đã đọc</string>
+    <string name="policy2">Chính sách bảo mật</string>
+    <string name="logout">Đăng xuất</string>
+    <string name="about_team">Về chúng tôi</string>
+</resources>

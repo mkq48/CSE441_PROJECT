@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tai_khoan">Tài khoản</string>
+    <string name="update_profile">Cập nhật tài khoản</string>
+    <string name="xoa_tk">Xóa tài khoản</string>
+    <string name="change_pass">Đổi mật khẩu</string>
+</resources>
