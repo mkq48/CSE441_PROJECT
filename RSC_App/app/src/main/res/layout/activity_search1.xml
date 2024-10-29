@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".Search"
+    tools:context=".SearchActivity"
     android:padding="16dp">
 
     <!-- CardView cho SearchView với viền màu đen -->
@@ -17,14 +17,6 @@
         android:orientation="horizontal"
         android:layout_marginTop="13dp"
         android:layout_marginBottom="13dp">
-
-        <ImageButton
-            android:id="@+id/imageButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:background="#FFFFFF"
-            app:srcCompat="?attr/actionModeCloseDrawable" />
 
         <!-- CardView để tạo viền màu đen cho SearchView -->
         <androidx.cardview.widget.CardView
@@ -98,5 +90,13 @@
         android:layout_height="match_parent"
         android:layout_marginTop="18dp"
         android:layout_weight="1" />
-
+    <TextView
+        android:id="@+id/tv_result"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="Không tìm thấy kết quả"
+        android:textSize="18sp"
+        android:textColor="@color/black"
+        android:visibility="gone" />
 </LinearLayout>

@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.graphics.Color;
 
 
-public class FavoriteListActivity  extends AppCompatActivity {
+public class SearchActivity extends AppCompatActivity {
     private SearchView searchView;
     private TextView tv_genre, tv_author, tv_name;
     private RecyclerView rv_ressult;
@@ -24,13 +24,13 @@ public class FavoriteListActivity  extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_favorite_list);
+        setContentView(R.layout.activity_search1);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-//        initViews();
+        initViews();
 
     }
 

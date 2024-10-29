@@ -25,4 +25,39 @@
             android:layout_toRightOf="@+id/img"
             android:text="Thanh guom diet quy" />
     </RelativeLayout>
+
+<!--    <LinearLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:orientation="vertical"-->
+<!--        android:padding="16dp">-->
+
+<!--        &lt;!&ndash; Hình ảnh và Tên truyện &ndash;&gt;-->
+<!--        <ImageView-->
+<!--            android:id="@+id/img"-->
+<!--            android:layout_width="100dp"-->
+<!--            android:layout_height="100dp"-->
+<!--            android:layout_marginEnd="8dp"-->
+<!--            android:scaleType="centerCrop" />-->
+
+<!--        <TextView-->
+<!--            android:id="@+id/tv_story_name"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="Tên truyện"-->
+<!--            android:textSize="16sp"-->
+<!--            android:textStyle="bold" />-->
+
+<!--        &lt;!&ndash; RecyclerView để hiển thị danh sách thể loại &ndash;&gt;-->
+<!--        <androidx.recyclerview.widget.RecyclerView-->
+<!--            android:id="@+id/categories_rv"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginTop="8dp"-->
+<!--            android:orientation="horizontal"-->
+<!--            android:scrollbars="horizontal" />-->
+
+<!--    </LinearLayout>-->
+
+
 </androidx.cardview.widget.CardView>

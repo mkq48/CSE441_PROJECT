@@ -34,6 +34,12 @@ public class Story {
         this.categories = categories;
 
     }
+    public Story(String storyId, String name, String imageUrl, List<String> categories) {
+        this.storyId = storyId;
+        this.name = name;
+        this.imageUrl = imageUrl;
+        this.categories = categories;
+    }
 
 
     public void setViews(int views) {

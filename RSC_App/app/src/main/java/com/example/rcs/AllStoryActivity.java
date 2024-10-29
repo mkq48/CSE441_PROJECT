@@ -34,20 +34,19 @@ public class AllStoryActivity extends AppCompatActivity {
     private ArrayList<Story> stories;
     private StoryAdapter adapter;
 
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_all_story);
 
-        // Áp dụng Insets cho giao diện
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
 
-        // Khởi tạo RecyclerView và adapter
         recyclerview = findViewById(R.id.recyclerview);
         stories = new ArrayList<>();
         adapter = new StoryAdapter(stories, this);
@@ -57,19 +56,22 @@ public class AllStoryActivity extends AppCompatActivity {
         // Lấy dữ liệu từ Firebase
         getData();
 
-        // Test chuyển sang FavoriteListActivity
+        // Button chuyển sang FavoriteListActivity
         Button btn_test = findViewById(R.id.btn_test);
-        btn_test.setOnClickListener(view -> {
-            Intent i = new Intent(AllStoryActivity.this, FavoriteListActivity.class);
-            startActivity(i);
+//        btn_test.setOnClickListener(view -> {
+//            Intent intent = new Intent(AllStoryActivity.this, FavoriteListActivity.class);
+//            startActivity(intent);
+//        });
+
+
+        btn_test.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(AllStoryActivity.this, FavoriteListActivity.class);
+                startActivity(intent);
+            }
         });
 
-        // Thêm sự kiện cho btn_search để chuyển sang SearchActivity
-        Button btn_search = findViewById(R.id.btn_search);
-        btn_search.setOnClickListener(view -> {
-            Intent intent = new Intent(AllStoryActivity.this, Search.class);
-            startActivity(intent);
-        });
 
     }
 
@@ -90,10 +92,7 @@ public class AllStoryActivity extends AppCompatActivity {
 
                             List<String> categoryList = Collections.singletonList((String) document.get("category"));
 
-
                             stories.add(new Story(favorites, imgUrl, id, author, name, categoryList));
-
-
 
                             sortAndLimitStories();
                             adapter.notifyDataSetChanged();
@@ -125,28 +124,27 @@ public class AllStoryActivity extends AppCompatActivity {
                 if (index != -1) {
                     stories.remove(index);
 
-                     adapter.notifyDataSetChanged();
+                    adapter.notifyDataSetChanged();
                 }
             }
 
             @Override
             public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-             }
+            }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-             }
+            }
         });
     }
 
     private void sortAndLimitStories() {
-         stories.sort((s1, s2) -> Long.compare(s2.getFavorites(), s1.getFavorites()));
+        stories.sort((s1, s2) -> Long.compare(s2.getFavorites(), s1.getFavorites()));
 
-         if (stories.size() > 50) {
+        if (stories.size() > 50) {
             stories = new ArrayList<>(stories.subList(0, 50));
         }
     }
-
 
     public int findStoryIndexById(String id) {
         for (int i = 0; i < stories.size(); i++) {
