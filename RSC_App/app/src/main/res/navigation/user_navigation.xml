@@ -7,8 +7,8 @@
     <fragment
         android:id="@+id/userFragment2"
         android:name="com.example.rcs.fragment.UserFragment"
-        android:label="fragment_user"
-        tools:layout="@layout/fragment_user" >
+        android:label="@string/policy"
+        tools:layout="@layout/fragment_user">
         <action
             android:id="@+id/action_userFragment2_to_profileFragment"
             app:destination="@id/profileFragment" />
@@ -16,6 +16,15 @@
     <fragment
         android:id="@+id/profileFragment"
         android:name="com.example.rcs.fragment.ProfileFragment"
-        android:label="fragment_profile"
-        tools:layout="@layout/fragment_profile" />
+        android:label="@string/policy"
+        tools:layout="@layout/fragment_profile">
+        <action
+            android:id="@+id/action_profileFragment_to_changePassFragment"
+            app:destination="@id/changePassFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/changePassFragment"
+        android:name="com.example.rcs.fragment.ChangePassFragment"
+        android:label="@string/change_pass"
+        tools:layout="@layout/fragment_change_pass" />
 </navigation>

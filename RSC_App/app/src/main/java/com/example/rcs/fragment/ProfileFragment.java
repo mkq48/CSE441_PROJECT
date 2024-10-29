@@ -16,6 +16,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.bumptech.glide.Glide;
 import com.example.rcs.MainActivity;
@@ -42,6 +44,10 @@ public class ProfileFragment extends Fragment {
 
         loadProfile();
         binding.btnUpdateProfile.setOnClickListener(view -> updateProfileUser());
+        binding.btnChangePass.setOnClickListener(view -> {
+            NavController navController = NavHostFragment.findNavController(this);
+            navController.navigate(R.id.action_profileFragment_to_changePassFragment);
+        });
         binding.btnDel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
