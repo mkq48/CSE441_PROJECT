@@ -148,17 +148,22 @@ public class ChangePassActivity extends AppCompatActivity {
     }
 
     private void changePass(){
-        String passOld = edtPassOld.getText().toString().trim();
+        String oldPass = edtPassOld.getText().toString().trim();
         String newPass = edtPassNew.getText().toString().trim();
         String confirmPass = edtConfirm.getText().toString().trim();
 
-        if (passOld.isEmpty() || newPass.isEmpty() || confirmPass.isEmpty()) {
+        if (oldPass.isEmpty() || newPass.isEmpty() || confirmPass.isEmpty()) {
             Toast.makeText(this, "Vui lòng điền đầy đủ thông tin", Toast.LENGTH_SHORT).show();
             return;
         }
 
         if (!newPass.equals(confirmPass)) {
             Toast.makeText(this, "Mật khẩu mới và mật khẩu xác nhận không trùng khớp", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (newPass.equals(oldPass)) {
+            Toast.makeText(this, "Mật khẩu mới và mật khẩu cũ không được trùng khớp", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -169,7 +174,7 @@ public class ChangePassActivity extends AppCompatActivity {
             progressDialog.setCancelable(false);
             progressDialog.show();
             AuthCredential credential = EmailAuthProvider
-                    .getCredential(currentUser.getEmail(), passOld);
+                    .getCredential(currentUser.getEmail(), oldPass);
 
             currentUser.reauthenticate(credential)
                     .addOnCompleteListener(task -> {
