@@ -89,12 +89,14 @@
             android:text="Thể loại"
             android:textAlignment="center"
             android:textSize="16sp" />
+
     </LinearLayout>
 
-    <ListView
-        android:id="@+id/lv"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_ressult"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="13dp" />
+        android:layout_marginTop="18dp"
+        android:layout_weight="1" />
 
 </LinearLayout>

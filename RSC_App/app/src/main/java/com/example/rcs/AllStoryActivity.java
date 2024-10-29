@@ -27,6 +27,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 
 public class AllStoryActivity extends AppCompatActivity {
     private RecyclerView recyclerview;
@@ -84,15 +85,17 @@ public class AllStoryActivity extends AppCompatActivity {
                             String name = (String) document.get("name");
                             String imgUrl = (String) document.get("imageUrl");
                             String author = (String) document.get("author");
+                            String category = (String) document.get("category");
                             int favorites = snapshot.child("favorites").getValue(Integer.class);
 
-                            // Thêm truyện vào danh sách
-                            stories.add(new Story(favorites, imgUrl, id, author, name));
+                            List<String> categoryList = Collections.singletonList((String) document.get("category"));
 
-                            // Sắp xếp theo lượt thích giảm dần và giới hạn 50 truyện
+
+                            stories.add(new Story(favorites, imgUrl, id, author, name, categoryList));
+
+
+
                             sortAndLimitStories();
-
-                            // Cập nhật adapter
                             adapter.notifyDataSetChanged();
                         }
                     }
@@ -108,10 +111,8 @@ public class AllStoryActivity extends AppCompatActivity {
                 if (index != -1) {
                     stories.get(index).setFavorites(favorites);
 
-                    // Sắp xếp lại và giới hạn số lượng truyện
                     sortAndLimitStories();
 
-                    // Cập nhật adapter
                     adapter.notifyDataSetChanged();
                 }
             }
@@ -124,29 +125,24 @@ public class AllStoryActivity extends AppCompatActivity {
                 if (index != -1) {
                     stories.remove(index);
 
-                    // Cập nhật lại adapter sau khi xóa
-                    adapter.notifyDataSetChanged();
+                     adapter.notifyDataSetChanged();
                 }
             }
 
             @Override
             public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                // Không cần xử lý trong trường hợp này
-            }
+             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                // Xử lý lỗi nếu cần
-            }
+             }
         });
     }
 
     private void sortAndLimitStories() {
-        // Sắp xếp danh sách theo lượt yêu thích giảm dần
-        stories.sort((s1, s2) -> Long.compare(s2.getFavorites(), s1.getFavorites()));
+         stories.sort((s1, s2) -> Long.compare(s2.getFavorites(), s1.getFavorites()));
 
-        // Giới hạn danh sách tối đa 50 truyện
-        if (stories.size() > 50) {
+         if (stories.size() > 50) {
             stories = new ArrayList<>(stories.subList(0, 50));
         }
     }

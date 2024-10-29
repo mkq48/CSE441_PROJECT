@@ -6,10 +6,13 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.List;
+
 public class Story {
     private String storyId;
     private String author;
-    private String categories;
+    private List<String> categories;
+
     private String content;
     private int favorites;
     private String imageUrl;
@@ -18,15 +21,20 @@ public class Story {
 
     public long getViews() {
         return views;
+
+
     }
 
-    public Story(int favorites, String imageUrl, String storyId, String author, String name) {
+    public Story(int favorites, String imageUrl, String storyId, String author, String name, List<String> categories) {
         this.favorites = favorites;
         this.storyId = storyId;
         this.author = author;
         this.name = name;
         this.imageUrl = imageUrl;
+        this.categories = categories;
+
     }
+
 
     public void setViews(int views) {
         this.views = views;
@@ -49,11 +57,11 @@ public class Story {
         this.author = author;
     }
 
-    public String getCategories() {
+    public List<String> getCategories() {
         return categories;
     }
 
-    public void setCategories(String categories) {
+    public void setCategories(List<String> categories) {
         this.categories = categories;
     }
 
@@ -85,7 +93,8 @@ public class Story {
         return name;
     }
 
-    public Story(String storyId, String name, String imageUrl) {
+
+    public Story(String storyId, String name, String imageUrl ) {
         this.storyId = storyId;
         this.name = name;
         this.imageUrl = imageUrl;

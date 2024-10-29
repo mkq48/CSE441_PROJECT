@@ -23,6 +23,8 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class FavoriteListActivity extends AppCompatActivity {
     private FavoriteStoryAdapter adapter;
@@ -61,7 +63,9 @@ public class FavoriteListActivity extends AppCompatActivity {
                             if (document.exists()) {
                                 String name = (String)document.get("name");
                                 String imgUrl = (String)document.get("imageUrl");;
-                                Story story = new Story(id,name,imgUrl);
+                                String category = (String)document.get("category");
+                                List<String> categoryList = Collections.singletonList(category);  // Chuyển đổi category thành List
+                                Story story = new Story(id, name, imgUrl, categoryList);
                                 favoriteList.add(new Story(id,name,imgUrl));
                                 adapter.notifyItemInserted(favoriteList.size()-1);
                             }
