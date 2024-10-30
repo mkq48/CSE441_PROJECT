@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -67,7 +68,7 @@ public class ChapterAdapter extends RecyclerView.Adapter<ChapterAdapter.ChapterV
                 @Override
                 public void onClick(View view) {
                     Intent i = new Intent(context, Chaper_View_Activity.class);
-                    i.putExtra("chapId", holder.getAdapterPosition() + 1);
+                    i.putExtra("chapId", chapterList.get(holder.getAdapterPosition()));
                     i.putExtra("storyId", storyId);
                     context.startActivity(i);
                 }

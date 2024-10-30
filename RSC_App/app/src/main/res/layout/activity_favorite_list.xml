@@ -6,10 +6,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".FavoriteListActivity"
-    android:paddingLeft="40dp"
-    android:paddingEnd="40dp">
+    android:backgroundTint="@color/white">
+    <Toolbar
+        android:id="@+id/tb"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:title="Danh sách yêu thích"/>
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_below="@+id/tb"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/background_color"
+        android:padding="25dp" />
 </RelativeLayout>

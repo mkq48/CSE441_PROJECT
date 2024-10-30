@@ -1,4 +1,5 @@
 package com.example.rcs;
+
 import androidx.annotation.NonNull;
 
 import com.google.firebase.database.DataSnapshot;
@@ -6,24 +7,41 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.List;
+
 public class Story {
     private String storyId;
     private String author;
-    private String categories;
+    private List<String> categories;
+
     private String content;
     private int favorites;
     private String imageUrl;
     private String name;
     private int views;
+    public Story(int favorites, String imageUrl, String storyId, String author, String name, List<String> categories) {
+        this.favorites = favorites;
+        this.storyId = storyId;
+        this.author = author;
+        this.name = name;
+        this.imageUrl = imageUrl;
+        this.categories = categories;
 
-    public long getViews() {
-        return views;
     }
 
-    public void setViews(int views) {
-        this.views = views;
+    public Story(String storyId, String name, String imageUrl) {
+        this.storyId = storyId;
+        this.name = name;
+        this.imageUrl = imageUrl;
     }
 
+    public Story(String storyId, String author, List<String> categories, String name, String imageUrl) {
+        this.storyId = storyId;
+        this.author = author;
+        this.categories = categories;
+        this.name = name;
+        this.imageUrl = imageUrl;
+    }
 
     public String getStoryId() {
         return storyId;
@@ -41,11 +59,11 @@ public class Story {
         this.author = author;
     }
 
-    public String getCategories() {
+    public List<String> getCategories() {
         return categories;
     }
 
-    public void setCategories(String categories) {
+    public void setCategories(List<String> categories) {
         this.categories = categories;
     }
 
@@ -57,7 +75,7 @@ public class Story {
         this.content = content;
     }
 
-    public long getFavorites() {
+    public int getFavorites() {
         return favorites;
     }
 
@@ -77,21 +95,15 @@ public class Story {
         return name;
     }
 
-    public Story(String storyId, String name, String imageUrl) {
-        this.storyId = storyId;
-        this.name = name;
-        this.imageUrl = imageUrl;
-    }
-
     public void setName(String name) {
         this.name = name;
     }
 
-    @Override
-    public String toString() {
-        return "Story{" +
-                "storyId='" + storyId + '\''+
-                ", name='" + name+
-                '}';
+    public int getViews() {
+        return views;
+    }
+
+    public void setViews(int views) {
+        this.views = views;
     }
 }

@@ -56,8 +56,6 @@ public class AllStoryActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent i = new Intent(AllStoryActivity.this,FavoriteListActivity.class);
                 startActivity(i);
-//                Intent i = new Intent(AllStoryActivity.this,SearchActivity.class);
-//                startActivity(i);
             }
         });
     }
@@ -75,7 +73,6 @@ public class AllStoryActivity extends AppCompatActivity {
                             if (document.exists()) {
                                 String name = (String)document.get("name");
                                 String imgUrl = (String)document.get("imageUrl");;
-                                Story story = new Story(id,name,imgUrl);
                                 stories.add(new Story(id,name,imgUrl));
                                 adapter.notifyItemInserted(stories.size()-1);
                             }

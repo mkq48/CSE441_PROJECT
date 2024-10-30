@@ -23,6 +23,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class FavoriteListActivity extends AppCompatActivity {
     private FavoriteStoryAdapter adapter;
@@ -59,10 +60,11 @@ public class FavoriteListActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             DocumentSnapshot document = task.getResult();
                             if (document.exists()) {
+                                String author = (String)document.get("author");
                                 String name = (String)document.get("name");
-                                String imgUrl = (String)document.get("imageUrl");;
-                                Story story = new Story(id,name,imgUrl);
-                                favoriteList.add(new Story(id,name,imgUrl));
+                                String imgUrl = (String)document.get("imageUrl");
+                                List<String> categories = ( List<String>)document.get("categories");
+                                favoriteList.add(new Story(id,author,categories,name,imgUrl));
                                 adapter.notifyItemInserted(favoriteList.size()-1);
                             }
                         }
