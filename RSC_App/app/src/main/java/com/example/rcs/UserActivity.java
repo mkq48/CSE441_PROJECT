@@ -15,6 +15,8 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
+
 import android.content.SharedPreferences;
 import android.content.Context;
 
@@ -22,6 +24,7 @@ import android.content.Context;
 public class UserActivity extends AppCompatActivity {
 
     Button btnProfile, btnLogout;
+    Button btnHome;
     FirebaseAuth mAuth;
     FirebaseUser currentUser;
 
@@ -36,17 +39,26 @@ public class UserActivity extends AppCompatActivity {
             return insets;
         });
 
+        initUI();
+        initListener();
+
+
+//        if (currentUser == null) {
+//            navigateToLogin();
+//        }
+
+    }
+
+    private void initUI(){
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
-
-        if (currentUser == null) {
-            navigateToLogin();
-        }
-
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
         btnProfile = findViewById(R.id.btnProfile);
         btnLogout = findViewById(R.id.btnLogout);
+        btnHome = findViewById(R.id.btnStory);
+    }
 
-
+    private void initListener(){
         btnProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -61,7 +73,16 @@ public class UserActivity extends AppCompatActivity {
                 logoutUser();
             }
         });
+
+        btnHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(UserActivity.this, MainActivity2.class);
+                startActivity(intent);
+            }
+        });
     }
+
 
     private void logoutUser() {
         new AlertDialog.Builder(this)

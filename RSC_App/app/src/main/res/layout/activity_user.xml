@@ -75,6 +75,7 @@
             android:textSize="12sp" />
 
         <Button
+            android:id="@+id/btnStory"
             android:layout_width="300dp"
             android:layout_height="40dp"
             android:layout_margin="10dp"
