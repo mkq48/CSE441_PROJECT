@@ -27,7 +27,7 @@ public class UserActivity1 extends AppCompatActivity {
         setSupportActionBar(binding.toolbar);
 
         NavController navController = Navigation.findNavController(this,R.id.nav_host_fragment_activity_user);
-        AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(R.id.userFragment2,R.id.profileFragment).build();
+        AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
         NavigationUI.setupActionBarWithNavController(this,navController,appBarConfiguration);
         NavigationUI.setupWithNavController(binding.toolbar,navController);
     }

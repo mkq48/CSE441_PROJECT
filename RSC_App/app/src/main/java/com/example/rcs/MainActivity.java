@@ -13,6 +13,9 @@ import androidx.navigation.ui.NavigationUI;
 import com.bumptech.glide.Glide;
 import com.example.rcs.databinding.ActivityMainBinding;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -24,9 +27,9 @@ public class MainActivity extends AppCompatActivity {
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        Glide.with(this).load(FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl()).error(R.drawable.ic_launcher_foreground).into(binding.avatarImg);
+        loadAvatar();
         setSupportActionBar(binding.toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
 
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.homeFragment, R.id.searchFragment, R.id.favoriteFragment, R.id.userFragment)
@@ -36,8 +39,15 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
 
-        binding.avatarImg.setOnClickListener(v->{
-            startActivity(new Intent(MainActivity.this, UserActivity1.class));
-        });
+        binding.avatarImg.setOnClickListener(v-> startActivity(new Intent(MainActivity.this, UserActivity1.class)));
+    }
+
+    private void loadAvatar() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        //load avatar
+        Glide.with(this).load(user.getPhotoUrl()).
+                error(R.drawable.account).
+                into(binding.avatarImg);
+        //Log.d("user-img-mainac",user.getPhotoUrl().toString());
     }
 }

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="take_picture">Chụp ảnh</string>
+    <string name="library_img">Thư viện</string>
+    <string name="save">Lưu</string>
+</resources>

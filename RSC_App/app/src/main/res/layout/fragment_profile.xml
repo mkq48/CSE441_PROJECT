@@ -8,16 +8,17 @@
     android:background="#fff"
     tools:context=".fragment.ProfileFragment">
 
-    <ImageView
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/avatar_profile_img"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
         android:layout_marginTop="24dp"
         android:importantForAccessibility="no"
+        android:src="@drawable/account"
+        app:civ_border_width="0dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/account" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/textView"
@@ -97,5 +98,16 @@
         app:layout_constraintEnd_toEndOf="@+id/btnChangePass"
         app:layout_constraintStart_toStartOf="@+id/btnChangePass"
         app:layout_constraintTop_toBottomOf="@+id/btnChangePass" />
+
+    <ImageView
+        android:id="@+id/changeAvatar"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:importantForAccessibility="no"
+        android:src="@drawable/pencil_circle_outline"
+        app:layout_constraintBottom_toBottomOf="@+id/avatar_profile_img"
+        app:layout_constraintEnd_toEndOf="@+id/avatar_profile_img" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

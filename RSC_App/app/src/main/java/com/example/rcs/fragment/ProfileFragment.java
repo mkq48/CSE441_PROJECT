@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.InputType;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,11 +49,10 @@ public class ProfileFragment extends Fragment {
             NavController navController = NavHostFragment.findNavController(this);
             navController.navigate(R.id.action_profileFragment_to_changePassFragment);
         });
-        binding.btnDel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                deleteUser();
-            }
+        binding.btnDel.setOnClickListener(view -> deleteUser());
+        binding.changeAvatar.setOnClickListener(v->{
+            NavController navController = NavHostFragment.findNavController(this);
+            navController.navigate(R.id.action_profileFragment_to_updateAvatarFragment);
         });
         return binding.getRoot();
     }
@@ -143,6 +143,7 @@ public class ProfileFragment extends Fragment {
             if (currentUser.getPhotoUrl() != null) {
                 Glide.with(this)
                         .load(currentUser.getPhotoUrl())
+                        .override(500, 500)
                         .into(binding.avatarProfileImg);
             }
         }
@@ -182,6 +183,7 @@ public class ProfileFragment extends Fragment {
                                         progressDialog.dismiss();
                                         String errorMessage = task.getException() != null ? task.getException().getMessage() : "Unknown error occurred.";
                                         Toast.makeText(getContext(), "Cập nhật thất bại: " + errorMessage, Toast.LENGTH_SHORT).show();
+                                        //Log.d("onFail", "Cập nhật thất bại: " + errorMessage);
                                     }
                                 }
                             });

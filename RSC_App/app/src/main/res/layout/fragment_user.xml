@@ -22,7 +22,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:drawableEnd="@drawable/chevron_right"
+        android:drawableEnd="@drawable/logout"
         android:text="@string/logout"
         app:layout_constraintEnd_toEndOf="@+id/btnProfile"
         app:layout_constraintStart_toStartOf="@+id/btnProfile"

@@ -16,15 +16,23 @@
     <fragment
         android:id="@+id/profileFragment"
         android:name="com.example.rcs.fragment.ProfileFragment"
-        android:label="@string/policy"
+        android:label="@string/profile"
         tools:layout="@layout/fragment_profile">
         <action
             android:id="@+id/action_profileFragment_to_changePassFragment"
             app:destination="@id/changePassFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_updateAvatarFragment"
+            app:destination="@id/updateAvatarFragment" />
     </fragment>
     <fragment
         android:id="@+id/changePassFragment"
         android:name="com.example.rcs.fragment.ChangePassFragment"
         android:label="@string/change_pass"
         tools:layout="@layout/fragment_change_pass" />
+    <fragment
+        android:id="@+id/updateAvatarFragment"
+        android:name="com.example.rcs.fragment.UpdateAvatarFragment"
+        android:label="@string/change_avatar"
+        tools:layout="@layout/fragment_update_avatar" />
 </navigation>

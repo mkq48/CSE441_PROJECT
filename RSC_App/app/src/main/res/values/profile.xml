@@ -4,4 +4,6 @@
     <string name="update_profile">Cập nhật tài khoản</string>
     <string name="xoa_tk">Xóa tài khoản</string>
     <string name="change_pass">Đổi mật khẩu</string>
+    <string name="profile">Hồ sơ người dùng</string>
+    <string name="change_avatar">Đổi ảnh đại diện</string>
 </resources>

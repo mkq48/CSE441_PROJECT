@@ -93,7 +93,10 @@ public class ChangePassFragment extends Fragment {
             Toast.makeText(getContext(), "Mật khẩu mới và mật khẩu xác nhận không trùng khớp", Toast.LENGTH_SHORT).show();
             return;
         }
-
+        if (newPass.equals(passOld)) {
+            Toast.makeText(getContext(), "Mật khẩu mới và mật khẩu cũ không được trùng khớp", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         if (currentUser != null) {
             progressDialog = new ProgressDialog(getContext());
