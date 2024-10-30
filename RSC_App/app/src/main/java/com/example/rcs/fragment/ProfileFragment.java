@@ -77,9 +77,8 @@ public class ProfileFragment extends Fragment {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
-                            clearSharedPreferences();
                             Toast.makeText(getContext(), "Xóa tài khoản thành công.", Toast.LENGTH_SHORT).show();
-
+                            clearSharedPreferences();
                         } else {
                             Toast.makeText(getContext(), "Xóa tài khoản thất bại: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                         }
@@ -171,7 +170,7 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
-                    currentUser.updateEmail(newEmail)
+                    currentUser.verifyBeforeUpdateEmail(newEmail)
                             .addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
@@ -183,7 +182,7 @@ public class ProfileFragment extends Fragment {
                                         progressDialog.dismiss();
                                         String errorMessage = task.getException() != null ? task.getException().getMessage() : "Unknown error occurred.";
                                         Toast.makeText(getContext(), "Cập nhật thất bại: " + errorMessage, Toast.LENGTH_SHORT).show();
-                                        //Log.d("onFail", "Cập nhật thất bại: " + errorMessage);
+                                        Log.d("onFail", "Cập nhật thất bại: " + errorMessage);
                                     }
                                 }
                             });
@@ -206,6 +205,8 @@ public class ProfileFragment extends Fragment {
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
                             Toast.makeText(getContext(), "Cập nhật thông tin tài khoản thành công.", Toast.LENGTH_SHORT).show();
+                            Log.d("onUpdate", "user profile updated");
+                            //loadProfile();
                         } else {
                             Toast.makeText(getContext(), "Cập nhật thông tin tài khoản thất bại.", Toast.LENGTH_SHORT).show();
                         }

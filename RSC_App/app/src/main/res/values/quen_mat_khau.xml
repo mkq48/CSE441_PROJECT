@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="dat_lai_mk">Đặt lại mật khẩu</string>">
+    <string name="reset_password_nof">Nhập địa chỉ E-mail liên kết với tài\nkhoản của bạn để nhận hướng dẫn\ncách đặt lại mật khẩu.</string>
+    <string name="xac_nhan">Xác nhận</string>
+</resources>

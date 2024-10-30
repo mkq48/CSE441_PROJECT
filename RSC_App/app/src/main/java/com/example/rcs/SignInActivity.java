@@ -50,7 +50,7 @@ public class SignInActivity extends AppCompatActivity {
         });
 
         binding.quenMk.setOnClickListener(view ->{
-            //startActivity(new Intent(SignInActivity.this, ForgetPasswordActivity.class));
+            startActivity(new Intent(SignInActivity.this, ForgetPasswordActivity.class));
         });
 
         binding.btnDangNhap.setOnClickListener(view -> {
