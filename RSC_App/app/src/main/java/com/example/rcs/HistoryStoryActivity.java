@@ -1,20 +1,16 @@
 package com.example.rcs;
 
-import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -23,45 +19,52 @@ import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class AllStoryActivity extends AppCompatActivity {
-    private RecyclerView recyclerview;
-    private ArrayList<Story> stories;
-    private StoryAdapter adapter;
+public class HistoryStoryActivity extends AppCompatActivity {
+    private FavoriteStoryAdapter adapter;
+    private ArrayList<Story> historyList;
+    private RecyclerView rv;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_all_story);
+        setContentView(R.layout.activity_history_story);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        recyclerview = findViewById(R.id.recyclerview);
-        stories = new ArrayList<>();
-//        stories = new Database().getAllStory();
+        rv = findViewById(R.id.rv);
+        historyList = new ArrayList<>();
         getData();
-        adapter = new StoryAdapter(stories,this);
-        recyclerview.setAdapter(adapter);
-        recyclerview.setLayoutManager(new GridLayoutManager(this,3));
-        // test favoriteActivity
-        Button btn_test = findViewById(R.id.btn_test);
-        btn_test.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(AllStoryActivity.this,HistoryStoryActivity.class);
-                startActivity(i);
-            }
-        });
-    }
+        adapter = new FavoriteStoryAdapter(historyList, this);
+        rv.setAdapter(adapter);
+        rv.setLayoutManager(new LinearLayoutManager(this));
+        // set Toolbar
+//        Toolbar toolbar = findViewById(R.id.toolbar);
+//        setSupportActionBar(toolbar);
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//        getSupportActionBar().setDisplayShowHomeEnabled(true);
+//        getSupportActionBar().setTitle("Lịch sử đọc");
+//        // Bật nút "Back"
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-    private void getData() {
-        FirebaseDatabase.getInstance().getReference("stories").addChildEventListener(new ChildEventListener() {
+    }
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed(); // Trở lại Activity trước đó
+        return true;
+    }
+    public void getData() {
+        FirebaseDatabase.getInstance().getReference("history/" + new User().getCurrentUserId()).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 String id = snapshot.getKey();
@@ -71,10 +74,12 @@ public class AllStoryActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             DocumentSnapshot document = task.getResult();
                             if (document.exists()) {
+                                String author = (String)document.get("author");
                                 String name = (String)document.get("name");
-                                String imgUrl = (String)document.get("imageUrl");;
-                                stories.add(new Story(id,name,imgUrl));
-                                adapter.notifyItemInserted(stories.size()-1);
+                                String imgUrl = (String)document.get("imageUrl");
+                                List<String> categories = ( List<String>)document.get("categories");
+                                historyList.add(new Story(id,author,categories,name,imgUrl));
+                                adapter.notifyItemInserted(historyList.size()-1);
                             }
                         }
                     }
@@ -102,5 +107,4 @@ public class AllStoryActivity extends AppCompatActivity {
             }
         });
     }
-
 }

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+    android:layout_width="100dp"
+    android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_marginLeft="20dp"
+    android:layout_marginStart="20dp"
     android:id="@+id/cardview">
         <androidx.cardview.widget.CardView
             android:layout_width="wrap_content"
@@ -11,11 +11,12 @@
             app:cardCornerRadius="5dp"
             android:foreground="@drawable/boder_story_item"
             android:id="@+id/contain_img">
+
             <ImageView
-                android:layout_width="100dp"
-                android:layout_height="135dp"
                 android:id="@+id/img"
-                android:src="@drawable/ic_launcher_background"/>
+                android:layout_width="100dp"
+                android:layout_height="140dp"
+                android:src="@drawable/ic_launcher_background" />
         </androidx.cardview.widget.CardView>
         <TextView
             android:layout_width="90dp"

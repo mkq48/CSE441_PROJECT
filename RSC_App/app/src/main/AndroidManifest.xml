@@ -15,6 +15,9 @@
         android:theme="@style/Theme.RCS"
         tools:targetApi="31">
         <activity
+            android:name=".HistoryStoryActivity"
+            android:exported="false" />
+        <activity
             android:name=".FavoriteListActivity"
             android:exported="false" />
         <activity

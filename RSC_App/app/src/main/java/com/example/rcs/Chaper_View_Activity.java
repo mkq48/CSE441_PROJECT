@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -36,9 +37,10 @@ import java.net.URL;
 public class Chaper_View_Activity extends AppCompatActivity {
     private PDFView pdfView;
     private String pdfUrl,storyId;
-    int currentPage,chapId;
-    long chapCount;
-    Button previous_btn,next_btn;
+    private int currentPage,chapId;
+    private long chapCount;
+    private Button previous_btn,next_btn;
+    private ImageView img_comment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +53,15 @@ public class Chaper_View_Activity extends AppCompatActivity {
             return insets;
         });
         pdfView = findViewById(R.id.pdfView);
-
+        // set su kien chuyen den man hinh binh luan cua chap
+        img_comment = findViewById(R.id.img_comment);
+        img_comment.setVisibility(View.GONE);
+        img_comment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // chuyen den man hinh binh luan
+            }
+        });
         next_btn = findViewById(R.id.next_btn);
         next_btn.setVisibility(View.GONE);
         next_btn.setOnClickListener(new View.OnClickListener() {
@@ -134,35 +144,12 @@ public class Chaper_View_Activity extends AppCompatActivity {
                     .onLoad(new OnLoadCompleteListener() {
                 @Override
                 public void loadComplete(int nbPages) {
-                    pdfView.moveTo(0,0.5f);
-//                    Toast.makeText(Chaper_View_Activity.this, pdfView.getPageCount()+","+pdfView.getPositionOffset()+"", Toast.LENGTH_SHORT).show();
+                    showFunctionButton();
                 }
             }).onTap(new OnTapListener() {
                 @Override
                 public boolean onTap(MotionEvent e) {
-                    if(chapId<chapCount){
-                        next_btn.setVisibility(View.VISIBLE);
-
-                        // Sử dụng Handler để ẩn nút sau 3 giây (3000 ms)
-                        new Handler().postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                next_btn.setVisibility(View.GONE); // Ẩn nút
-                            }
-                        }, 3000); // Thời gian hiển thị là 3 giây
-                    }
-
-                    if(chapId>1){
-                        previous_btn.setVisibility(View.VISIBLE);
-
-                        // Sử dụng Handler để ẩn nút sau 3 giây (3000 ms)
-                        new Handler().postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                previous_btn.setVisibility(View.GONE); // Ẩn nút
-                            }
-                        }, 3000); // Thời gian hiển thị là 3 giây
-                    }
+                    showFunctionButton();
                     return true;
                 }
             }).load();
@@ -202,5 +189,39 @@ public class Chaper_View_Activity extends AppCompatActivity {
             }
         });
 
+    }
+    public void showFunctionButton(){
+        if(chapId<chapCount){
+            next_btn.setVisibility(View.VISIBLE);
+
+            // Sử dụng Handler để ẩn nút sau 3 giây (3000 ms)
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    next_btn.setVisibility(View.GONE); // Ẩn nút
+                }
+            }, 3000); // Thời gian hiển thị là 3 giây
+        }
+
+        if(chapId>1){
+            previous_btn.setVisibility(View.VISIBLE);
+
+            // Sử dụng Handler để ẩn nút sau 3 giây (3000 ms)
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    previous_btn.setVisibility(View.GONE); // Ẩn nút
+                }
+            }, 3000); // Thời gian hiển thị là 3 giây
+        }
+        img_comment.setVisibility(View.VISIBLE);
+
+        // Sử dụng Handler để ẩn nút sau 3 giây (3000 ms)
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                img_comment.setVisibility(View.GONE); // Ẩn nút
+            }
+        }, 3000); // Thời gian hiển thị là 3 giây
     }
 }

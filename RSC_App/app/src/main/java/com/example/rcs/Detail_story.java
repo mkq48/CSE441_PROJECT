@@ -62,12 +62,6 @@ public class Detail_story extends AppCompatActivity {
     private int currentChap, currentPage;
 
     @Override
-    public boolean onSupportNavigateUp() {
-        onBackPressed(); // Trở lại Activity trước đó
-        return true;
-    }
-
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
@@ -146,12 +140,6 @@ public class Detail_story extends AppCompatActivity {
         imageUrl = intent.getStringExtra("imageUrl");
         userId = new User().getCurrentUserId();
         chapter_rv = findViewById(R.id.chapter_rv);
-        // hien thi toolbar
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        toolbar.setTitle(name);
         // hien thi cac chap len recycler
         chapList = new ArrayList<>();
         allList = new ArrayList<>();
@@ -224,11 +212,6 @@ public class Detail_story extends AppCompatActivity {
                 tv_show_more_chap.setVisibility(View.GONE);
                 chapterAdapter.expand();
                 tv_collapse_chap.setVisibility(View.VISIBLE);
-//                if(isLastestChapterList){
-//                    chapterAdapter.sortDesc();
-//                }else {
-//                    chapterAdapter.sortIncrease();
-//                }
             }
         });
         tv_collapse_chap.setOnClickListener(new View.OnClickListener() {
@@ -237,11 +220,6 @@ public class Detail_story extends AppCompatActivity {
                 tv_collapse_chap.setVisibility(View.GONE);
                 chapterAdapter.collapse();
                 tv_show_more_chap.setVisibility(View.VISIBLE);
-//                if(isLastestChapterList){
-//                    chapterAdapter.sortDesc();
-//                }else {
-//                    chapterAdapter.sortIncrease();
-//                }
             }
         });
         tv_latest.setOnClickListener(new View.OnClickListener() {
@@ -252,7 +230,6 @@ public class Detail_story extends AppCompatActivity {
                 tv_oldest.setTextColor(getResources().getColor(R.color.black));
                 tv_oldest.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.grey)));
                 chapterAdapter.sortDesc();
-
             }
         });
         tv_oldest.setOnClickListener(new View.OnClickListener() {
@@ -448,6 +425,8 @@ public class Detail_story extends AppCompatActivity {
                 tv_chap_count.setText(chapCount + " Chapter");
                 if (chapCount > 0) {
                     btn_read.setVisibility(View.VISIBLE);
+                    tv_oldest.setVisibility(View.VISIBLE);
+                    tv_latest.setVisibility(View.VISIBLE);
                     if (chapCount > 5) {
                         tv_show_more_chap.setVisibility(View.VISIBLE);
                     }

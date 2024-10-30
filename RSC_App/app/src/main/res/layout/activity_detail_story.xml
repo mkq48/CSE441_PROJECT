@@ -5,24 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-            app:title="@string/app_name" />
-
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/toolbar"
-            android:layout_marginTop="35dp"
+            android:layout_marginTop="31dp"
+            android:backgroundTint="@color/black"
             android:paddingHorizontal="27dp">
 
             <androidx.cardview.widget.CardView
@@ -34,7 +22,7 @@
 
                 <ImageView
                     android:id="@+id/img"
-                    android:layout_width="90dp"
+                    android:layout_width="100dp"
                     android:layout_height="150dp"
                     android:contentDescription="@string/app_name"
                     android:src="@drawable/ic_launcher_background" />
@@ -137,7 +125,8 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/tv_content"
                 android:layout_marginTop="60dp"
-                android:text="CHAPTER"
+                android:text="Chương"
+                android:textAllCaps="true"
                 android:textColor="@color/black"
                 android:textSize="14sp" />
 
@@ -148,12 +137,13 @@
                 android:layout_below="@id/tv_content"
                 android:layout_marginStart="110dp"
                 android:layout_marginTop="62dp"
+                android:visibility="gone"
                 android:layout_toRightOf="@+id/tv_chapter"
                 android:background="@drawable/radius_tv_order_chapter"
+                android:backgroundTint="@color/orange"
                 android:paddingHorizontal="5dp"
                 android:paddingVertical="3dp"
                 android:text="Mới nhất"
-                android:backgroundTint="@color/orange"
                 android:textColor="#FFFFFF"
                 android:textSize="12sp" />
 
@@ -171,14 +161,8 @@
                 android:paddingVertical="3dp"
                 android:text="Cũ nhất"
                 android:textColor="#000000"
+                android:visibility="gone"
                 android:textSize="12sp" />
-
-            <Button
-                android:id="@+id/btn_read"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/tv_show_more_chap"
-                android:text="Doc truyen"/>
 
 
             <ImageView
@@ -230,38 +214,41 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/tv_chapter"
                 android:layout_marginTop="29dp" />
+
             <TextView
                 android:id="@+id/tv_show_more_chap"
-                android:layout_below="@+id/chapter_rv"
-                android:layout_marginTop="38dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Xem thêm  >"
-                android:paddingVertical="5dp"
-                android:paddingHorizontal="8dp"
+                android:layout_below="@+id/chapter_rv"
                 android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
                 android:backgroundTint="#EDEDED"
-                android:textAllCaps="false"
-                android:textStyle="bold"
-                android:visibility="gone"
                 android:foreground="@drawable/conner_radius_btn_show_more_chap"
-                android:textSize="11sp"/>
+                android:paddingHorizontal="8dp"
+                android:paddingVertical="5dp"
+                android:text="Xem thêm  >"
+                android:textAllCaps="false"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                android:visibility="gone" />
+
             <TextView
                 android:id="@+id/tv_collapse_chap"
-                android:layout_below="@+id/chapter_rv"
-                android:layout_marginTop="38dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Thu gọn"
-                android:paddingVertical="5dp"
-                android:paddingHorizontal="8dp"
+                android:layout_below="@+id/chapter_rv"
                 android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
                 android:backgroundTint="#EDEDED"
-                android:textAllCaps="false"
-                android:textStyle="bold"
-                android:visibility="gone"
                 android:foreground="@drawable/conner_radius_btn_show_more_chap"
-                android:textSize="11sp"/>
+                android:paddingHorizontal="8dp"
+                android:paddingVertical="5dp"
+                android:text="Thu gọn"
+                android:textAllCaps="false"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                android:visibility="gone" />
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/categories_rv"
                 android:layout_width="wrap_content"
@@ -269,6 +256,21 @@
                 android:layout_below="@+id/tv_chap_count"
                 android:layout_marginStart="10dp"
                 android:layout_toEndOf="@+id/cv_img" />
+
+            <Button
+                android:id="@+id/btn_read"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="600dp"
+                android:background="@drawable/boder_btn_read"
+                android:backgroundTint="#EF4949"
+                android:paddingHorizontal="90dp"
+                android:paddingVertical="10dp"
+                android:text="Đọc truyện"
+                android:layout_centerHorizontal="true"
+                android:textAllCaps="false"
+                android:textColor="#FFFFFF"
+                android:textSize="12sp" />
         </RelativeLayout>
-    </RelativeLayout>
 </ScrollView>
