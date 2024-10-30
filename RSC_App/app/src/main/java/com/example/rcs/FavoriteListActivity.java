@@ -66,18 +66,21 @@ public class FavoriteListActivity extends AppCompatActivity {
         tv_story.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                setActiveTab(tv_story);
                 searchByStoryName();
             }
         });
         tv_author.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                setActiveTab(tv_author);
                 searchByAuthorName();
             }
         });
         tv_genre.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                setActiveTab(tv_genre);
                 searchByGenre();
             }
         });
@@ -91,6 +94,7 @@ public class FavoriteListActivity extends AppCompatActivity {
         btn_search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                setActiveTab(tv_story);
                 searchByStoryName();
                 tab_layout.setVisibility(View.VISIBLE);
             }
@@ -108,7 +112,7 @@ public class FavoriteListActivity extends AppCompatActivity {
         tv_result.setVisibility(View.GONE);
         resultList.clear();
         // lấy chuỗi keyWord của searchview
-        String keyWord = search_view.getQuery().toString().trim();
+        String keyWord = searchView.getQuery().toString().trim();
         FirebaseFirestore.getInstance().collection("stories").whereArrayContainsAny("name_key", Arrays.asList(keyWord.split(" "))).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -135,7 +139,7 @@ public class FavoriteListActivity extends AppCompatActivity {
         tv_result.setVisibility(View.GONE);
         resultList.clear();
         // lấy chuỗi keyWord của searchview
-        String keyWord = search_view.getQuery().toString().trim();
+        String keyWord = searchView.getQuery().toString().trim();
         FirebaseFirestore.getInstance().collection("stories").whereArrayContains("categories",keyWord).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -162,7 +166,7 @@ public class FavoriteListActivity extends AppCompatActivity {
         tv_result.setVisibility(View.GONE);
         resultList.clear();
         // lấy chuỗi keyWord của searchview
-        String keyWord = search_view.getQuery().toString().trim();
+        String keyWord = searchView.getQuery().toString().trim();
         FirebaseFirestore.getInstance().collection("stories").whereArrayContainsAny("author_key", Arrays.asList(keyWord.split(" "))).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
