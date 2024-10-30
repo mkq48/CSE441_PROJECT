@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ten_tai_khoan">Tên tài khoản *</string>
+    <string name="ngay_sinh">Ngày sinh *</string>
+    <string name="email_dk">Email *</string>
+    <string name="mat_khau_dk">Mật khẩu *</string>
+    <string name="xac_nhan_mat_khau">Xác nhận mật khẩu *</string>
+    <string name="dk_tai_khoan">ĐĂNG KÍ TÀI KHOẢN</string>"
+</resources>

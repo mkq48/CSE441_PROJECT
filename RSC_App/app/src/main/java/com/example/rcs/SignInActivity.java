@@ -46,7 +46,7 @@ public class SignInActivity extends AppCompatActivity {
         });
 
         binding.goToDk.setOnClickListener(view ->{
-            //startActivity(new Intent(this, SignUpActivity.class);
+            startActivity(new Intent(this, SignUpActivity.class));
         });
 
         binding.quenMk.setOnClickListener(view ->{
