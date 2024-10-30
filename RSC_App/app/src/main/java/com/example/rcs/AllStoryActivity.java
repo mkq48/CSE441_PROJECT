@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -41,6 +42,12 @@ public class AllStoryActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_all_story);
 
+        RecyclerView recyclerView = findViewById(R.id.recyclerview);
+        recyclerView.setLayoutManager(new GridLayoutManager(this, 2)); // Hiển thị 2 item mỗi dòng
+        adapter = new StoryAdapter(stories, this);
+        recyclerView.setAdapter(adapter);
+
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -51,7 +58,7 @@ public class AllStoryActivity extends AppCompatActivity {
         stories = new ArrayList<>();
         adapter = new StoryAdapter(stories, this);
         recyclerview.setAdapter(adapter);
-        recyclerview.setLayoutManager(new LinearLayoutManager(this));
+//        recyclerview.setLayoutManager(new LinearLayoutManager(this));
 
         // Lấy dữ liệu từ Firebase
         getData();
@@ -86,13 +93,14 @@ public class AllStoryActivity extends AppCompatActivity {
                         if (document != null && document.exists()) {
                             String name = (String) document.get("name");
                             String imgUrl = (String) document.get("imageUrl");
-                            String author = (String) document.get("author");
-                            String category = (String) document.get("category");
+//                            String author = (String) document.get("author");
+//                            String category = (String) document.get("category");
                             int favorites = snapshot.child("favorites").getValue(Integer.class);
 
-                            List<String> categoryList = Collections.singletonList((String) document.get("category"));
+//                            List<String> categoryList = Collections.singletonList((String) document.get("category"));
 
-                            stories.add(new Story(favorites, imgUrl, id, author, name, categoryList));
+//                            stories.add(new Story(favorites, imgUrl, id, author, name, categoryList));
+                            stories.add(new Story(favorites, imgUrl, id, name));
 
                             sortAndLimitStories();
                             adapter.notifyDataSetChanged();

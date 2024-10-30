@@ -24,22 +24,29 @@ public class Story {
 
 
     }
+//    public Story(String storyId, String author, List<String> categories, String name, String imageUrl) {
+//        this.storyId = storyId;
+//        this.author = author;
+//        this.categories = categories;
+//        this.name = name;
+//        this.imageUrl = imageUrl;
+//    }
 
-    public Story(int favorites, String imageUrl, String storyId, String author, String name, List<String> categories) {
+
+    public Story(int favorites, String imageUrl, String storyId,  String name) {
         this.favorites = favorites;
+          this.imageUrl = imageUrl;
         this.storyId = storyId;
-        this.author = author;
         this.name = name;
-        this.imageUrl = imageUrl;
-        this.categories = categories;
+
 
     }
-    public Story(String storyId, String name, String imageUrl, List<String> categories) {
-        this.storyId = storyId;
-        this.name = name;
-        this.imageUrl = imageUrl;
-        this.categories = categories;
-    }
+//    public Story(String storyId, String name, String imageUrl, List<String> categories) {
+//        this.storyId = storyId;
+//        this.name = name;
+//        this.imageUrl = imageUrl;
+//        this.categories = categories;
+//    }
 
 
     public void setViews(int views) {

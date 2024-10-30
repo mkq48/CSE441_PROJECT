@@ -22,43 +22,59 @@ import com.bumptech.glide.Glide;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.StoryViewHolder> {
+
+public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private List<Story> storiesList;
     private Context context;
+    private int viewType;
 
-    public SearchAdapter(ArrayList<Story> storiesList, Context context) {
+    // Các viewType cụ thể
+    public static final int VIEW_TYPE_STORY = 0;
+    public static final int VIEW_TYPE_AUTHOR = 1;
+    public static final int VIEW_TYPE_GENRE = 2;
+
+    public SearchAdapter(List<Story> storiesList, Context context, int viewType) {
         this.storiesList = storiesList;
         this.context = context;
+        this.viewType = viewType;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return viewType;
     }
 
     @NonNull
     @Override
-    public StoryViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.search_item_layout,parent,false);
-        return new StoryViewHolder(view);
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view;
+        switch (viewType) {
+            case VIEW_TYPE_AUTHOR:
+                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.author_item_layout, parent, false);
+                return new AuthorViewHolder(view);
+            case VIEW_TYPE_GENRE:
+                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.genre_item_layout, parent, false);
+                return new GenreViewHolder(view);
+            case VIEW_TYPE_STORY:
+            default:
+                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.story_item_layout, parent, false);
+                return new StoryViewHolder(view);
+        }
     }
 
     @Override
-    public void onBindViewHolder(@NonNull StoryViewHolder holder, int position) {
-        holder.tv_name.setText(storiesList.get(holder.getAdapterPosition()).getName());
-        holder.tv_author.setText(storiesList.get(holder.getAdapterPosition()).getAuthor());
-        Story story = storiesList.get(holder.getAdapterPosition());
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+        Story story = storiesList.get(position);
+        if (holder instanceof StoryViewHolder) {
+            ((StoryViewHolder) holder).tv_name.setText(story.getName());
+            Glide.with(context).load(story.getImageUrl()).into(((StoryViewHolder) holder).img);
+        }
+        // Thêm xử lý cho các view type khác nếu cần
 
-        CategoryAdapter categoryAdapter = new CategoryAdapter(story.getCategories());
-        holder.categories_rv.setAdapter(categoryAdapter);
-        holder.categories_rv.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
-        Glide.with(context).asBitmap().load(storiesList.get(holder.getAdapterPosition()).getImageUrl()).into(holder.img);
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(context,Detail_story.class);
-                intent.putExtra("storyId",storiesList.get(holder.getAdapterPosition()).getStoryId());
-                intent.putExtra("imageUrl",storiesList.get(holder.getAdapterPosition()).getImageUrl());
-                intent.putExtra("name",storiesList.get(holder.getAdapterPosition()).getName());
-                context.startActivity(intent);
-            }
-        });
     }
+
+
+
 
 
     @Override
@@ -66,19 +82,33 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.StoryViewH
         return storiesList.size();
     }
 
-    static class StoryViewHolder extends RecyclerView.ViewHolder{
-        private TextView tv_name, tv_author;
-        private ImageView img, img_heart;
-        private RecyclerView categories_rv;
+    // ViewHolder cho Story
+    static class StoryViewHolder extends RecyclerView.ViewHolder {
+        private TextView tv_name;
+        private ImageView img;
 
-        //        private CardView cardview;
         public StoryViewHolder(@NonNull View itemView) {
             super(itemView);
-            tv_name=itemView.findViewById(R.id.tv_name);
-            img=itemView.findViewById(R.id.img);
-            tv_author=itemView.findViewById(R.id.tv_author);
-            categories_rv = itemView.findViewById(R.id.categories_rv); // Liên kết RecyclerView
+            tv_name = itemView.findViewById(R.id.tv_name);
+            img = itemView.findViewById(R.id.img);
+        }
+    }
+
+    // ViewHolder cho Author (Tạo các ViewHolder khác cho các loại khác)
+    static class AuthorViewHolder extends RecyclerView.ViewHolder {
+        // Khai báo các view tương ứng
+        public AuthorViewHolder(@NonNull View itemView) {
+            super(itemView);
+            // Tìm các view trong layout author_item_layout.xml
+        }
+    }
+
+    static class GenreViewHolder extends RecyclerView.ViewHolder {
+        public GenreViewHolder(@NonNull View itemView) {
+            super(itemView);
+            // Tìm các view trong layout genre_item_layout.xml
         }
     }
 }
+
 

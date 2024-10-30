@@ -50,6 +50,7 @@
 
     <!-- Sử dụng CardView cho các TextView để có bo góc và màu nền xám nhạt -->
     <LinearLayout
+        android:id="@+id/tab_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
@@ -57,64 +58,74 @@
         <androidx.cardview.widget.CardView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            app:cardCornerRadius="12dp"
             android:layout_margin="4dp"
-            android:backgroundTint="#D3D3D3"> <!-- Màu nền xám nhạt -->
+            android:layout_weight="1"
+            android:backgroundTint="#D3D3D3"
+            app:cardCornerRadius="12dp"> <!-- Màu nền xám nhạt -->
 
             <TextView
                 android:id="@+id/tv_story"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="#DEDBDB"
+                android:backgroundTint="#E4E0E0"
+                android:padding="8dp"
                 android:text="Tên truyện"
                 android:textAlignment="center"
-                android:textSize="16sp"
-                android:padding="8dp" />
+                android:textSize="16sp" />
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            app:cardCornerRadius="12dp"
             android:layout_margin="4dp"
-            android:backgroundTint="#D3D3D3"> <!-- Màu nền xám nhạt -->
+            android:layout_weight="1"
+            android:backgroundTint="#D3D3D3"
+            app:cardCornerRadius="12dp"> <!-- Màu nền xám nhạt -->
 
             <TextView
                 android:id="@+id/tv_author"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="#DEDBDB"
+                android:backgroundTint="#E4E0E0"
+                android:padding="8dp"
                 android:text="Tên tác giả"
                 android:textAlignment="center"
-                android:textSize="16sp"
-                android:padding="8dp" />
+                android:textSize="16sp" />
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            app:cardCornerRadius="12dp"
             android:layout_margin="4dp"
-            android:backgroundTint="#D3D3D3"> <!-- Màu nền xám nhạt -->
+            android:layout_weight="1"
+            android:backgroundTint="#D3D3D3"
+            app:cardCornerRadius="12dp"> <!-- Màu nền xám nhạt -->
 
             <TextView
                 android:id="@+id/tv_genre"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="#DEDBDB"
+                android:backgroundTint="#E4E0E0"
+                android:padding="8dp"
                 android:text="Thể loại"
                 android:textAlignment="center"
-                android:textSize="16sp"
-                android:padding="8dp" />
+                android:textSize="16sp" />
         </androidx.cardview.widget.CardView>
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_result"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="18dp"
-        android:layout_weight="1" />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:padding="4dp"
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        tools:listitem="@layout/search_item_layout">
+
+    </androidx.recyclerview.widget.RecyclerView>
 
     <TextView
         android:id="@+id/tv_result"

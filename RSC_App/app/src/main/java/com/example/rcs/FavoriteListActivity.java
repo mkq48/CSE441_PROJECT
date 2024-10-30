@@ -25,7 +25,6 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 public class FavoriteListActivity extends AppCompatActivity {
     private SearchView searchView;
@@ -63,41 +62,40 @@ public class FavoriteListActivity extends AppCompatActivity {
         btn_search = findViewById(R.id.btn_search);
         tab_layout = findViewById(R.id.tab_layout);
 
-        tv_story.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                setActiveTab(tv_story);
-                searchByStoryName();
-            }
-        });
-        tv_author.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                setActiveTab(tv_author);
-                searchByAuthorName();
-            }
-        });
-        tv_genre.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                setActiveTab(tv_genre);
-                searchByGenre();
-            }
-        });
-        tab_layout.setVisibility(View.GONE);
-        // hien thi danh sach truyen tim thay len recyclerView
         resultList = new ArrayList<>();
-        searchAdapter = new SearchAdapter(resultList,this);
+        // Set default view type to STORY
+        searchAdapter = new SearchAdapter(resultList, this, SearchAdapter.VIEW_TYPE_STORY);
         rv_result.setAdapter(searchAdapter);
-        rv_result.setLayoutManager(new GridLayoutManager(this,2));
+        rv_result.setLayoutManager(new GridLayoutManager(this, 2));
 
-        btn_search.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                setActiveTab(tv_story);
-                searchByStoryName();
-                tab_layout.setVisibility(View.VISIBLE);
-            }
+        tv_story.setOnClickListener(view -> {
+            setActiveTab(tv_story);
+            searchAdapter = new SearchAdapter(resultList, this, SearchAdapter.VIEW_TYPE_STORY);
+            rv_result.setAdapter(searchAdapter);
+            searchByStoryName();
+        });
+
+        tv_author.setOnClickListener(view -> {
+            setActiveTab(tv_author);
+            searchAdapter = new SearchAdapter(resultList, this, SearchAdapter.VIEW_TYPE_AUTHOR);
+            rv_result.setAdapter(searchAdapter);
+            searchByAuthorName();
+        });
+
+        tv_genre.setOnClickListener(view -> {
+            setActiveTab(tv_genre);
+            searchAdapter = new SearchAdapter(resultList, this, SearchAdapter.VIEW_TYPE_GENRE);
+            rv_result.setAdapter(searchAdapter);
+            searchByGenre();
+        });
+
+        tab_layout.setVisibility(View.GONE);
+
+        // Set up the search button
+        btn_search.setOnClickListener(view -> {
+            setActiveTab(tv_story);
+            searchByStoryName();
+            tab_layout.setVisibility(View.VISIBLE);
         });
     }
 
@@ -108,84 +106,90 @@ public class FavoriteListActivity extends AppCompatActivity {
         activeTab.setTextColor(Color.RED); // Highlight the active tab
     }
 
-    public void searchByStoryName(){
+    public void searchByStoryName() {
         tv_result.setVisibility(View.GONE);
         resultList.clear();
-        // lấy chuỗi keyWord của searchview
         String keyWord = searchView.getQuery().toString().trim();
-        FirebaseFirestore.getInstance().collection("stories").whereArrayContainsAny("name_key", Arrays.asList(keyWord.split(" "))).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    for (QueryDocumentSnapshot document : task.getResult()) {
-                        String img = (String) document.get("imageUrl");
-                        String author = (String) document.get("author");
-                        List<String> categories = (List<String>) document.get("categories");
-                        String name = (String) document.get("name");
-                        Story story = new Story(document.getId(),author,categories,name,img);
-                        resultList.add(story);
-                        searchAdapter.notifyItemInserted(resultList.size()-1);
+
+        FirebaseFirestore.getInstance()
+                .collection("stories")
+                .whereArrayContainsAny("name_key", Arrays.asList(keyWord.split(" ")))
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                String img = (String) document.get("imageUrl");
+                                String name = (String) document.get("name");
+                                Story story = new Story(document.getId(), name, img);
+
+                                resultList.add(story);
+                            }
+                            searchAdapter.notifyDataSetChanged();
+                            if (searchAdapter.getItemCount() == 0) {
+                                tv_result.setVisibility(View.VISIBLE);
+                            }
+                        }
                     }
-                    if(searchAdapter.getItemCount()==0){
-                        // hien thi tv khong tim thay
-                        tv_result.setVisibility(View.VISIBLE);
-                    }
-                }
-            }
-        });
+                });
     }
 
-    public void searchByGenre(){
+    public void searchByGenre() {
         tv_result.setVisibility(View.GONE);
         resultList.clear();
-        // lấy chuỗi keyWord của searchview
         String keyWord = searchView.getQuery().toString().trim();
-        FirebaseFirestore.getInstance().collection("stories").whereArrayContains("categories",keyWord).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    for (QueryDocumentSnapshot document : task.getResult()) {
-                        String img = (String) document.get("imageUrl");
-                        String author = (String) document.get("author");
-                        List<String> categories = (List<String>) document.get("categories");
-                        String name = (String) document.get("name");
-                        Story story = new Story(document.getId(),author,categories,name,img);
-                        resultList.add(story);
-                        searchAdapter.notifyItemInserted(resultList.size()-1);
+
+        FirebaseFirestore.getInstance()
+                .collection("stories")
+                .whereArrayContains("categories", keyWord)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                String img = (String) document.get("imageUrl");
+                                String name = (String) document.get("name");
+                                Story story = new Story(document.getId(), name, img);
+
+                                resultList.add(story);
+                            }
+                            searchAdapter.notifyDataSetChanged();
+                            if (searchAdapter.getItemCount() == 0) {
+                                tv_result.setVisibility(View.VISIBLE);
+                            }
+                        }
                     }
-                    if(searchAdapter.getItemCount()==0){
-                        // hien thi tv khong tim thay
-                        tv_result.setVisibility(View.VISIBLE);
-                    }
-                }
-            }
-        });
+                });
     }
 
-    public void searchByAuthorName(){
+    public void searchByAuthorName() {
         tv_result.setVisibility(View.GONE);
         resultList.clear();
-        // lấy chuỗi keyWord của searchview
         String keyWord = searchView.getQuery().toString().trim();
-        FirebaseFirestore.getInstance().collection("stories").whereArrayContainsAny("author_key", Arrays.asList(keyWord.split(" "))).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    for (QueryDocumentSnapshot document : task.getResult()) {
-                        String img = (String) document.get("imageUrl");
-                        String author = (String) document.get("author");
-                        List<String> categories = (List<String>) document.get("categories");
-                        String name = (String) document.get("name");
-                        Story story = new Story(document.getId(),author,categories,name,img);
-                        resultList.add(story);
-                        searchAdapter.notifyItemInserted(resultList.size()-1);
+
+        FirebaseFirestore.getInstance()
+                .collection("stories")
+                .whereArrayContainsAny("author_key", Arrays.asList(keyWord.split(" ")))
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                String img = (String) document.get("imageUrl");
+                                String name = (String) document.get("name");
+                                Story story = new Story(document.getId(), name, img);
+
+                                resultList.add(story);
+                            }
+                            searchAdapter.notifyDataSetChanged();
+                            if (searchAdapter.getItemCount() == 0) {
+                                tv_result.setVisibility(View.VISIBLE);
+                            }
+                        }
                     }
-                    if(searchAdapter.getItemCount()==0){
-                        // hien thi tv khong tim thay
-                        tv_result.setVisibility(View.VISIBLE);
-                    }
-                }
-            }
-        });
+                });
     }
 }
