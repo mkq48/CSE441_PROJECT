@@ -120,7 +120,7 @@ public class UpdateAvatarFragment extends Fragment {
                     progressDialog.dismiss();
                     if (task.isSuccessful()) {
                         Toast.makeText(getContext(), "Cập nhật ảnh đại diện thành công", Toast.LENGTH_SHORT).show();
-                        //back to previous fragment via navController
+
                         NavController navController = NavHostFragment.findNavController(UpdateAvatarFragment.this);
                         navController.popBackStack();
                     } else {
@@ -147,7 +147,7 @@ public class UpdateAvatarFragment extends Fragment {
                 binding.btnSave.setVisibility(View.VISIBLE);
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), imageUri);
 
-                String saveImageToInternalStorage = saveImageToInternalStorage(bitmap);
+                saveImageToInternalStorage(bitmap);
                 Glide.with(UpdateAvatarFragment.this)
                         .load(imageUri)
                         .override(500, 500)
@@ -227,12 +227,12 @@ public class UpdateAvatarFragment extends Fragment {
 
         UploadTask uploadTask = storageRef.putFile(imageUri);
         uploadTask.addOnSuccessListener(taskSnapshot -> {
-            // Lấy URL tải xuống của ảnh
+
             storageRef.getDownloadUrl().addOnSuccessListener(downloadUrl -> {
                 String avatarUrl = downloadUrl.toString();
                 Log.d("UploadAvatar", "Avatar URL: " + avatarUrl);
 
-                // Lưu URL vào Firestore hoặc Realtime Database nếu cần
+
                 saveAvatarUrlToDatabase(userId, avatarUrl);
                 updateAvatar(avatarUrl);
             });
@@ -240,7 +240,7 @@ public class UpdateAvatarFragment extends Fragment {
     }
 
     private void saveAvatarUrlToDatabase(String userId, String avatarUrl) {
-        // Lưu URL vào Firestore
+
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference usersRef = db.collection("users");
         usersRef.document(userId).update("imageUrl", avatarUrl)

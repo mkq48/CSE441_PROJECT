@@ -1,6 +1,4 @@
-package com.example.rcs;
-
-import androidx.annotation.NonNull;
+package com.example.rcs.model;
 
 import java.util.Map;
 

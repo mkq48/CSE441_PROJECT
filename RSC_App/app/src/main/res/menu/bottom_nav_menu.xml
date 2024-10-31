@@ -17,8 +17,8 @@
         android:title="@string/yeu_thich" />
 
     <item
-        android:id="@+id/userFragment"
-        android:icon="@drawable/account"
-        android:title="@string/toi" />
+        android:id="@+id/historyFragment"
+        android:icon="@drawable/history"
+        android:title="@string/history" />
 
 </menu>

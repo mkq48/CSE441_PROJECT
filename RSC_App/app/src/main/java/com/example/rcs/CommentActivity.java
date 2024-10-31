@@ -8,16 +8,15 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.example.rcs.adapter.CommentAdapter;
 import com.example.rcs.databinding.ActivityCommentBinding;
+import com.example.rcs.model.Comment;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,7 +30,7 @@ public class CommentActivity extends AppCompatActivity {
     private String storyID = "";
     private String chapID = "";
     private CommentAdapter adapter;
-    protected static DatabaseReference commentsRef;
+    public static DatabaseReference commentsRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

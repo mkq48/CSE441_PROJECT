@@ -1,4 +1,4 @@
-package com.example.rcs;
+package com.example.rcs.adapter;
 
 import android.annotation.SuppressLint;
 import android.util.Log;
@@ -9,7 +9,10 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.rcs.CommentActivity;
+import com.example.rcs.R;
 import com.example.rcs.databinding.CommentItemBinding;
+import com.example.rcs.model.Comment;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;

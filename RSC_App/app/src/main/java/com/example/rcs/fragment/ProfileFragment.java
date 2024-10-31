@@ -170,7 +170,7 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
-                    currentUser.verifyBeforeUpdateEmail(newEmail)
+                    currentUser.updateEmail(newEmail)
                             .addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {

@@ -23,31 +23,34 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="60dp"
+        android:background="@drawable/border"
         android:drawableEnd="@drawable/ic_menu_camera"
         android:text="@string/take_picture"
         android:textAllCaps="false"
         android:textSize="12sp"
         app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="126dp"
-        tools:ignore="VisualLintOverlap" />
+        tools:ignore="VisualLintOverlap"
+        tools:layout_editor_absoluteY="126dp" />
 
     <Button
         android:id="@+id/btnGallery"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="@drawable/border"
         android:drawableEnd="@drawable/image_multiple"
         android:text="@string/library_img"
         android:textAllCaps="false"
         android:textSize="12sp"
+        tools:ignore="VisualLintOverlap"
         tools:layout_editor_absoluteX="191dp"
-        tools:layout_editor_absoluteY="126dp"
-        tools:ignore="VisualLintOverlap" />
+        tools:layout_editor_absoluteY="126dp" />
 
     <Button
         android:id="@+id/btnSave"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
+        android:background="@drawable/border"
         android:drawableEnd="@drawable/content_save_edit"
         android:text="@string/save"
         app:layout_constraintEnd_toEndOf="parent"

@@ -30,15 +30,10 @@ public class MainActivity extends AppCompatActivity {
         loadAvatar();
         setSupportActionBar(binding.toolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
-
-        AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.homeFragment, R.id.searchFragment, R.id.favoriteFragment, R.id.userFragment)
-                .build();
-
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
+        AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(R.id.homeFragment, R.id.searchFragment, R.id.favoriteFragment, R.id.historyFragment).build();
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
-
         binding.avatarImg.setOnClickListener(v-> startActivity(new Intent(MainActivity.this, UserActivity1.class)));
     }
 

@@ -17,7 +17,8 @@
         android:name="com.example.rcs.fragment.SearchFragment"
         tools:layout="@layout/fragment_search" />
     <fragment
-        android:id="@+id/userFragment"
-        android:name="com.example.rcs.fragment.UserFragment"
-        tools:layout="@layout/fragment_user" />
+        android:id="@+id/historyFragment"
+        android:name="com.example.rcs.fragment.HistoryFragment"
+        android:label="@string/history"
+        tools:layout="@layout/fragment_history" />
 </navigation>
