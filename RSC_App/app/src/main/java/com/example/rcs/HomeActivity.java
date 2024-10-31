@@ -32,10 +32,10 @@ import java.util.ArrayList;
 public class HomeActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView1, recyclerView2, recyclerView3;
-    private StoryAdapter storyAdapter1, storyAdapter2, storyAdapter3, adapter;
+    private StoryAdapter storyAdapter1, storyAdapter2;
     private SliderAdapter sliderAdapter;
     private FavoriteStoryAdapter favoriteStoryAdapter;
-    private ArrayList<Story> storyList1, storyList2, storyList3, stories;
+    private ArrayList<Story> storyList1, storyList2, storyList3;
     private ArrayList<Story> sliderList;
     private ViewPager2 viewPager2;
     private Handler sliderHandler;
@@ -66,21 +66,10 @@ public class HomeActivity extends AppCompatActivity {
         progressDialog.show();
 
 
-        storyList1 = new ArrayList<Story>();
-        storyList2 = new ArrayList<Story>();
-        storyList3 = new ArrayList<Story>();
-        sliderList = new ArrayList<Story>();
-
         initUI();
         initListener();
 
-        storyAdapter1 = new StoryAdapter(storyList1, HomeActivity.this);
-        storyAdapter2 = new StoryAdapter(storyList2, HomeActivity.this);
-        favoriteStoryAdapter = new FavoriteStoryAdapter(HomeActivity.this, storyList3);
 
-        recyclerView1.setAdapter(storyAdapter1);
-        recyclerView2.setAdapter(storyAdapter2);
-        recyclerView3.setAdapter(favoriteStoryAdapter);
 
         setAutoSlide();
     }
@@ -98,6 +87,19 @@ public class HomeActivity extends AppCompatActivity {
         recyclerView1.setLayoutManager(layoutManager1);
         recyclerView2.setLayoutManager(layoutManager2);
         recyclerView3.setLayoutManager(layoutManager3);
+
+        storyList1 = new ArrayList<Story>();
+        storyList2 = new ArrayList<Story>();
+        storyList3 = new ArrayList<Story>();
+        sliderList = new ArrayList<Story>();
+
+        storyAdapter1 = new StoryAdapter(storyList1, HomeActivity.this);
+        storyAdapter2 = new StoryAdapter(storyList2, HomeActivity.this);
+        favoriteStoryAdapter = new FavoriteStoryAdapter(HomeActivity.this, storyList3);
+
+        recyclerView1.setAdapter(storyAdapter1);
+        recyclerView2.setAdapter(storyAdapter2);
+        recyclerView3.setAdapter(favoriteStoryAdapter);
     }
 
 
