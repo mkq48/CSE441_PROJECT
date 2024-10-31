@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/detail_story"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/toolbar"
+            android:layout_marginTop="31dp"
+            android:backgroundTint="@color/black"
+            android:paddingHorizontal="27dp">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cv_img"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:foreground="@drawable/boder_story_item"
+                app:cardCornerRadius="5dp">
+
+                <ImageView
+                    android:id="@+id/img"
+                    android:layout_width="100dp"
+                    android:layout_height="150dp"
+                    android:contentDescription="@string/app_name"
+                    android:src="@drawable/ic_launcher_background" />
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:id="@+id/tv_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_toEndOf="@+id/cv_img"
+                android:text="Thập đại đế hoàng"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tv_author"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_name"
+                android:layout_centerHorizontal="true"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_toEndOf="@+id/cv_img"
+                android:text="tác giả: Nguyễn Văn A"
+                android:textColor="#666666"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/tv_chap_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_author"
+                android:layout_centerHorizontal="true"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_toEndOf="@+id/cv_img"
+                android:text="14 Chapters"
+                android:textColor="#666666"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/tv_category"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_author"
+                android:layout_marginTop="20dp"
+                android:text="The loai: "
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/tv_tomtat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/btn_favorite"
+                android:layout_marginTop="32dp"
+                android:text="Tóm tắt nội dung"
+                android:textAllCaps="true"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/tv_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_tomtat"
+                android:layout_marginTop="14dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="@string/app_name"
+                android:textColor="#777777"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/tv_show_more"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_content"
+                android:layout_marginTop="5dp"
+                android:text="Xem thêm"
+                android:textColor="#2674F5"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_collapse"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_content"
+                android:layout_marginTop="5dp"
+                android:text="Thu gọn"
+                android:textColor="#2674F5"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/tv_chapter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tv_content"
+                android:layout_marginTop="60dp"
+                android:text="Chương"
+                android:textAllCaps="true"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/tv_latest"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tv_content"
+                android:layout_marginStart="110dp"
+                android:layout_marginTop="62dp"
+                android:visibility="gone"
+                android:layout_toRightOf="@+id/tv_chapter"
+                android:background="@drawable/radius_tv_order_chapter"
+                android:backgroundTint="@color/orange"
+                android:paddingHorizontal="5dp"
+                android:paddingVertical="3dp"
+                android:text="Mới nhất"
+                android:textColor="#FFFFFF"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/tv_oldest"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tv_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="62dp"
+                android:layout_toRightOf="@+id/tv_latest"
+                android:background="@drawable/radius_tv_order_chapter"
+                android:backgroundTint="#EDEDED"
+                android:paddingHorizontal="5dp"
+                android:paddingVertical="3dp"
+                android:text="Cũ nhất"
+                android:textColor="#000000"
+                android:visibility="gone"
+                android:textSize="12sp" />
+
+
+            <ImageView
+                android:id="@+id/btn_favorite"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_below="@+id/categories_rv"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="9dp"
+                android:layout_toEndOf="@+id/cv_img"
+                android:background="@android:color/transparent"
+                android:contentDescription="@string/app_name" />
+
+            <TextView
+                android:id="@+id/tv_favorites"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/categories_rv"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="12dp"
+                android:layout_toEndOf="@+id/btn_favorite"
+                android:text="10"
+                android:textSize="12sp" />
+
+            <ImageView
+                android:id="@+id/views_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/categories_rv"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_toEndOf="@id/tv_favorites"
+                android:src="@drawable/view_icon" />
+
+            <TextView
+                android:id="@+id/tv_views"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/categories_rv"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="12dp"
+                android:layout_toEndOf="@id/views_icon"
+                android:text="10"
+                android:textSize="12sp" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/chapter_rv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_chapter"
+                android:layout_marginTop="29dp" />
+
+            <TextView
+                android:id="@+id/tv_show_more_chap"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/chapter_rv"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
+                android:backgroundTint="#EDEDED"
+                android:foreground="@drawable/conner_radius_btn_show_more_chap"
+                android:paddingHorizontal="8dp"
+                android:paddingVertical="5dp"
+                android:text="Xem thêm  >"
+                android:textAllCaps="false"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/tv_collapse_chap"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/chapter_rv"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
+                android:backgroundTint="#EDEDED"
+                android:foreground="@drawable/conner_radius_btn_show_more_chap"
+                android:paddingHorizontal="8dp"
+                android:paddingVertical="5dp"
+                android:text="Thu gọn"
+                android:textAllCaps="false"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                android:visibility="gone" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/categories_rv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_chap_count"
+                android:layout_marginStart="10dp"
+                android:layout_toEndOf="@+id/cv_img" />
+
+            <Button
+                android:id="@+id/btn_read"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="600dp"
+                android:background="@drawable/boder_btn_read"
+                android:backgroundTint="#EF4949"
+                android:paddingHorizontal="90dp"
+                android:paddingVertical="10dp"
+                android:text="Đọc truyện"
+                android:layout_centerHorizontal="true"
+                android:textAllCaps="false"
+                android:textColor="#FFFFFF"
+                android:textSize="12sp" />
+        </RelativeLayout>
+</ScrollView>

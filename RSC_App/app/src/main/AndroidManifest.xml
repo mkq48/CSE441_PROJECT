@@ -34,6 +34,8 @@
         <activity android:name=".SignUpActivity" />
         <activity android:name=".ForgetPasswordActivity" />
         <activity android:name=".CommentActivity" />
+        <activity android:name=".Detail_story" />
+        <activity android:name=".Chaper_View_Activity" />
     </application>
 
 </manifest>

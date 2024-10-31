@@ -13,8 +13,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.rcs.adapter.FavoriteStoryAdapter;
+import com.example.rcs.databinding.FragmentHistoryBinding;
 import com.example.rcs.model.Story;
-import com.example.rcs.databinding.FragmentHistoryStoryBinding;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -35,7 +35,7 @@ public class HistoryFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        FragmentHistoryStoryBinding binding = FragmentHistoryStoryBinding.inflate(inflater, container, false);
+        FragmentHistoryBinding binding = FragmentHistoryBinding.inflate(inflater, container, false);
         historyList = new ArrayList<>();
         getData();
         adapter = new FavoriteStoryAdapter(historyList, getContext());
