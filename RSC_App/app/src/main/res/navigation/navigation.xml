@@ -19,6 +19,5 @@
     <fragment
         android:id="@+id/historyFragment"
         android:name="com.example.rcs.fragment.HistoryFragment"
-        android:label="@string/history"
         tools:layout="@layout/fragment_history" />
 </navigation>

@@ -6,7 +6,6 @@ public class Story {
     private String storyId;
     private String author;
     private List<String> categories;
-
     private String content;
     private int favorites;
     private String imageUrl;
@@ -19,7 +18,6 @@ public class Story {
         this.name = name;
         this.imageUrl = imageUrl;
         this.categories = categories;
-
     }
 
     public Story(String storyId, String name, String imageUrl) {
@@ -34,6 +32,9 @@ public class Story {
         this.categories = categories;
         this.name = name;
         this.imageUrl = imageUrl;
+    }
+
+    public Story() {
     }
 
     public String getStoryId() {
