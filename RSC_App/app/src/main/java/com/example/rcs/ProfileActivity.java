@@ -165,14 +165,14 @@ public class ProfileActivity extends AppCompatActivity {
 
 
     private void updateProfileUser(){
-        if (currentUser != null) {
-            String newDisplayName = edtName.getText().toString().trim();
-            String newEmail = edtEmail.getText().toString().trim();
+    if (currentUser != null) {
+        String newDisplayName = edtName.getText().toString().trim();
+        String newEmail = edtEmail.getText().toString().trim();
 
-            confirmUpdate(newEmail, newDisplayName);
+        confirmUpdate(newEmail, newDisplayName);
 
-        }
     }
+}
 
     private void confirmUpdate(String newEmail, String newDisplayName) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
