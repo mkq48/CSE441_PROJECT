@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -24,7 +25,7 @@ import android.content.Context;
 public class UserActivity extends AppCompatActivity {
 
     Button btnProfile, btnLogout;
-    Button btnHome;
+    ImageView btnHome;
     FirebaseAuth mAuth;
     FirebaseUser currentUser;
 
@@ -55,7 +56,7 @@ public class UserActivity extends AppCompatActivity {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         btnProfile = findViewById(R.id.btnProfile);
         btnLogout = findViewById(R.id.btnLogout);
-        btnHome = findViewById(R.id.btnStory);
+        btnHome = findViewById(R.id.btnHome);
     }
 
     private void initListener(){
@@ -74,10 +75,12 @@ public class UserActivity extends AppCompatActivity {
             }
         });
 
+
+
         btnHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(UserActivity.this, MainActivity2.class);
+                Intent intent = new Intent(UserActivity.this, HomeActivity.class);
                 startActivity(intent);
             }
         });

@@ -1,13 +1,14 @@
 {
   "project_info": {
-    "project_number": "907737819279",
-    "project_id": "rscapp-1f435",
-    "storage_bucket": "rscapp-1f435.appspot.com"
+    "project_number": "691111309284",
+    "firebase_url": "https://rscapp-fe4a1-default-rtdb.firebaseio.com",
+    "project_id": "rscapp-fe4a1",
+    "storage_bucket": "rscapp-fe4a1.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:907737819279:android:eb3d23d1cf03ac994628fa",
+        "mobilesdk_app_id": "1:691111309284:android:5f4dabd8414dffb44ea1f1",
         "android_client_info": {
           "package_name": "com.example.rcs"
         }
@@ -15,7 +16,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyAY33NY2nRrsoVQVNKJMMnr4oSmmdf2bq4"
+          "current_key": "AIzaSyCnM1RdjJYr24xcZywKa7z77bTZoXs1Sa4"
         }
       ],
       "services": {

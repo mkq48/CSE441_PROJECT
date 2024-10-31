@@ -209,7 +209,7 @@ public class UpdateAvatar extends AppCompatActivity {
 
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
 
-                String saveImageToInternalStorage = saveImageToInternalStorage(bitmap);
+                saveImageToInternalStorage(bitmap);
 
 
                 Glide.with(UpdateAvatar.this)
