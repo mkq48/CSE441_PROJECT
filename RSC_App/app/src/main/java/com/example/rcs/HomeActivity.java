@@ -5,8 +5,6 @@ import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.view.MotionEvent;
-import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -21,29 +19,22 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.FirebaseApp;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class HomeActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView1, recyclerView2, recyclerView3;
     private StoryAdapter storyAdapter1, storyAdapter2, storyAdapter3, adapter;
     private SliderAdapter sliderAdapter;
+    private FavoriteStoryAdapter favoriteStoryAdapter;
     private ArrayList<Story> storyList1, storyList2, storyList3, stories;
     private ArrayList<Story> sliderList;
     private ViewPager2 viewPager2;
@@ -85,11 +76,11 @@ public class HomeActivity extends AppCompatActivity {
 
         storyAdapter1 = new StoryAdapter(storyList1, HomeActivity.this);
         storyAdapter2 = new StoryAdapter(storyList2, HomeActivity.this);
-        storyAdapter3 = new StoryAdapter(storyList3, HomeActivity.this);
+        favoriteStoryAdapter = new FavoriteStoryAdapter(HomeActivity.this, storyList3);
 
         recyclerView1.setAdapter(storyAdapter1);
         recyclerView2.setAdapter(storyAdapter2);
-        recyclerView3.setAdapter(storyAdapter3);
+        recyclerView3.setAdapter(favoriteStoryAdapter);
 
         setAutoSlide();
     }
@@ -121,18 +112,24 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 String id = snapshot.getKey();
-                FirebaseFirestore.getInstance().document("stories/" + id).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                FirebaseFirestore.getInstance().document("stories/" + id)
+                        .get()
+                        .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                         if (task.isSuccessful()) {
                             DocumentSnapshot document = task.getResult();
                             if (document.exists()) {
                                 String name = (String)document.get("name");
-                                String imgUrl = (String)document.get("imageUrl");;
+                                String imgUrl = (String)document.get("imageUrl");
+                                String author = (String)document.get("author");
+//                                int favorites = (int)document.get("favorites");
                                 storyList1.add(new Story(id,name,imgUrl));
                                 storyAdapter1.notifyItemInserted(storyList1.size()-1);
                                 storyList2.add(new Story(id,name,imgUrl));
-                                storyAdapter2.notifyItemInserted(storyList1.size()-1);
+                                storyAdapter2.notifyItemInserted(storyList2.size()-1);
+                                storyList3.add(new Story(id,name,imgUrl,author));
+                                favoriteStoryAdapter.notifyItemInserted(storyList3.size()-1);
                                 sliderList.add(new Story(id, name,imgUrl));
                                 sliderAdapter = new SliderAdapter(HomeActivity.this, sliderList);
                                 viewPager2.setAdapter(sliderAdapter);

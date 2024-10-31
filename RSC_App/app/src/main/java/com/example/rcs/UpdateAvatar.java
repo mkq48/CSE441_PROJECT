@@ -195,8 +195,6 @@ public class UpdateAvatar extends AppCompatActivity {
         Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
         startActivityForResult(cameraIntent, CAMERA_REQUEST_CODE);
-
-
     }
 
     @Override
