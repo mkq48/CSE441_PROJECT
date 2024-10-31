@@ -52,7 +52,7 @@ public class Detail_story extends AppCompatActivity {
     private String storyId, name, imageUrl;
     private boolean isfavorited, initial_favorite_status;
     private List<String> categoryList;
-    private List<Integer> chapList, allList, subList;
+    private List<Integer> chapList;
     private boolean isCollapseChapterList, isLastestChapterList;
     private RecyclerView chapter_rv, categories_rv;
     private ChapterAdapter chapterAdapter;
@@ -142,8 +142,7 @@ public class Detail_story extends AppCompatActivity {
         chapter_rv = findViewById(R.id.chapter_rv);
         // hien thi cac chap len recycler
         chapList = new ArrayList<>();
-        allList = new ArrayList<>();
-        subList = allList.subList(0, Math.min(5, allList.size()));
+
 //        isCollapseChapterList = true;
         isLastestChapterList = true;
         chapterAdapter = new ChapterAdapter(chapList, storyId, this);

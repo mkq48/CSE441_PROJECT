@@ -8,6 +8,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -41,6 +42,7 @@ public class Chaper_View_Activity extends AppCompatActivity {
     private long chapCount;
     private Button previous_btn,next_btn;
     private ImageView img_comment;
+    private ProgressBar progress_load;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +54,7 @@ public class Chaper_View_Activity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        progress_load = findViewById(R.id.progress_load);
         pdfView = findViewById(R.id.pdfView);
         // set su kien chuyen den man hinh binh luan cua chap
         img_comment = findViewById(R.id.img_comment);
@@ -117,7 +120,6 @@ public class Chaper_View_Activity extends AppCompatActivity {
 
             }
         });
-//        new DownloadPdf().execute(pdfUrl);
     }
     class DownloadPdf extends AsyncTask<String, Void, InputStream> {
         @Override
@@ -144,6 +146,7 @@ public class Chaper_View_Activity extends AppCompatActivity {
                     .onLoad(new OnLoadCompleteListener() {
                 @Override
                 public void loadComplete(int nbPages) {
+                    progress_load.setVisibility(View.GONE);
                     showFunctionButton();
                 }
             }).onTap(new OnTapListener() {
@@ -175,12 +178,13 @@ public class Chaper_View_Activity extends AppCompatActivity {
 
                         @Override
                         public void onComplete(@Nullable DatabaseError error, boolean committed, @Nullable DataSnapshot currentData) {
-                            String userId = new User().getCurrentUserId();
-                            FirebaseDatabase.getInstance().getReference("history/"+userId+"/"+storyId+"/currentChap").setValue(chapId);
-                            FirebaseDatabase.getInstance().getReference("history/"+userId+"/"+storyId+"/currentPage").setValue(pdfView.getCurrentPage());
+
                         }
                     });
                 }
+                String userId = new User().getCurrentUserId();
+                FirebaseDatabase.getInstance().getReference("history/"+userId+"/"+storyId+"/currentChap").setValue(chapId);
+                FirebaseDatabase.getInstance().getReference("history/"+userId+"/"+storyId+"/currentPage").setValue(pdfView.getCurrentPage());
             }
 
             @Override

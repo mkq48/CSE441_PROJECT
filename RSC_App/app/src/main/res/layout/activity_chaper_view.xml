@@ -7,6 +7,7 @@
     android:layout_height="match_parent"
     tools:context=".Chaper_View_Activity"
     android:padding="20dp">
+
     <com.github.barteksc.pdfviewer.PDFView
         android:id="@+id/pdfView"
         android:layout_width="match_parent"
@@ -42,4 +43,9 @@
         android:layout_alignParentBottom="true"
         android:backgroundTint="#EDEDED"
         android:text="Chương sau"/>
+    <ProgressBar
+        android:id="@+id/progress_load"
+        android:layout_centerInParent="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
 </RelativeLayout>
