@@ -1,11 +1,12 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="8dp"
     android:layout_margin="4dp"
     android:layout_gravity="center">
+
     <ImageView
         android:id="@+id/img"
         android:layout_width="120dp"
@@ -17,7 +18,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:ellipsize="end"
         android:maxLines="2"
         android:text="Tên truyện"
         android:textColor="@android:color/black"
@@ -26,8 +26,8 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/textView"
@@ -37,12 +37,12 @@
 
         <TextView
             android:id="@+id/tv_author"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="TextView" />
-
+            android:maxLines="3"
+            android:text="Tên tác giả đầy đủ sẽ hiển thị xuống dòng khi cần"
+            android:textColor="@android:color/black"
+            android:textSize="14sp"
+            android:lineSpacingExtra="2dp" />
     </LinearLayout>
-
-
 </LinearLayout>

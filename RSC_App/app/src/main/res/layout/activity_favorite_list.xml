@@ -8,6 +8,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".FavoriteListActivity"
+    android:background="@color/white"
     android:padding="16dp">
 
     <!-- CardView cho SearchView với viền màu đen -->
@@ -15,7 +16,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginTop="13dp"
+        android:layout_marginTop="23dp"
         android:layout_marginBottom="13dp">
 
         <androidx.cardview.widget.CardView
@@ -46,6 +47,7 @@
             android:padding="1dp"
             android:text="Tìm kiếm"
             android:textColor="@android:color/holo_red_dark" />
+
     </LinearLayout>
 
     <!-- Sử dụng CardView cho các TextView để có bo góc và màu nền xám nhạt -->
@@ -53,67 +55,38 @@
         android:id="@+id/tab_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
         android:orientation="horizontal">
 
-        <androidx.cardview.widget.CardView
+
+        <TextView
+            android:id="@+id/tv_story"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="4dp"
             android:layout_weight="1"
-            android:backgroundTint="#D3D3D3"
-            app:cardCornerRadius="12dp"> <!-- Màu nền xám nhạt -->
+            android:textSize="16sp"
+            android:textAlignment="center"
+            android:text="Truyện" />
 
-            <TextView
-                android:id="@+id/tv_story"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#DEDBDB"
-                android:backgroundTint="#E4E0E0"
-                android:padding="8dp"
-                android:text="Tên truyện"
-                android:textAlignment="center"
-                android:textSize="16sp" />
-        </androidx.cardview.widget.CardView>
-
-        <androidx.cardview.widget.CardView
+        <TextView
+            android:id="@+id/tv_author"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="4dp"
             android:layout_weight="1"
-            android:backgroundTint="#D3D3D3"
-            app:cardCornerRadius="12dp"> <!-- Màu nền xám nhạt -->
+            android:textAlignment="center"
+            android:textSize="16sp"
+            android:text="Tác giả" />
 
-            <TextView
-                android:id="@+id/tv_author"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#DEDBDB"
-                android:backgroundTint="#E4E0E0"
-                android:padding="8dp"
-                android:text="Tên tác giả"
-                android:textAlignment="center"
-                android:textSize="16sp" />
-        </androidx.cardview.widget.CardView>
-
-        <androidx.cardview.widget.CardView
+        <TextView
+            android:id="@+id/tv_genre"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="4dp"
             android:layout_weight="1"
-            android:backgroundTint="#D3D3D3"
-            app:cardCornerRadius="12dp"> <!-- Màu nền xám nhạt -->
+            android:textAlignment="center"
+            android:textSize="16sp"
+            android:text="Thể loại" />
 
-            <TextView
-                android:id="@+id/tv_genre"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#DEDBDB"
-                android:backgroundTint="#E4E0E0"
-                android:padding="8dp"
-                android:text="Thể loại"
-                android:textAlignment="center"
-                android:textSize="16sp" />
-        </androidx.cardview.widget.CardView>
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
@@ -133,7 +106,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:text="Không tìm thấy kết quả"
-        android:textSize="18sp"
+        android:textSize="14sp"
         android:textColor="@color/black"
         android:visibility="gone" />
 </LinearLayout>

@@ -65,17 +65,27 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         Story story = storiesList.get(position);
+
         if (holder instanceof StoryViewHolder) {
             ((StoryViewHolder) holder).tv_name.setText(story.getName());
             Glide.with(context).load(story.getImageUrl()).into(((StoryViewHolder) holder).img);
+        } else if (holder instanceof AuthorViewHolder) {
+            ((AuthorViewHolder) holder).tv_name.setText(story.getName());
+            ((AuthorViewHolder) holder).tv_author.setText(story.getAuthor()); // Gán tên tác giả vào TextView
+            Glide.with(context).load(story.getImageUrl()).into(((AuthorViewHolder) holder).img);
+        } else if (holder instanceof GenreViewHolder) {
+            GenreViewHolder genreHolder = (GenreViewHolder) holder;
+            genreHolder.tv_name.setText(story.getName());
+
+            // Thiết lập CategoryAdapter cho danh sách thể loại
+            List<String> categories = story.getCategories();
+            CategoryAdapter categoryAdapter = new CategoryAdapter(categories);
+            genreHolder.categories_rv.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
+            genreHolder.categories_rv.setAdapter(categoryAdapter);
+
+            Glide.with(context).load(story.getImageUrl()).into(genreHolder.img);
         }
-        // Thêm xử lý cho các view type khác nếu cần
-
     }
-
-
-
-
 
     @Override
     public int getItemCount() {
@@ -94,21 +104,30 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         }
     }
 
-    // ViewHolder cho Author (Tạo các ViewHolder khác cho các loại khác)
+    // ViewHolder cho Author
     static class AuthorViewHolder extends RecyclerView.ViewHolder {
-        // Khai báo các view tương ứng
+        private TextView tv_name, tv_author;
+        private ImageView img;
+
         public AuthorViewHolder(@NonNull View itemView) {
             super(itemView);
-            // Tìm các view trong layout author_item_layout.xml
+            tv_name = itemView.findViewById(R.id.tv_name);
+            tv_author = itemView.findViewById(R.id.tv_author);
+            img = itemView.findViewById(R.id.img);
         }
     }
 
+    // ViewHolder cho Genre
     static class GenreViewHolder extends RecyclerView.ViewHolder {
+        private TextView tv_name;
+        private ImageView img;
+        private RecyclerView categories_rv;
+
         public GenreViewHolder(@NonNull View itemView) {
             super(itemView);
-            // Tìm các view trong layout genre_item_layout.xml
+            tv_name = itemView.findViewById(R.id.tv_name);
+            img = itemView.findViewById(R.id.img);
+            categories_rv = itemView.findViewById(R.id.categories_rv);
         }
     }
 }
-
-

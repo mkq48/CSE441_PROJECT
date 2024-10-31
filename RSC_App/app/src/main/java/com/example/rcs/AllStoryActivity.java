@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
+
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -22,6 +24,7 @@ import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -86,42 +89,24 @@ public class AllStoryActivity extends AppCompatActivity {
         FirebaseDatabase.getInstance().getReference("stories").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                String id = snapshot.getKey();
-                FirebaseFirestore.getInstance().document("stories/" + id).get().addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        DocumentSnapshot document = task.getResult();
-                        if (document != null && document.exists()) {
-                            String name = (String) document.get("name");
-                            String imgUrl = (String) document.get("imageUrl");
-//                            String author = (String) document.get("author");
-//                            String category = (String) document.get("category");
-                            int favorites = snapshot.child("favorites").getValue(Integer.class);
-
-//                            List<String> categoryList = Collections.singletonList((String) document.get("category"));
-
-//                            stories.add(new Story(favorites, imgUrl, id, author, name, categoryList));
-                            stories.add(new Story(favorites, imgUrl, id, name));
-
-                            sortAndLimitStories();
-                            adapter.notifyDataSetChanged();
-                        }
-                    }
-                });
+                getMostFavoritesStory();
             }
 
             @Override
             public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                String id = snapshot.getKey();
-                int favorites = snapshot.child("favorites").getValue(Integer.class);
-                int index = findStoryIndexById(id);
-
-                if (index != -1) {
-                    stories.get(index).setFavorites(favorites);
-
-                    sortAndLimitStories();
-
-                    adapter.notifyDataSetChanged();
-                }
+//                String id = snapshot.getKey();
+//                int favorites = snapshot.child("favorites").getValue(Integer.class);
+//                int index = findStoryIndexById(id);
+//
+//                if (index != -1) {
+//                    stories.get(index).setFavorites(favorites);
+//
+//                    sortAndLimitStories();
+//
+//                    adapter.notifyDataSetChanged();
+//                }
+//                stories.clear();
+                getMostFavoritesStory();
             }
 
             @Override
@@ -161,5 +146,35 @@ public class AllStoryActivity extends AppCompatActivity {
             }
         }
         return -1;
+    }
+
+    public void getMostFavoritesStory() {
+        stories.clear();
+        FirebaseDatabase.getInstance().getReference("stories").orderByChild("favorites").limitToLast(10).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot snap : snapshot.getChildren()) {
+                    String id = snap.getKey();
+                    Toast.makeText(AllStoryActivity.this, id+","+stories.size(), Toast.LENGTH_SHORT).show();
+                    FirebaseFirestore.getInstance().document("stories/" + id).get().addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (document != null && document.exists()) {
+                                String name = (String) document.get("name");
+                                String imgUrl = (String) document.get("imageUrl");
+                                int favorites = snap.child("favorites").getValue(Integer.class);
+                                stories.add(new Story(favorites, imgUrl, id, name));
+                                adapter.notifyDataSetChanged();
+                            }
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 }
