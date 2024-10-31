@@ -1,4 +1,4 @@
-package com.example.rcs;
+package com.example.rcs.model;
 
 public class UserProfile {
     public String name;

@@ -15,6 +15,7 @@ import androidx.fragment.app.DialogFragment;
 
 import com.example.rcs.databinding.ActivitySignUpBinding;
 import com.example.rcs.fragment.DatePickerFragment;
+import com.example.rcs.model.UserProfile;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="goc_binh_luan">Góc bình luận</string>
+	<string name="dang">Đăng</string>
+	<string name="tra_loi">Trả lời</string>
+	<string name="thich">Thích</string>
+	<string name="ngay_dang">Ngày đăng</string>
+	<string name="nha_binh_luan">Bình luận của bạn</string>
+	<string name="binh_luan">Bình luận</string>
+	<string name="ok">Thêm bình luận thành công</string>
+	<string name="empty">Vui lòng nhập bình luận</string>
+	<string name="like">Like</string>
+</resources>
