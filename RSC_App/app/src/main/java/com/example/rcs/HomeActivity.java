@@ -19,13 +19,17 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentChange;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -38,10 +42,10 @@ import java.util.List;
 public class HomeActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView1, recyclerView2, recyclerView3;
-    private StoryAdapter storyAdapter1, storyAdapter2, storyAdapter3;
+    private StoryAdapter storyAdapter1, storyAdapter2, storyAdapter3, adapter;
     private SliderAdapter sliderAdapter;
-    private ArrayList<Story> storyList1, storyList2, storyList3;
-    private ArrayList<String> sliderList;
+    private ArrayList<Story> storyList1, storyList2, storyList3, stories;
+    private ArrayList<Story> sliderList;
     private ViewPager2 viewPager2;
     private Handler sliderHandler;
     private Runnable sliderRunnable;
@@ -49,6 +53,8 @@ public class HomeActivity extends AppCompatActivity {
     FirebaseFirestore db;
     DatabaseReference dbRef;
     ProgressDialog progressDialog;
+
+
 
 
     @SuppressLint("ClickableViewAccessibility")
@@ -72,7 +78,7 @@ public class HomeActivity extends AppCompatActivity {
         storyList1 = new ArrayList<Story>();
         storyList2 = new ArrayList<Story>();
         storyList3 = new ArrayList<Story>();
-        sliderList = new ArrayList<String>();
+        sliderList = new ArrayList<Story>();
 
         initUI();
         initListener();
@@ -85,14 +91,7 @@ public class HomeActivity extends AppCompatActivity {
         recyclerView2.setAdapter(storyAdapter2);
         recyclerView3.setAdapter(storyAdapter3);
 
-        viewPager2.setOnTouchListener((v, event) -> {
-            if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                stopAutoSlide();
-            } else if (event.getAction() == MotionEvent.ACTION_UP) {
-                startAutoSlide();
-            }
-            return false;
-        });
+        setAutoSlide();
     }
 
     private void initUI(){
@@ -112,210 +111,58 @@ public class HomeActivity extends AppCompatActivity {
 
 
     private void initListener(){
-        EventChangeListener();
-        loadFavories();
-        loadSlider();
-
+        getData();
 
     }
 
-    public void loadSlider(){
-        db.collection("stories")
-                .limit(6)
-                .get()
-                .addOnSuccessListener(queryDocumentSnapshots -> {
-                    for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
-                        String imageUrl = document.getString("imageUrl");
-                        if (imageUrl != null) {
-                            sliderList.add(imageUrl);
+
+    private void getData() {
+        FirebaseDatabase.getInstance().getReference("stories").addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                String id = snapshot.getKey();
+                FirebaseFirestore.getInstance().document("stories/" + id).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (document.exists()) {
+                                String name = (String)document.get("name");
+                                String imgUrl = (String)document.get("imageUrl");;
+                                storyList1.add(new Story(id,name,imgUrl));
+                                storyAdapter1.notifyItemInserted(storyList1.size()-1);
+                                storyList2.add(new Story(id,name,imgUrl));
+                                storyAdapter2.notifyItemInserted(storyList1.size()-1);
+                                sliderList.add(new Story(id, name,imgUrl));
+                                sliderAdapter = new SliderAdapter(HomeActivity.this, sliderList);
+                                viewPager2.setAdapter(sliderAdapter);
+                            }
+
                         }
+                     progressDialog.dismiss();
+
                     }
-
-                    sliderAdapter = new SliderAdapter(HomeActivity.this, sliderList);
-                    viewPager2.setAdapter(sliderAdapter);
-
-                    setAutoSlide();
-                })
-                .addOnFailureListener(e -> {
-                    e.printStackTrace();
                 });
-
-        viewPager2.setOnTouchListener((v, event) -> {
-            if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                stopAutoSlide();
-            } else if (event.getAction() == MotionEvent.ACTION_UP) {
-                startAutoSlide();
-            }
-            return false;
-        });
-
-    }
-
-    public void EventChangeListener(){
-        FirebaseApp.initializeApp(this);
-        db = FirebaseFirestore.getInstance();
-//        dbRef = FirebaseDatabase.getInstance().getReference("stories").child("favories");
-
-        db.collection("stories").limit(6).addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
-                if (value != null) {
-                    for (DocumentChange dc : value.getDocumentChanges()){
-                        if(dc.getType() == DocumentChange.Type.ADDED){
-                            Story story = dc.getDocument().toObject(Story.class);
-                            if (!storyList1.contains(story)) {
-                                storyList1.add(story);
-                            }
-                            if (!storyList2.contains(story)) {
-                                storyList2.add(story);
-                            }
-                        }
-                    }
-                    storyAdapter1.notifyDataSetChanged();
-                    storyAdapter2.notifyDataSetChanged();
-
-                    progressDialog.dismiss();
-                }
-
-
-                if(error != null){
-                    progressDialog.dismiss();
-                    Toast.makeText(HomeActivity.this, "Lỗi firestore", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                if (value == null || value.isEmpty()) {
-                    progressDialog.dismiss();
-                    Toast.makeText(HomeActivity.this, "Không có dữ liệu", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-            }
-        });
-
-
-//        dbRef.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                storyList3.clear();
-//
-//                for (DataSnapshot data : dataSnapshot.getChildren()) {
-//                    Story story = data.getValue(Story.class);
-//
-//                    if (story != null) {
-//                        storyList3.add(story);
-//                    }
-//                    storyAdapter3.notifyDataSetChanged();
-//                    progressDialog.dismiss();
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//                progressDialog.dismiss();
-//                Toast.makeText(MainActivity2.this, "Lỗi Realtime Database", Toast.LENGTH_SHORT).show();
-//            }
-//        });
-
-//        db.collection("stories").orderBy("favorites").limit(3)
-//                .addSnapshotListener(new EventListener<QuerySnapshot>() {
-//            @Override
-//            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
-//                if (value != null) {
-//                    for (DocumentChange dc : value.getDocumentChanges()){
-//                        if(dc.getType() == DocumentChange.Type.ADDED){
-//                            Story story = dc.getDocument().toObject(Story.class);
-//                            if (!storyList3.contains(story)) {
-//                                storyList3.add(story);
-//                            }
-//
-//                        }
-//                    }
-//                    storyAdapter3.notifyDataSetChanged();
-//
-//                    progressDialog.dismiss();
-//                }
-//
-//
-//                if(error != null){
-//                    progressDialog.dismiss();
-//                    Toast.makeText(MainActivity2.this, "Lỗi firestore", Toast.LENGTH_SHORT).show();
-//                    return;
-//                }
-//
-//                if (value == null || value.isEmpty()) {
-//                    progressDialog.dismiss();
-//                    Toast.makeText(MainActivity2.this, "Không có dữ liệu", Toast.LENGTH_SHORT).show();
-//                    return;
-//                }
-//
-//            }
-//        });
-
-    }
-
-
-    public void loadFavories(){
-        FirebaseApp.initializeApp(this);
-        db = FirebaseFirestore.getInstance();
-        dbRef = FirebaseDatabase.getInstance().getReference("stories");
-
-        List<String> favoriteIds = new ArrayList<>();
-
-
-        dbRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                favoriteIds.clear();
-
-                for (DataSnapshot data : dataSnapshot.getChildren()) {
-                    String storyId = data.getKey();
-                    if (storyId != null) {
-                        favoriteIds.add(storyId);
-                    }
-                }
-
-                if (!favoriteIds.isEmpty()) {
-                    db.collection("stories")
-                            .whereIn("id", favoriteIds) // Truy vấn các truyện có ID trong favoriteIds
-                            .addSnapshotListener(new EventListener<QuerySnapshot>() {
-                                @Override
-                                public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
-                                    if (value != null) {
-                                        storyList3.clear();
-                                        for (DocumentChange dc : value.getDocumentChanges()) {
-                                            if (dc.getType() == DocumentChange.Type.ADDED) {
-                                                Story story = dc.getDocument().toObject(Story.class);
-                                                storyList3.add(story);
-                                            }
-                                        }
-                                        storyAdapter3.notifyDataSetChanged();
-                                        progressDialog.dismiss();
-                                    }
-
-                                    if (error != null) {
-                                        progressDialog.dismiss();
-                                        Toast.makeText(HomeActivity.this, "Lỗi Firestore", Toast.LENGTH_SHORT).show();
-                                        return;
-                                    }
-
-                                    if (value == null || value.isEmpty()) {
-                                        progressDialog.dismiss();
-                                        Toast.makeText(HomeActivity.this, "Không có dữ liệu yêu thích", Toast.LENGTH_SHORT).show();
-                                        return;
-                                    }
-                                }
-                            });
-                } else {
-                    progressDialog.dismiss();
-                    Toast.makeText(HomeActivity.this, "Không có dữ liệu yêu thích", Toast.LENGTH_SHORT).show();
-                }
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                progressDialog.dismiss();
-                Toast.makeText(HomeActivity.this, "Lỗi Realtime Database", Toast.LENGTH_SHORT).show();
+            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
             }
         });
     }

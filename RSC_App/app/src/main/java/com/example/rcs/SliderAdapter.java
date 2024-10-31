@@ -1,23 +1,27 @@
 package com.example.rcs;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
+
 import java.util.List;
 
 public class SliderAdapter extends RecyclerView.Adapter<SliderAdapter.SliderViewHolder> {
 
     private final Context context;
-    private final List<String> imageUrls;
+    private final List<Story> sliderList;
 
-    public SliderAdapter(Context context, List<String> imageUrls) {
+    public SliderAdapter(Context context, List<Story> imageUrls) {
         this.context = context;
-        this.imageUrls = imageUrls;
+        this.sliderList = imageUrls;
     }
 
     @NonNull
@@ -29,15 +33,27 @@ public class SliderAdapter extends RecyclerView.Adapter<SliderAdapter.SliderView
 
     @Override
     public void onBindViewHolder(@NonNull SliderViewHolder holder, int position) {
-        String imageUrl = imageUrls.get(position);
-        Glide.with(context)
-                .load(imageUrl)
-                .into(holder.imageView);
+        Glide.with(context).asBitmap().load(sliderList.get(holder.getAdapterPosition()).getImageUrl()).into(holder.imageView);
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context,Detail_story.class);
+                intent.putExtra("storyId",sliderList.get(holder.getAdapterPosition()).getStoryId());
+//                intent.putExtra("author",storiesList.get(position).getAuthor());
+//                intent.putExtra("categories",storiesList.get(position).getCategories());
+//                intent.putExtra("StoryId",storiesList.get(position).getStoryId());
+//                intent.putExtra("content",storiesList.get(position).getContent());
+//                intent.putExtra("favorites",storiesList.get(position).getFavorites());
+                intent.putExtra("imageUrl",sliderList.get(holder.getAdapterPosition()).getImageUrl());
+                intent.putExtra("name",sliderList.get(holder.getAdapterPosition()).getName());
+                context.startActivity(intent);
+            }
+        });
     }
 
     @Override
     public int getItemCount() {
-        return imageUrls.size();
+        return sliderList.size();
     }
 
     static class SliderViewHolder extends RecyclerView.ViewHolder {

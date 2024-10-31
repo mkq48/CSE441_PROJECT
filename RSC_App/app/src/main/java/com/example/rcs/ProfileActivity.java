@@ -269,7 +269,7 @@ public class ProfileActivity extends AppCompatActivity {
         if (currentUser != null) {
             new AlertDialog.Builder(this)
                     .setTitle("Xác nhận xóa")
-                    .setMessage("Bạn có chắc chắn muốn xóa tài khoản?")
+                    .setMessage("Bạn có chắc chắn muốn xóa tài khoản? Tất cả thông tin sẽ bị xóa vĩnh viễn và không thể khôi phục.")
                     .setIcon(R.drawable.alert)
                     .setPositiveButton("Xác nhận", (dialog, which) -> {
                         deleteAccount();

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="30dp">
+
+        <ImageView
+            android:id="@+id/img"
+            android:layout_width="118dp"
+            android:layout_height="160dp"
+            android:background="@drawable/boder_chapter_item_btn"
+            android:src="@android:drawable/ic_dialog_alert" />
+
+        <TextView
+            android:id="@+id/tv_story_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="50dp"
+            android:layout_marginTop="30dp"
+            android:textSize="20sp"
+            android:layout_toRightOf="@+id/img"
+            android:text="Thanh guom diet quy" />
+    </RelativeLayout>
+</androidx.cardview.widget.CardView>

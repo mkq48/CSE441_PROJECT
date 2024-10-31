@@ -1,19 +1,29 @@
 package com.example.rcs;
 
-import java.util.Date;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class User {
-    private String userId, imageUrl, email, userName, password;
-    private Date DoB;
+    private String userId;
+    private String imageUrl;
+    private String userName;
+    private String passWord;
+    private String email;
 
+    public String getCurrentUserId() {
+        return "user1";
+    }
+    public User getUserById(String id){
 
-    public User(String userId, String imageUrl, String email, String userName, String password, Date doB) {
-        this.userId = userId;
-        this.imageUrl = imageUrl;
-        this.email = email;
-        this.userName = userName;
-        this.password = password;
-        DoB = doB;
+        return new User();
+    }
+    public User getCurrentUser(){
+        return new User();
+    }
+    public void addNewUser(){
+
+    }
+
+    public User() {
     }
 
     public String getUserId() {
@@ -24,43 +34,20 @@ public class User {
         return imageUrl;
     }
 
-    public String getEmail() {
-        return email;
-    }
 
     public String getUserName() {
         return userName;
     }
 
-    public String getPassword() {
-        return password;
+    public String getPassWord() {
+        return passWord;
     }
 
-    public Date getDoB() {
-        return DoB;
-    }
 
-    public void setDoB(Date doB) {
-        DoB = doB;
+    public String getEmail() {
+        return email;
     }
+    public void UpdateCurrentUser(){
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
     }
 }
