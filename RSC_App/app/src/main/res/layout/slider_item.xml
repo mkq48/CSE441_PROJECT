@@ -9,4 +9,5 @@
         android:scaleType="centerCrop"
         android:contentDescription="slider_image"
        />
+
 </FrameLayout>

@@ -5,10 +5,11 @@ import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -17,17 +18,18 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
+
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
+
 import com.google.firebase.firestore.DocumentSnapshot;
+
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import com.google.firebase.firestore.Query;
+
+
 import java.util.ArrayList;
+import java.util.List;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -69,9 +71,6 @@ public class HomeActivity extends AppCompatActivity {
         initUI();
         initListener();
 
-
-
-        setAutoSlide();
     }
 
     private void initUI(){
@@ -100,6 +99,7 @@ public class HomeActivity extends AppCompatActivity {
         recyclerView1.setAdapter(storyAdapter1);
         recyclerView2.setAdapter(storyAdapter2);
         recyclerView3.setAdapter(favoriteStoryAdapter);
+
     }
 
 
@@ -109,62 +109,89 @@ public class HomeActivity extends AppCompatActivity {
     }
 
 
+
     private void getData() {
-        FirebaseDatabase.getInstance().getReference("stories").addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                String id = snapshot.getKey();
-                FirebaseFirestore.getInstance().document("stories/" + id)
-                        .get()
-                        .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if (task.isSuccessful()) {
-                            DocumentSnapshot document = task.getResult();
+        db = FirebaseFirestore.getInstance();
+
+        db.collection("stories")
+                .orderBy("created_at", Query.Direction.DESCENDING)
+                .limit(6)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        for (DocumentSnapshot document : task.getResult()) {
                             if (document.exists()) {
-                                String name = (String)document.get("name");
-                                String imgUrl = (String)document.get("imageUrl");
-                                String author = (String)document.get("author");
-//                                int favorites = (int)document.get("favorites");
-                                storyList1.add(new Story(id,name,imgUrl));
-                                storyAdapter1.notifyItemInserted(storyList1.size()-1);
-                                storyList2.add(new Story(id,name,imgUrl));
-                                storyAdapter2.notifyItemInserted(storyList2.size()-1);
-                                storyList3.add(new Story(id,name,imgUrl,author));
-                                favoriteStoryAdapter.notifyItemInserted(storyList3.size()-1);
-                                sliderList.add(new Story(id, name,imgUrl));
+                                String id = document.getId();
+                                String name = document.getString("name");
+                                String imgUrl = document.getString("imageUrl");
+
+
+                                storyList1.add(0, new Story(id, name, imgUrl));
+                                storyAdapter1.notifyItemInserted(0);
+
+                                sliderList.add(0, new Story(id, name, imgUrl));
                                 sliderAdapter = new SliderAdapter(HomeActivity.this, sliderList);
                                 viewPager2.setAdapter(sliderAdapter);
                             }
+                        }
+                        setAutoSlide();
+                    } else {
+                        Log.w("Firestore", "Error getting documents.", task.getException());
+                    }
+                    progressDialog.dismiss();
+                });
+
+        db.collection("stories")
+                .orderBy("views", Query.Direction.DESCENDING)
+                .limit(6)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        for (DocumentSnapshot document : task.getResult()) {
+                            if (document.exists()) {
+                                String id = document.getId();
+                                String name = document.getString("name");
+                                String imgUrl = document.getString("imageUrl");
+
+                                storyList2.add(new Story(id, name, imgUrl));
+                            }
+                        }
+                        storyAdapter2.notifyDataSetChanged();
+                    } else {
+                        Log.w("Firestore", "Error getting documents.", task.getException());
+                    }
+                    progressDialog.dismiss();
+                });
+
+        db.collection("stories")
+                .orderBy("favorites", Query.Direction.DESCENDING)
+                .limit(3)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        for (DocumentSnapshot document : task.getResult()) {
+                            if (document.exists()) {
+                                String id = document.getId();
+                                String name = document.getString("name");
+                                String imgUrl = document.getString("imageUrl");
+                                String author = document.getString("author");
+                                long favorites = document.getLong("favorites").intValue();
+
+
+                                storyList3.add(new Story(id, name, imgUrl, author, favorites));
+
+                            }
 
                         }
-                     progressDialog.dismiss();
-
+                        favoriteStoryAdapter.notifyDataSetChanged();
+                    } else {
+                        Log.w("Firestore", "Error getting documents.", task.getException());
                     }
+                    progressDialog.dismiss();
                 });
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
     }
+
+
 
 
     private void setAutoSlide() {
@@ -201,3 +228,4 @@ public class HomeActivity extends AppCompatActivity {
 
 
 }
+

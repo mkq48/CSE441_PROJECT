@@ -2,6 +2,7 @@ package com.example.rcs;
 
 import androidx.annotation.NonNull;
 
+import com.google.firebase.Timestamp;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
@@ -15,10 +16,11 @@ public class Story {
     private List<String> categories;
 
     private String content;
-    private int favorites;
+    private long favorites;
     private String imageUrl;
     private String name;
     private int views;
+    private Timestamp created_at;
 
     public Story(int favorites, String imageUrl, String storyId, String author, String name, List<String> categories) {
         this.favorites = favorites;
@@ -35,12 +37,12 @@ public class Story {
         this.imageUrl = imageUrl;
     }
 
-    public Story(String storyId, String name, String imageUrl, String author) {
+    public Story(String storyId, String name, String imageUrl, String author, Long favorites) {
         this.storyId = storyId;
         this.name = name;
         this.imageUrl = imageUrl;
         this.author = author;
-//        this.favorites = favorites;
+        this.favorites = favorites;
     }
 
     public Story(String storyId, String author, List<String> categories, String name, String imageUrl) {
@@ -83,7 +85,7 @@ public class Story {
         this.content = content;
     }
 
-    public int getFavorites() {
+    public long getFavorites() {
         return favorites;
     }
 
@@ -113,5 +115,13 @@ public class Story {
 
     public void setViews(int views) {
         this.views = views;
+    }
+
+    public Timestamp getCreated_at() {
+        return created_at;
+    }
+
+    public void setCreated_at(Timestamp created_at) {
+        this.created_at = created_at;
     }
 }

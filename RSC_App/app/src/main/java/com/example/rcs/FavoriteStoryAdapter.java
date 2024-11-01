@@ -36,6 +36,7 @@ public class FavoriteStoryAdapter extends RecyclerView.Adapter<FavoriteStoryAdap
     public void onBindViewHolder(@NonNull FavoriteViewHolder holder, int position) {
         holder.tv_name.setText(favoriteStoryList.get(holder.getAdapterPosition()).getName());
         holder.tv_author.setText(favoriteStoryList.get(holder.getAdapterPosition()).getAuthor());
+        holder.tv_like.setText(String.valueOf(favoriteStoryList.get(holder.getAdapterPosition()).getFavorites()));
         Glide.with(context).asBitmap().load(favoriteStoryList.get(holder.getAdapterPosition()).getImageUrl()).into(holder.imageView);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -46,7 +47,7 @@ public class FavoriteStoryAdapter extends RecyclerView.Adapter<FavoriteStoryAdap
 //                intent.putExtra("categories",storiesList.get(position).getCategories());
 //                intent.putExtra("StoryId",storiesList.get(position).getStoryId());
 //                intent.putExtra("content",storiesList.get(position).getContent());
-//                intent.putExtra("favorites",storiesList.get(position).getFavorites());
+                intent.putExtra("favorites",favoriteStoryList.get(holder.getAdapterPosition()).getFavorites());
                 intent.putExtra("imageUrl",favoriteStoryList.get(holder.getAdapterPosition()).getImageUrl());
                 intent.putExtra("name",favoriteStoryList.get(holder.getAdapterPosition()).getName());
                 context.startActivity(intent);
@@ -62,13 +63,14 @@ public class FavoriteStoryAdapter extends RecyclerView.Adapter<FavoriteStoryAdap
 
     static class FavoriteViewHolder extends RecyclerView.ViewHolder {
         ImageView imageView;
-        TextView tv_name, tv_author;
+        TextView tv_name, tv_author, tv_like;
 
         public FavoriteViewHolder(@NonNull View itemView) {
             super(itemView);
             imageView = itemView.findViewById(R.id.img);
             tv_name = itemView.findViewById(R.id.tv_name);
             tv_author = itemView.findViewById(R.id.tv_author);
+            tv_like = itemView.findViewById(R.id.tv_like);
         }
     }
 }
