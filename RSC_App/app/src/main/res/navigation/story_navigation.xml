@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/story_navigation"
+    app:startDestination="@id/fragmentDetailStory">
+
+    <fragment
+        android:id="@+id/fragmentDetailStory"
+        android:name="com.example.rcs.fragment.FragmentDetailStory"
+        android:label="@string/detail"
+        tools:layout="@layout/fragment_detail_story">
+        <action
+            android:id="@+id/action_fragmentDetailStory_to_fragmentChaperView"
+            app:destination="@id/fragmentChaperView" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragmentChaperView"
+        android:name="com.example.rcs.fragment.FragmentChaperView"
+        tools:layout="@layout/fragment_chaper_view">
+        <action
+            android:id="@+id/action_fragmentChaperView_self"
+            app:destination="@id/fragmentChaperView"
+            app:popUpTo="@id/fragmentDetailStory"
+            app:popUpToInclusive="false" />
+        <argument
+            android:name="chapId"
+            android:defaultValue="0"
+            app:argType="integer" />
+        <argument
+            android:name="storyId"
+            app:argType="string" />
+        <argument
+            android:name="currentPage"
+            app:argType="integer" />
+        <action
+            android:id="@+id/action_fragmentChaperView_to_commentFragment"
+            app:destination="@id/commentFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/commentFragment"
+        android:name="com.example.rcs.fragment.CommentFragment"
+        android:label="@string/binh_luan"
+        tools:layout="@layout/fragment_comment" >
+        <argument
+            android:name="chapId"
+            app:argType="integer" />
+        <argument
+            android:name="storyId"
+            app:argType="string" />
+    </fragment>
+</navigation>

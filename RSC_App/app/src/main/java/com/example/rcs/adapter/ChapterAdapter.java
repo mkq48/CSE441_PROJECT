@@ -1,17 +1,21 @@
 package com.example.rcs.adapter;
 
 import android.content.Context;
-import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.rcs.Chaper_View_Activity;
 import com.example.rcs.R;
+import com.example.rcs.fragment.FragmentChaperView;
+import com.example.rcs.fragment.FragmentDetailStory;
 
 import java.util.Comparator;
 import java.util.List;
@@ -21,9 +25,9 @@ public class ChapterAdapter extends RecyclerView.Adapter<ChapterAdapter.ChapterV
     private List<Integer> chapterList;
     private int itemCountDefault;
     private String storyId;
-    private Context context;
+    private FragmentDetailStory context;
 
-    public ChapterAdapter(List<Integer> chapterList, String storyId, Context context) {
+    public ChapterAdapter(List<Integer> chapterList, String storyId, FragmentDetailStory context) {
         this.chapterList = chapterList;
         this.storyId = storyId;
         this.context = context;
@@ -61,10 +65,13 @@ public class ChapterAdapter extends RecyclerView.Adapter<ChapterAdapter.ChapterV
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent i = new Intent(context, Chaper_View_Activity.class);
-                    i.putExtra("chapId", chapterList.get(holder.getAdapterPosition()));
-                    i.putExtra("storyId", storyId);
-                    context.startActivity(i);
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("chapId", chapterList.get(holder.getAdapterPosition()));
+                    bundle.putInt("currentPage", 1);
+                    bundle.putString("storyId", storyId);
+
+                    NavController navController = NavHostFragment.findNavController(context);
+                    navController.navigate(R.id.action_fragmentDetailStory_to_fragmentChaperView, bundle);
                 }
             });
         }

@@ -9,7 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.rcs.CommentActivity;
+import com.example.rcs.fragment.CommentFragment;
 import com.example.rcs.R;
 import com.example.rcs.databinding.CommentItemBinding;
 import com.example.rcs.model.Comment;
@@ -70,7 +70,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
                         comment.getLikes().put(FirebaseAuth.getInstance().getCurrentUser().getUid(), true);
                         comment.setNumberOfLike(comment.getNumberOfLike()+1);
                     }
-                    CommentActivity.commentsRef.child(comment.getId()).setValue(comment, (error, ref) -> {
+                    CommentFragment.commentsRef.child(comment.getId()).setValue(comment, (error, ref) -> {
                         if (error!=null){
                             Log.d("err", "loi gi do");
                         }

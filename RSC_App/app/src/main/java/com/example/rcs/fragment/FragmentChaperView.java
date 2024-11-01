@@ -1,23 +1,26 @@
-package com.example.rcs;
+package com.example.rcs.fragment;
 
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
 
+import com.example.rcs.R;
+import com.example.rcs.databinding.FragmentChaperViewBinding;
 import com.github.barteksc.pdfviewer.PDFView;
 import com.github.barteksc.pdfviewer.listener.OnLoadCompleteListener;
 import com.github.barteksc.pdfviewer.listener.OnTapListener;
@@ -35,7 +38,7 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class Chaper_View_Activity extends AppCompatActivity {
+public class FragmentChaperView extends Fragment {
     private PDFView pdfView;
     private String pdfUrl,storyId;
     private int currentPage,chapId;
@@ -44,61 +47,65 @@ public class Chaper_View_Activity extends AppCompatActivity {
     private ImageView img_comment;
     private String userID;
 
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_chaper_view);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
-        pdfView = findViewById(R.id.pdfView);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        FragmentChaperViewBinding binding = FragmentChaperViewBinding.inflate(inflater, container, false);
+        pdfView = binding.pdfView;
         // set su kien chuyen den man hinh binh luan cua chap
-        img_comment = findViewById(R.id.img_comment);
+        img_comment = binding.imgComment;
         img_comment.setVisibility(View.GONE);
         img_comment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // chuyen den man hinh binh luan
-                Intent i = new Intent(Chaper_View_Activity.this, CommentActivity.class);
-                i.putExtra("chapId",chapId);
-                i.putExtra("storyId",storyId);
-                startActivity(i);
+                Bundle bundle = new Bundle();
+                bundle.putInt("chapId", chapId);
+                bundle.putString("storyId", storyId);
+                NavController navController = NavHostFragment.findNavController(FragmentChaperView.this);
+                navController.navigate(R.id.action_fragmentChaperView_to_commentFragment, bundle);
             }
         });
         userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        next_btn = findViewById(R.id.next_btn);
+        next_btn = binding.nextBtn;
         next_btn.setVisibility(View.GONE);
         next_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(chapId<chapCount){
-                    Intent i = new Intent(Chaper_View_Activity.this, Chaper_View_Activity.class);
-                    i.putExtra("chapId",chapId+1);
-                    i.putExtra("storyId",storyId);
-                    startActivity(i);
+                    // chuyen sang chap tiep theo
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("chapId", chapId+1);
+                    bundle.putInt("currentPage", 1);
+                    bundle.putString("storyId", storyId);
+                    NavController navController = NavHostFragment.findNavController(FragmentChaperView.this);
+                    navController.navigate(R.id.action_fragmentChaperView_self, bundle);
                 }
             }
         });
-        previous_btn = findViewById(R.id.previous_btn);
+        previous_btn = binding.previousBtn;
         previous_btn.setVisibility(View.GONE);
         previous_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(chapId>1){
-                    Intent i = new Intent(Chaper_View_Activity.this, Chaper_View_Activity.class);
-                    i.putExtra("chapId",chapId-1);
-                    i.putExtra("storyId",storyId);
-                    startActivity(i);
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("chapId", chapId-1);
+                    bundle.putInt("currentPage", 1);
+                    bundle.putString("storyId", storyId);
+                    NavController navController = NavHostFragment.findNavController(FragmentChaperView.this);
+                    navController.navigate(R.id.action_fragmentChaperView_self, bundle);
                 }
             }
         });
-        Intent i = getIntent();
-        chapId = i.getIntExtra("chapId",0);
-        storyId = i.getStringExtra("storyId");
-        currentPage = i.getIntExtra("currentPage",0);
+        chapId = getArguments().getInt("chapId",0);
+        storyId = getArguments().getString("storyId");
+        currentPage = getArguments().getInt("currentPage",0);
+        //set title for toolbar
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Chương "+chapId);
+        //print to log cat
+        Log.d("chapId",chapId+"");
+        Log.d("storyId",storyId);
+        Log.d("currentPage",currentPage+"");
         // get chapCount
         FirebaseDatabase.getInstance().getReference("story_chapters/"+storyId).addValueEventListener(new ValueEventListener() {
             @Override
@@ -116,6 +123,7 @@ public class Chaper_View_Activity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 pdfUrl = snapshot.getValue(String.class);
+                Log.d("pdfUrl",pdfUrl);
                 new DownloadPdf().execute(pdfUrl);
             }
 
@@ -125,7 +133,9 @@ public class Chaper_View_Activity extends AppCompatActivity {
             }
         });
 //        new DownloadPdf().execute(pdfUrl);
+        return binding.getRoot();
     }
+
     class DownloadPdf extends AsyncTask<String, Void, InputStream> {
         @Override
         protected InputStream doInBackground(String... strings) {
@@ -164,8 +174,9 @@ public class Chaper_View_Activity extends AppCompatActivity {
     }
 
     @Override
-    protected void onPause() {
+    public void onPause() {
         super.onPause();
+        Log.d("onPause","onPause");
         // them so view
         userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
         FirebaseDatabase.getInstance().getReference("history/"+userID+"/"+storyId).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -197,6 +208,7 @@ public class Chaper_View_Activity extends AppCompatActivity {
         });
 
     }
+
     public void showFunctionButton(){
         if(chapId<chapCount){
             next_btn.setVisibility(View.VISIBLE);

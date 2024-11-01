@@ -3,9 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-feature android:name="android.hardware.camera" android:required="true" />
+
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="true" />
 
     <application
         android:allowBackup="true"
@@ -17,6 +20,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.RCS"
         tools:targetApi="31">
+        <activity
+            android:name=".StoryActivity"
+            android:exported="false" />
         <activity
             android:name=".UserActivity1"
             android:exported="false" />
@@ -33,9 +39,6 @@
         <activity android:name=".SignInActivity" />
         <activity android:name=".SignUpActivity" />
         <activity android:name=".ForgetPasswordActivity" />
-        <activity android:name=".CommentActivity" />
-        <activity android:name=".Detail_story" />
-        <activity android:name=".Chaper_View_Activity" />
     </application>
 
 </manifest>

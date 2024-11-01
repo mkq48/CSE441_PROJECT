@@ -1,28 +1,31 @@
-package com.example.rcs;
+package com.example.rcs.fragment;
 
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.rcs.R;
 import com.example.rcs.adapter.CategoryAdapter;
 import com.example.rcs.adapter.ChapterAdapter;
+import com.example.rcs.databinding.FragmentDetailStoryBinding;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -39,7 +42,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Detail_story extends AppCompatActivity {
+public class FragmentDetailStory extends Fragment {
     private TextView tv_name, tv_author, tv_category, tv_content, tv_favorites,
             tv_views, tv_chap_count, tv_show_more, tv_collapse, tv_show_more_chap,
             tv_collapse_chap,
@@ -56,19 +59,15 @@ public class Detail_story extends AppCompatActivity {
     private String userId;
     private Button btn_read;
     private int currentChap, currentPage;
+    FragmentDetailStoryBinding binding;
 
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_detail_story);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.detail_story), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        binding = FragmentDetailStoryBinding.inflate(inflater, container, false);
         initView();
         loadData();
+        return binding.getRoot();
     }
 
     private void loadData() {
@@ -112,30 +111,24 @@ public class Detail_story extends AppCompatActivity {
     }
 
     public void initView() {
-        img = findViewById(R.id.img);
-        tv_chap_count = findViewById(R.id.tv_chap_count);
-        tv_name = findViewById(R.id.tv_name);
-        tv_author = findViewById(R.id.tv_author);
-        tv_category = findViewById(R.id.tv_category);
-        tv_content = findViewById(R.id.tv_content);
-        tv_favorites = findViewById(R.id.tv_favorites);
-        btn_favorite = findViewById(R.id.btn_favorite);
-        img = findViewById(R.id.img);
-        tv_name = findViewById(R.id.tv_name);
-        tv_author = findViewById(R.id.tv_author);
-        tv_category = findViewById(R.id.tv_category);
-        tv_content = findViewById(R.id.tv_content);
-        tv_favorites = findViewById(R.id.tv_favorites);
-        btn_favorite = findViewById(R.id.btn_favorite);
-        tv_views = findViewById(R.id.tv_views);
-        categories_rv = findViewById(R.id.categories_rv);
+        img = binding.img;
+        tv_chap_count = binding.tvChapCount;
+        img = binding.img;
+        tv_name = binding.tvName;
+        tv_author = binding.tvAuthor;
+        tv_category = binding.tvCategory;
+        tv_content = binding.tvContent;
+        tv_favorites = binding.tvFavorites;
+        btn_favorite = binding.btnFavorite;
+        tv_views = binding.tvViews;
+        categories_rv = binding.categoriesRv;
         // lay du lieu tu intent
-        Intent intent = getIntent();
+        Intent intent = getActivity().getIntent();
         storyId = intent.getStringExtra("storyId");
         name = intent.getStringExtra("name");
         imageUrl = intent.getStringExtra("imageUrl");
         userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        chapter_rv = findViewById(R.id.chapter_rv);
+        chapter_rv = binding.chapterRv;
         // hien thi cac chap len recycler
         chapList = new ArrayList<>();
         allList = new ArrayList<>();
@@ -144,13 +137,13 @@ public class Detail_story extends AppCompatActivity {
         isLastestChapterList = true;
         chapterAdapter = new ChapterAdapter(chapList, storyId, this);
         chapter_rv.setAdapter(chapterAdapter);
-        chapter_rv.setLayoutManager(new GridLayoutManager(this, 5));
+        chapter_rv.setLayoutManager(new GridLayoutManager(getContext(), 5));
         // hien thi the loai truyen len recycler
         categoryList = new ArrayList<>();
         categoryAdapter = new CategoryAdapter(categoryList);
         categoryAdapter.notifyDataSetChanged();
         categories_rv.setAdapter(categoryAdapter);
-        categories_rv.setLayoutManager(new GridLayoutManager(this, 2));
+        categories_rv.setLayoutManager(new GridLayoutManager(getContext(), 2));
         //gán sự kien cho nut yeu thich:
         btn_favorite.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -179,8 +172,8 @@ public class Detail_story extends AppCompatActivity {
                 }
             }
         });
-        tv_show_more = findViewById(R.id.tv_show_more);
-        tv_collapse = findViewById(R.id.tv_collapse);
+        tv_show_more = binding.tvShowMore;
+        tv_collapse = binding.tvCollapse;
         tv_show_more.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -198,10 +191,10 @@ public class Detail_story extends AppCompatActivity {
             }
         });
         // su kien xu ly cac btn voi chapList
-        tv_show_more_chap = findViewById(R.id.tv_show_more_chap);
-        tv_collapse_chap = findViewById(R.id.tv_collapse_chap);
-        tv_latest = findViewById(R.id.tv_latest);
-        tv_oldest = findViewById(R.id.tv_oldest);
+        tv_show_more_chap = binding.tvShowMoreChap;
+        tv_collapse_chap = binding.tvCollapseChap;
+        tv_latest = binding.tvLatest;
+        tv_oldest = binding.tvOldest;
         tv_show_more_chap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -239,7 +232,7 @@ public class Detail_story extends AppCompatActivity {
             }
         });
 //        nut doc tiep
-        btn_read = findViewById(R.id.btn_read);
+        btn_read = binding.btnRead;
         btn_read.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -250,7 +243,7 @@ public class Detail_story extends AppCompatActivity {
     }
 
     @Override
-    protected void onPause() {
+    public void onPause() {
         super.onPause();
 
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference("user_favorites/" + userId + "/" + storyId);
@@ -306,17 +299,19 @@ public class Detail_story extends AppCompatActivity {
                     currentPage = snapshot.child("currentPage").getValue(Integer.class);
 //                    positionOffSet = snapshot.child("positionOffSet").getValue(Float.class);
 //                    Toast.makeText(Detail_story.this, positionOffSet+"", Toast.LENGTH_SHORT).show();
-                    AlertDialog.Builder builder = new AlertDialog.Builder(Detail_story.this);
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                     builder.setTitle("Thông báo");
                     builder.setMessage("Chúng tôi ghi nhận lần gần nhất bạn đang đọc Chap " + currentChap + ". Bạn có muốn đọc tiếp Chap đang đọc hay không ?");
                     builder.setPositiveButton("Đọc tiếp", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            Intent i = new Intent(Detail_story.this, Chaper_View_Activity.class);
-                            i.putExtra("chapId", currentChap);
-                            i.putExtra("storyId", storyId);
-                            i.putExtra("currentPage", currentPage);
-                            startActivity(i);
+                            //navigate to chap view fragment using Navigation component
+                            Bundle bundle = new Bundle();
+                            bundle.putInt("chapId", currentChap);
+                            bundle.putInt("currentPage", currentPage);
+                            bundle.putString("storyId", storyId);
+                            NavController navController = NavHostFragment.findNavController(FragmentDetailStory.this);
+                            navController.navigate(R.id.action_fragmentDetailStory_to_fragmentChaperView, bundle);
                         }
                     });
 
@@ -342,10 +337,12 @@ public class Detail_story extends AppCompatActivity {
     }
 
     public void read_from_the_beginning() {
-        Intent i = new Intent(Detail_story.this, Chaper_View_Activity.class);
-        i.putExtra("chapId", 1);
-        i.putExtra("storyId", storyId);
-        startActivity(i);
+        Bundle bundle = new Bundle();
+        bundle.putInt("chapId", 1);
+        bundle.putInt("currentPage", 1);
+        bundle.putString("storyId", storyId);
+        NavController navController = NavHostFragment.findNavController(FragmentDetailStory.this);
+        navController.navigate(R.id.action_fragmentDetailStory_to_fragmentChaperView, bundle);
     }
 
     public void loadChapters() {
