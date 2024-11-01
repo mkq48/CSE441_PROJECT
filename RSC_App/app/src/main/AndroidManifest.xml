@@ -24,12 +24,6 @@
             android:name=".HomeActivity"
             android:exported="false" />
         <activity
-            android:name=".MainActivity2"
-            android:exported="false" />
-        <activity
-            android:name=".Home"
-            android:exported="false" />
-        <activity
             android:name=".UpdateAvatar"
             android:exported="false" />
         <activity
