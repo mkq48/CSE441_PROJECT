@@ -9,10 +9,6 @@
         android:name="com.example.rcs.fragment.HomeFragment"
         tools:layout="@layout/fragment_home" />
     <fragment
-        android:id="@+id/favoriteFragment"
-        android:name="com.example.rcs.fragment.FavoriteFragment"
-        tools:layout="@layout/fragment_favorite" />
-    <fragment
         android:id="@+id/searchFragment"
         android:name="com.example.rcs.fragment.SearchFragment"
         tools:layout="@layout/fragment_search" />
@@ -20,4 +16,9 @@
         android:id="@+id/historyFragment"
         android:name="com.example.rcs.fragment.HistoryFragment"
         tools:layout="@layout/fragment_history" />
+    <fragment
+        android:id="@+id/favoriteListFragment"
+        android:name="com.example.rcs.fragment.FavoriteListFragment"
+        android:label="fragment_favorite_list"
+        tools:layout="@layout/fragment_favorite_list" />
 </navigation>

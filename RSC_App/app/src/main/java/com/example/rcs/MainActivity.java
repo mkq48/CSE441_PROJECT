@@ -2,7 +2,6 @@ package com.example.rcs;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
@@ -31,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(binding.toolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
-        AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(R.id.homeFragment, R.id.searchFragment, R.id.favoriteFragment, R.id.historyFragment).build();
+        AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(R.id.homeFragment, R.id.searchFragment, R.id.favoriteListFragment, R.id.historyFragment).build();
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
         binding.avatarImg.setOnClickListener(v-> startActivity(new Intent(MainActivity.this, UserActivity1.class)));
