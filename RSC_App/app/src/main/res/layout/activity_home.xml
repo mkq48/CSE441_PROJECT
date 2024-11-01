@@ -41,12 +41,12 @@
 
             <ImageView
                 android:id="@+id/bell"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:layout_alignParentEnd="true"
                 android:layout_marginLeft="220dp"
-                android:contentDescription="Bell"
-                android:src="@drawable/bell" />
+                android:contentDescription="User"
+                android:src="@drawable/avartar_default" />
 
             />
 
