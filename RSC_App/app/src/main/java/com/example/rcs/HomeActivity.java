@@ -9,6 +9,7 @@ import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 
@@ -42,6 +43,7 @@ public class HomeActivity extends AppCompatActivity {
     private Handler sliderHandler;
     private Runnable sliderRunnable;
     private ImageView btnUser;
+    private TextView btnMoreFavorites, btnMoreViews, btnMoreNew;
 
     FirebaseFirestore db;
     ProgressDialog progressDialog;
@@ -71,6 +73,9 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void initUI(){
+        btnMoreNew = findViewById(R.id.btnMoreNew);
+        btnMoreFavorites = findViewById(R.id.btnMoreFavorites);
+        btnMoreViews = findViewById(R.id.btnMoreViews);
         btnUser = findViewById(R.id.btnUser);
         recyclerView1 = findViewById(R.id.recycleviewNewStory);
         recyclerView2 = findViewById(R.id.recycleviewRcmt);
@@ -112,6 +117,29 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
+        btnMoreNew.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(HomeActivity.this, NewStoryActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        btnMoreFavorites.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(HomeActivity.this, MoreFavoritesStory.class);
+                startActivity(intent);
+            }
+        });
+
+        btnMoreViews.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(HomeActivity.this, ViewActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
 
@@ -181,7 +209,7 @@ public class HomeActivity extends AppCompatActivity {
                                 String name = document.getString("name");
                                 String imgUrl = document.getString("imageUrl");
                                 String author = document.getString("author");
-                                long favorites = document.getLong("favorites").intValue();
+                                long favorites = document.getLong("favorites");
 
 
                                 storyList3.add(new Story(id, name, imgUrl, author, favorites));

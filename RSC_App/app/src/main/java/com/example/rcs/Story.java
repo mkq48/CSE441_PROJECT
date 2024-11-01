@@ -19,8 +19,8 @@ public class Story {
     private long favorites;
     private String imageUrl;
     private String name;
-    private int views;
-    private Timestamp created_at;
+    private long views;
+//    private Timestamp created_at;
 
     public Story(int favorites, String imageUrl, String storyId, String author, String name, List<String> categories) {
         this.favorites = favorites;
@@ -37,12 +37,27 @@ public class Story {
         this.imageUrl = imageUrl;
     }
 
-    public Story(String storyId, String name, String imageUrl, String author, Long favorites) {
+    public Story(String storyId, String name, String imageUrl, String author) {
         this.storyId = storyId;
         this.name = name;
         this.imageUrl = imageUrl;
         this.author = author;
-        this.favorites = favorites;
+    }
+
+    public Story(String storyId, String name, String imageUrl, String author, long favorite) {
+        this.storyId = storyId;
+        this.name = name;
+        this.imageUrl = imageUrl;
+        this.author = author;
+        this.favorites = favorite;
+    }
+
+    public Story(String storyId, String name, String imageUrl,long view, String author) {
+        this.storyId = storyId;
+        this.name = name;
+        this.imageUrl = imageUrl;
+        this.author = author;
+        this.views = view;
     }
 
     public Story(String storyId, String author, List<String> categories, String name, String imageUrl) {
@@ -89,7 +104,7 @@ public class Story {
         return favorites;
     }
 
-    public void setFavorites(int favorites) {
+    public void setFavorites(long favorites) {
         this.favorites = favorites;
     }
 
@@ -109,19 +124,19 @@ public class Story {
         this.name = name;
     }
 
-    public int getViews() {
+    public long getViews() {
         return views;
     }
 
-    public void setViews(int views) {
+    public void setViews(long views) {
         this.views = views;
     }
 
-    public Timestamp getCreated_at() {
-        return created_at;
-    }
-
-    public void setCreated_at(Timestamp created_at) {
-        this.created_at = created_at;
-    }
+//    public Timestamp getCreated_at() {
+//        return created_at;
+//    }
+//
+//    public void setCreated_at(Timestamp created_at) {
+//        this.created_at = created_at;
+//    }
 }

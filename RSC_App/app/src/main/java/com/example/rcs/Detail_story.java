@@ -397,7 +397,7 @@ public class Detail_story extends AppCompatActivity {
                         tv_author.setText("Tác giả: " + author);
                         tv_content.setText("Tóm tắt nội dung: " + content);
                         categoryList.addAll(categories);
-//                        categoryAdapter.notifyDataSetChanged();
+//                        categoryAdater.notifyDataSetChanged();
                     }
                 }
             }
