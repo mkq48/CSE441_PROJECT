@@ -4,7 +4,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="sort">Sắp xếp theo</string>
     <string-array name="spinner_items">
-        <item>Moi xep truoc</item>
         <item>Cu xep truoc</item>
+        <item>Moi xep truoc</item>
     </string-array>
 </resources>
