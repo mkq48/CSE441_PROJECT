@@ -91,7 +91,7 @@ public class MoreFavoritesStory extends AppCompatActivity {
                                 String author = document.getString("author");
                                 long favorites = document.getLong("favorites");
 
-                                storyList.add(new Story(id, name, imgUrl, author, favorites));
+                                storyList.add(new Story(id, name, imgUrl, author, (int) favorites));
 
                             }
                             adapter.notifyItemInserted(storyList.size() - 1);
