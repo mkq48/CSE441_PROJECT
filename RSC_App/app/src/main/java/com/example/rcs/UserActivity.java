@@ -44,9 +44,9 @@ public class UserActivity extends AppCompatActivity {
         initListener();
 
 
-//        if (currentUser == null) {
-//            navigateToLogin();
-//        }
+        if (currentUser == null) {
+            navigateToLogin();
+        }
 
     }
 

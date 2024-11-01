@@ -10,7 +10,7 @@ public class User {
     private String email;
 
     public String getCurrentUserId() {
-        return "user1";
+        return FirebaseAuth.getInstance().getCurrentUser().getUid();
     }
     public User getUserById(String id){
 
