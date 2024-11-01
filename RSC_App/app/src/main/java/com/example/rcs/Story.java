@@ -52,6 +52,14 @@ public class Story {
         this.imageUrl = imageUrl;
     }
 
+    public Story(String storyId, String name, String imgUrl, String author, int favorites) {
+        this.storyId = storyId;
+        this.name = name;
+        this.imageUrl = imageUrl;
+        this.author = author;
+        this.favorites = favorites;
+    }
+
     public String getStoryId() {
         return storyId;
     }
