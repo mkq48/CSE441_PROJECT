@@ -19,6 +19,7 @@ public class Story {
     private String imageUrl;
     private String name;
     private int views;
+
     public Story(int favorites, String imageUrl, String storyId, String author, String name, List<String> categories) {
         this.favorites = favorites;
         this.storyId = storyId;
@@ -33,6 +34,14 @@ public class Story {
         this.storyId = storyId;
         this.name = name;
         this.imageUrl = imageUrl;
+    }
+
+    public Story(String storyId, String name, String imageUrl, String author) {
+        this.storyId = storyId;
+        this.name = name;
+        this.imageUrl = imageUrl;
+        this.author = author;
+//        this.favorites = favorites;
     }
 
     public Story(String storyId, String author, List<String> categories, String name, String imageUrl) {
