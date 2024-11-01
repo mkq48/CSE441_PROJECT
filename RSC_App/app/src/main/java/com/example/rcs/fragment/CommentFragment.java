@@ -79,13 +79,12 @@ public class CommentFragment extends Fragment {
         binding.spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if((parent.getItemAtPosition(position).toString().equals("Moi nhat"))){
-                    getComments(false);
-                }else{
+                if((parent.getItemAtPosition(position).toString().equals("Moi xep truoc"))){
                     getComments(true);
+                }else{
+                    getComments(false);
                 }
             }
-
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
 
