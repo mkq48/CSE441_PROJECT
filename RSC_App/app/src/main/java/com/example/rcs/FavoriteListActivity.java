@@ -18,7 +18,6 @@ import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -26,7 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FavoriteListActivity extends AppCompatActivity {
-    private FavoriteStoryAdapter adapter;
+    private VerticalStoryAdapter adapter;
     private ArrayList<Story> favoriteList;
     private RecyclerView rv;
 
@@ -43,7 +42,7 @@ public class FavoriteListActivity extends AppCompatActivity {
         rv = findViewById(R.id.rv);
         favoriteList = new ArrayList<>();
         getData();
-        adapter = new FavoriteStoryAdapter(favoriteList, this);
+        adapter = new VerticalStoryAdapter(favoriteList, this);
         rv.setAdapter(adapter);
         rv.setLayoutManager(new LinearLayoutManager(this));
 

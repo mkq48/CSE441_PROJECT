@@ -46,11 +46,6 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.StoryViewHol
             public void onClick(View view) {
                 Intent intent = new Intent(context,Detail_story.class);
                 intent.putExtra("storyId",storiesList.get(holder.getAdapterPosition()).getStoryId());
-//                intent.putExtra("author",storiesList.get(position).getAuthor());
-//                intent.putExtra("categories",storiesList.get(position).getCategories());
-//                intent.putExtra("StoryId",storiesList.get(position).getStoryId());
-//                intent.putExtra("content",storiesList.get(position).getContent());
-//                intent.putExtra("favorites",storiesList.get(position).getFavorites());
                 intent.putExtra("imageUrl",storiesList.get(holder.getAdapterPosition()).getImageUrl());
                 intent.putExtra("name",storiesList.get(holder.getAdapterPosition()).getName());
                 context.startActivity(intent);

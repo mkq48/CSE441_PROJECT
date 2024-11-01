@@ -21,7 +21,7 @@
             android:name=".FavoriteListActivity"
             android:exported="false" />
         <activity
-            android:name=".Chaper_View_Activity"
+            android:name=".Chapter_View_Activity"
             android:exported="false" />
         <activity
             android:name=".Detail_story"

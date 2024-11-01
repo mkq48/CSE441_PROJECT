@@ -3,31 +3,27 @@ package com.example.rcs;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.ColorStateList;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -35,12 +31,13 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.nex3z.flowlayout.FlowLayout;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 public class Detail_story extends AppCompatActivity {
@@ -90,27 +87,21 @@ public class Detail_story extends AppCompatActivity {
         // neu da thich: chuyen trang thai btn yeu thich thanh da thich
         showIsFavorite();
         // hien thi so luot thich, views dong thoi cap nhat realtime khi co thay doi trong db
-        FirebaseDatabase.getInstance().getReference("stories/" + storyId).addValueEventListener(new ValueEventListener() {
+        FirebaseFirestore.getInstance().document("stories/"+storyId).addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                // hien thi so luot thich
-                int total_like;
-                if (initial_favorite_status && !isfavorited) {
-                    total_like = snapshot.child("favorites").getValue(Integer.class) - 1;
-                } else if (!initial_favorite_status && isfavorited) {
-                    total_like = snapshot.child("favorites").getValue(Integer.class) + 1;
-                } else {
-                    total_like = snapshot.child("favorites").getValue(Integer.class);
+            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+                if (value != null && value.exists()) {
+                    long total_like;
+                    if (initial_favorite_status && !isfavorited) {
+                        total_like = value.getLong("favorites") - 1;
+                    } else if (!initial_favorite_status && isfavorited) {
+                        total_like = value.getLong("favorites") + 1;
+                    } else {
+                        total_like = value.getLong("favorites");
+                    }
+                    tv_favorites.setText(total_like + "");
+                    tv_views.setText(value.getLong("views") + "");
                 }
-                tv_favorites.setText(total_like + "");
-                // hien thi so luot xem
-                tv_views.setText(snapshot.child("views").getValue(Integer.class) + "");
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
             }
         });
     }
@@ -143,7 +134,6 @@ public class Detail_story extends AppCompatActivity {
         // hien thi cac chap len recycler
         chapList = new ArrayList<>();
 
-//        isCollapseChapterList = true;
         isLastestChapterList = true;
         chapterAdapter = new ChapterAdapter(chapList, storyId, this);
         chapter_rv.setAdapter(chapterAdapter);
@@ -256,25 +246,36 @@ public class Detail_story extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
 
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("user_favorites/" + userId + "/" + storyId);
-        int favorites;
-        FirebaseDatabase.getInstance().getReference("stories/" + storyId).child("favorites").runTransaction(new Transaction.Handler() {
-            @NonNull
+        DatabaseReference ref1 = FirebaseDatabase.getInstance().getReference("user_favorites/" + userId + "/" + storyId);
+        DocumentReference ref = FirebaseFirestore.getInstance().document("stories/"+storyId);
+        FirebaseFirestore.getInstance().runTransaction(new com.google.firebase.firestore.Transaction.Function<Void>() {
+            @Nullable
             @Override
-            public Transaction.Result doTransaction(@NonNull MutableData currentData) {
-                int favorites;
+            public Void apply(@NonNull com.google.firebase.firestore.Transaction transaction) throws FirebaseFirestoreException {
+                DocumentSnapshot snapshot = transaction.get(ref);
+                Long favorites = snapshot.getLong("favorites");
                 if (isfavorited && !initial_favorite_status) {
-                    ref.setValue(true);
-                    favorites = currentData.getValue(Integer.class) + 1;
-                    currentData.setValue(favorites);
+                    transaction.update(ref, "favorites", favorites + 1);
+
+                } if(!isfavorited && initial_favorite_status){
+                    transaction.update(ref, "favorites", favorites - 1);
+                }
+                return null;
+            }
+        }).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+                if (isfavorited && !initial_favorite_status){
+                    ref1.setValue(true);
                     initial_favorite_status = isfavorited;
-                    return Transaction.success(currentData);
-                } else if (!isfavorited && initial_favorite_status) {
-                    ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                }
+                if(!isfavorited && initial_favorite_status){
+                    ref1.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             if (snapshot.exists()) {
-                                ref.removeValue();
+                                ref1.removeValue();
+                                initial_favorite_status = isfavorited;
                             }
                         }
 
@@ -283,17 +284,7 @@ public class Detail_story extends AppCompatActivity {
 
                         }
                     });
-                    favorites = currentData.getValue(Integer.class) - 1;
-                    currentData.setValue(favorites);
-                    initial_favorite_status = isfavorited;
-                    return Transaction.success(currentData);
-                } else {
-                    return Transaction.abort();
                 }
-            }
-
-            @Override
-            public void onComplete(@Nullable DatabaseError error, boolean committed, @Nullable DataSnapshot currentData) {
 
             }
         });
@@ -315,7 +306,7 @@ public class Detail_story extends AppCompatActivity {
                     builder.setPositiveButton("Đọc tiếp", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            Intent i = new Intent(Detail_story.this, Chaper_View_Activity.class);
+                            Intent i = new Intent(Detail_story.this, Chapter_View_Activity.class);
                             i.putExtra("chapId", currentChap);
                             i.putExtra("storyId", storyId);
                             i.putExtra("currentPage", currentPage);
@@ -345,7 +336,7 @@ public class Detail_story extends AppCompatActivity {
     }
 
     public void read_from_the_beginning() {
-        Intent i = new Intent(Detail_story.this, Chaper_View_Activity.class);
+        Intent i = new Intent(Detail_story.this, Chapter_View_Activity.class);
         i.putExtra("chapId", 1);
         i.putExtra("storyId", storyId);
         startActivity(i);
@@ -375,7 +366,7 @@ public class Detail_story extends AppCompatActivity {
 
     public void showIsFavorite() {
         // lay id cua nguoi dung hien tai de truy van trong bang user_favorites
-        FirebaseDatabase.getInstance().getReference("user_favorites/" + userId).child(storyId).addListenerForSingleValueEvent(new ValueEventListener() {
+        FirebaseDatabase.getInstance().getReference("user_favorites/" + userId).child(storyId).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {

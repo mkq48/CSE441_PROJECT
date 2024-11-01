@@ -6,7 +6,6 @@ import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -19,7 +18,6 @@ import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -27,7 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HistoryStoryActivity extends AppCompatActivity {
-    private FavoriteStoryAdapter adapter;
+    private VerticalStoryAdapter adapter;
     private ArrayList<Story> historyList;
     private RecyclerView rv;
 
@@ -44,7 +42,7 @@ public class HistoryStoryActivity extends AppCompatActivity {
         rv = findViewById(R.id.rv);
         historyList = new ArrayList<>();
         getData();
-        adapter = new FavoriteStoryAdapter(historyList, this);
+        adapter = new VerticalStoryAdapter(historyList, this);
         rv.setAdapter(adapter);
         rv.setLayoutManager(new LinearLayoutManager(this));
         // set Toolbar
@@ -58,11 +56,11 @@ public class HistoryStoryActivity extends AppCompatActivity {
 //        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
     }
-    @Override
-    public boolean onSupportNavigateUp() {
-        onBackPressed(); // Trở lại Activity trước đó
-        return true;
-    }
+//    @Override
+//    public boolean onSupportNavigateUp() {
+//        onBackPressed(); // Trở lại Activity trước đó
+//        return true;
+//    }
     public void getData() {
         FirebaseDatabase.getInstance().getReference("history/" + new User().getCurrentUserId()).addChildEventListener(new ChildEventListener() {
             @Override
