@@ -11,7 +11,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -27,6 +26,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -55,7 +55,7 @@ public class CommentFragment extends Fragment {
         binding.commentSectionRe.setAdapter(adapter);
 
         //retrieval firebase data
-        getComments();
+        getComments(false);
 
         binding.pushBtn.setOnClickListener(v->{
             String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
@@ -63,7 +63,7 @@ public class CommentFragment extends Fragment {
             else{
                 Map<String, Boolean> likes = new HashMap<>();
                 likes.put(userID, false);
-                Comment comment = new Comment(userID,binding.commentEdt.getText().toString(),0,likes);
+                Comment comment = new Comment(userID,binding.commentEdt.getText().toString(),0,likes,System.currentTimeMillis());
                 commentsRef.push().setValue(comment, (error, ref) -> {
                     if (error!=null){
                         Log.d("err", "loi gi do");
@@ -79,7 +79,11 @@ public class CommentFragment extends Fragment {
         binding.spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Log.d("position", String.valueOf(parent.getItemAtPosition(position)));
+                if((parent.getItemAtPosition(position).toString().equals("Moi nhat"))){
+                    getComments(false);
+                }else{
+                    getComments(true);
+                }
             }
 
             @Override
@@ -89,8 +93,8 @@ public class CommentFragment extends Fragment {
         });
         return binding.getRoot();
     }
-    private void getComments() {
-        commentsRef.addValueEventListener(new ValueEventListener() {
+    private void getComments(Boolean moiXepTrc) {
+        commentsRef.orderByChild("timestamp").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 commentList.clear();
@@ -100,6 +104,7 @@ public class CommentFragment extends Fragment {
                     commentList.add(comment);
                 }
                 for(Comment c:commentList) Log.d("c",c.toString());
+                if (moiXepTrc) Collections.reverse(commentList);
                 adapter.updateData(commentList);
                 binding.numberOfCommentTv.setText(commentList.size()+" "+getContext().getString(R.string.binh_luan));
             }
