@@ -122,15 +122,15 @@ public class HomeActivity extends AppCompatActivity {
                                 String name = document.getString("name");
                                 String imgUrl = document.getString("imageUrl");
 
+                                storyList1.add(new Story(id, name, imgUrl));
 
-                                storyList1.add(0, new Story(id, name, imgUrl));
-                                storyAdapter1.notifyItemInserted(0);
 
-                                sliderList.add(0, new Story(id, name, imgUrl));
+                                sliderList.add(new Story(id, name, imgUrl));
                                 sliderAdapter = new SliderAdapter(HomeActivity.this, sliderList);
                                 viewPager2.setAdapter(sliderAdapter);
                             }
                         }
+                        storyAdapter1.notifyDataSetChanged();
                         setAutoSlide();
                     } else {
                         Log.w("Firestore", "Error getting documents.", task.getException());
