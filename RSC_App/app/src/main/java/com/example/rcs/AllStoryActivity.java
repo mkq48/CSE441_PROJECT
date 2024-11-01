@@ -54,7 +54,7 @@ public class AllStoryActivity extends AppCompatActivity {
         btn_test.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(AllStoryActivity.this,HistoryStoryActivity.class);
+                Intent i = new Intent(AllStoryActivity.this,SearchActivity.class);
                 startActivity(i);
             }
         });
