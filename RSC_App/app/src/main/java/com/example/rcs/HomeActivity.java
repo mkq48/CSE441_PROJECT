@@ -2,10 +2,13 @@ package com.example.rcs;
 
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
 
 import androidx.activity.EdgeToEdge;
 
@@ -38,6 +41,7 @@ public class HomeActivity extends AppCompatActivity {
     private ViewPager2 viewPager2;
     private Handler sliderHandler;
     private Runnable sliderRunnable;
+    private ImageView btnUser;
 
     FirebaseFirestore db;
     ProgressDialog progressDialog;
@@ -67,6 +71,7 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void initUI(){
+        btnUser = findViewById(R.id.btnUser);
         recyclerView1 = findViewById(R.id.recycleviewNewStory);
         recyclerView2 = findViewById(R.id.recycleviewRcmt);
         recyclerView3 = findViewById(R.id.recycleviewTop);
@@ -98,6 +103,14 @@ public class HomeActivity extends AppCompatActivity {
 
     private void initListener(){
         getData();
+
+        btnUser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(HomeActivity.this, UserActivity.class);
+                startActivity(intent);
+            }
+        });
 
     }
 

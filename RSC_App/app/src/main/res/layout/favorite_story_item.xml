@@ -62,7 +62,7 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/white_heart"/>
+                android:background="@drawable/red_heart"/>
 
             <Space
                 android:layout_width="5dp"
