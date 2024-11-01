@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -25,6 +26,7 @@ import com.github.barteksc.pdfviewer.PDFView;
 import com.github.barteksc.pdfviewer.listener.OnLoadCompleteListener;
 import com.github.barteksc.pdfviewer.listener.OnTapListener;
 import com.github.barteksc.pdfviewer.util.FitPolicy;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -32,6 +34,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import java.io.BufferedInputStream;
 import java.io.InputStream;
@@ -178,35 +184,42 @@ public class FragmentChaperView extends Fragment {
         super.onPause();
         Log.d("onPause","onPause");
         // them so view
+        DocumentReference ref = FirebaseFirestore.getInstance().document("stories/"+storyId);
         userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
         FirebaseDatabase.getInstance().getReference("history/"+userID+"/"+storyId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(!snapshot.exists()){
-                    FirebaseDatabase.getInstance().getReference("stories/" + storyId).child("views").runTransaction(new Transaction.Handler() {
-                        @NonNull
+                    FirebaseFirestore.getInstance().runTransaction(new com.google.firebase.firestore.Transaction.Function<Void>() {
+                        @Nullable
                         @Override
-                        public Transaction.Result doTransaction(@NonNull MutableData currentData) {
-                            long views = currentData.getValue(Long.class)+1;
-                            currentData.setValue(views);
-                                return Transaction.success(currentData);
+                        public Void apply(@NonNull com.google.firebase.firestore.Transaction transaction) throws FirebaseFirestoreException {
+                            DocumentSnapshot snapshot = transaction.get(ref);
+                            Long views = snapshot.getLong("views");
+                            transaction.update(ref, "views", views + 1);
+                            return null;
                         }
-
+                    }).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
-                        public void onComplete(@Nullable DatabaseError error, boolean committed, @Nullable DataSnapshot currentData) {
-                            FirebaseDatabase.getInstance().getReference("history/"+userID+"/"+storyId+"/currentChap").setValue(chapId);
-                            FirebaseDatabase.getInstance().getReference("history/"+userID+"/"+storyId+"/currentPage").setValue(pdfView.getCurrentPage());
+                        public void onSuccess(Void unused) {
+                            Toast.makeText(getContext(), "Succee", Toast.LENGTH_SHORT).show();
+                            String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                            FirebaseDatabase.getInstance().getReference("history/"+userId+"/"+storyId+"/currentChap").setValue(chapId);
+                            FirebaseDatabase.getInstance().getReference("history/"+userId+"/"+storyId+"/currentPage").setValue(pdfView.getCurrentPage());
                         }
                     });
                 }
+                else {
+                    String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                    FirebaseDatabase.getInstance().getReference("history/"+userId+"/"+storyId+"/currentChap").setValue(chapId);
+                    FirebaseDatabase.getInstance().getReference("history/"+userId+"/"+storyId+"/currentPage").setValue(pdfView.getCurrentPage());
+                }
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
             }
         });
-
     }
 
     public void showFunctionButton(){

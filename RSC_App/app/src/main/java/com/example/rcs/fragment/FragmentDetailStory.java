@@ -27,6 +27,7 @@ import com.example.rcs.adapter.CategoryAdapter;
 import com.example.rcs.adapter.ChapterAdapter;
 import com.example.rcs.databinding.FragmentDetailStoryBinding;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -36,8 +37,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -85,27 +89,21 @@ public class FragmentDetailStory extends Fragment {
         // neu da thich: chuyen trang thai btn yeu thich thanh da thich
         showIsFavorite();
         // hien thi so luot thich, views dong thoi cap nhat realtime khi co thay doi trong db
-        FirebaseDatabase.getInstance().getReference("stories/" + storyId).addValueEventListener(new ValueEventListener() {
+        FirebaseFirestore.getInstance().document("stories/"+storyId).addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                // hien thi so luot thich
-                int total_like;
-                if (initial_favorite_status && !isfavorited) {
-                    total_like = snapshot.child("favorites").getValue(Integer.class) - 1;
-                } else if (!initial_favorite_status && isfavorited) {
-                    total_like = snapshot.child("favorites").getValue(Integer.class) + 1;
-                } else {
-                    total_like = snapshot.child("favorites").getValue(Integer.class);
+            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+                if (value != null && value.exists()) {
+                    long total_like;
+                    if (initial_favorite_status && !isfavorited) {
+                        total_like = value.getLong("favorites") - 1;
+                    } else if (!initial_favorite_status && isfavorited) {
+                        total_like = value.getLong("favorites") + 1;
+                    } else {
+                        total_like = value.getLong("favorites");
+                    }
+                    tv_favorites.setText(total_like + "");
+                    tv_views.setText(value.getLong("views") + "");
                 }
-                tv_favorites.setText(total_like + "");
-                // hien thi so luot xem
-                tv_views.setText(snapshot.child("views").getValue(Integer.class) + "");
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
             }
         });
     }
@@ -131,9 +129,7 @@ public class FragmentDetailStory extends Fragment {
         chapter_rv = binding.chapterRv;
         // hien thi cac chap len recycler
         chapList = new ArrayList<>();
-        allList = new ArrayList<>();
-        subList = allList.subList(0, Math.min(5, allList.size()));
-//        isCollapseChapterList = true;
+
         isLastestChapterList = true;
         chapterAdapter = new ChapterAdapter(chapList, storyId, this);
         chapter_rv.setAdapter(chapterAdapter);
@@ -245,46 +241,44 @@ public class FragmentDetailStory extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("user_favorites/" + userId + "/" + storyId);
-        int favorites;
-        FirebaseDatabase.getInstance().getReference("stories/" + storyId).child("favorites").runTransaction(new Transaction.Handler() {
-            @NonNull
+        DatabaseReference ref1 = FirebaseDatabase.getInstance().getReference("user_favorites/" + userId + "/" + storyId);
+        DocumentReference ref = FirebaseFirestore.getInstance().document("stories/"+storyId);
+        FirebaseFirestore.getInstance().runTransaction(new com.google.firebase.firestore.Transaction.Function<Void>() {
+            @Nullable
             @Override
-            public Transaction.Result doTransaction(@NonNull MutableData currentData) {
-                int favorites;
+            public Void apply(@NonNull com.google.firebase.firestore.Transaction transaction) throws FirebaseFirestoreException {
+                DocumentSnapshot snapshot = transaction.get(ref);
+                Long favorites = snapshot.getLong("favorites");
                 if (isfavorited && !initial_favorite_status) {
-                    ref.setValue(true);
-                    favorites = currentData.getValue(Integer.class) + 1;
-                    currentData.setValue(favorites);
+                    transaction.update(ref, "favorites", favorites + 1);
+
+                } if(!isfavorited && initial_favorite_status){
+                    transaction.update(ref, "favorites", favorites - 1);
+                }
+                return null;
+            }
+        }).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+                if (isfavorited && !initial_favorite_status){
+                    ref1.setValue(true);
                     initial_favorite_status = isfavorited;
-                    return Transaction.success(currentData);
-                } else if (!isfavorited && initial_favorite_status) {
-                    ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                }
+                if(!isfavorited && initial_favorite_status){
+                    ref1.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             if (snapshot.exists()) {
-                                ref.removeValue();
+                                ref1.removeValue();
+                                initial_favorite_status = isfavorited;
                             }
                         }
-
                         @Override
                         public void onCancelled(@NonNull DatabaseError error) {
 
                         }
                     });
-                    favorites = currentData.getValue(Integer.class) - 1;
-                    currentData.setValue(favorites);
-                    initial_favorite_status = isfavorited;
-                    return Transaction.success(currentData);
-                } else {
-                    return Transaction.abort();
                 }
-            }
-
-            @Override
-            public void onComplete(@Nullable DatabaseError error, boolean committed, @Nullable DataSnapshot currentData) {
-
             }
         });
     }
@@ -369,7 +363,7 @@ public class FragmentDetailStory extends Fragment {
 
     public void showIsFavorite() {
         // lay id cua nguoi dung hien tai de truy van trong bang user_favorites
-        FirebaseDatabase.getInstance().getReference("user_favorites/" + userId).child(storyId).addListenerForSingleValueEvent(new ValueEventListener() {
+        FirebaseDatabase.getInstance().getReference("user_favorites/" + userId).child(storyId).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {

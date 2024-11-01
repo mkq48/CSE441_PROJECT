@@ -5,6 +5,7 @@ import static androidx.core.content.ContextCompat.startActivities;
 import static java.security.AccessController.getContext;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.rcs.R;
+import com.example.rcs.StoryActivity;
 import com.example.rcs.model.Story;
 
 import java.util.List;
@@ -68,14 +70,34 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         if (holder instanceof StoryViewHolder) {
             ((StoryViewHolder) holder).tv_name.setText(story.getName());
             Glide.with(context).load(story.getImageUrl()).into(((StoryViewHolder) holder).img);
+//            holder.itemView.setOnClickListener(v->{
+//                Intent intent = new Intent(context, StoryActivity.class);
+//                intent.putExtra("storyId",story.getStoryId());
+//                intent.putExtra("imageUrl",story.getImageUrl());
+//                intent.putExtra("name",story.getName());
+//                context.startActivity(intent);
+//            });
         } else if (holder instanceof AuthorViewHolder) {
             ((AuthorViewHolder) holder).tv_name.setText(story.getName());
             ((AuthorViewHolder) holder).tv_author.setText(story.getAuthor()); // Gán tên tác giả vào TextView
             Glide.with(context).load(story.getImageUrl()).into(((AuthorViewHolder) holder).img);
+//            holder.itemView.setOnClickListener(v->{
+//                Intent intent = new Intent(context, StoryActivity.class);
+//                intent.putExtra("storyId",story.getStoryId());
+//                intent.putExtra("imageUrl",story.getImageUrl());
+//                intent.putExtra("name",story.getName());
+//                context.startActivity(intent);
+//            });
         } else if (holder instanceof GenreViewHolder) {
             GenreViewHolder genreHolder = (GenreViewHolder) holder;
             genreHolder.tv_name.setText(story.getName());
-
+//            holder.itemView.setOnClickListener(v->{
+//                Intent intent = new Intent(context, StoryActivity.class);
+//                intent.putExtra("storyId",story.getStoryId());
+//                intent.putExtra("imageUrl",story.getImageUrl());
+//                intent.putExtra("name",story.getName());
+//                context.startActivity(intent);
+//            });
             // Thiết lập CategoryAdapter cho danh sách thể loại
             List<String> categories = story.getCategories();
             CategoryAdapter categoryAdapter = new CategoryAdapter(categories);
@@ -84,6 +106,13 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
             Glide.with(context).load(story.getImageUrl()).into(genreHolder.img);
         }
+        holder.itemView.setOnClickListener(v->{
+            Intent intent = new Intent(context, StoryActivity.class);
+            intent.putExtra("storyId",story.getStoryId());
+            intent.putExtra("imageUrl",story.getImageUrl());
+            intent.putExtra("name",story.getName());
+            context.startActivity(intent);
+        });
     }
 
     @Override
