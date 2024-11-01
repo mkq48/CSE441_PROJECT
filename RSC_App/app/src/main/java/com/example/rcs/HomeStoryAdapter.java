@@ -1,9 +1,7 @@
 package com.example.rcs;
 
 import static androidx.core.content.ContextCompat.startActivities;
-import static androidx.core.content.ContextCompat.startActivity;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -13,7 +11,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -21,11 +18,11 @@ import com.bumptech.glide.Glide;
 import java.util.ArrayList;
 import java.util.List;
 
-public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.StoryViewHolder> {
+public class HomeStoryAdapter extends RecyclerView.Adapter<HomeStoryAdapter.StoryViewHolder> {
     private List<Story> storiesList;
     private Context context;
 
-    public StoryAdapter(ArrayList<Story> storiesList, Context context) {
+    public HomeStoryAdapter(ArrayList<Story> storiesList, Context context) {
         this.storiesList = storiesList;
         this.context = context;
     }
@@ -33,7 +30,7 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.StoryViewHol
     @NonNull
     @Override
     public StoryViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.story_item,parent,false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.home_story_item,parent,false);
         return new StoryViewHolder(view);
     }
 

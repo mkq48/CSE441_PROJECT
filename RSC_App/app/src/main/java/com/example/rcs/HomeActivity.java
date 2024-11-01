@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 
@@ -19,8 +18,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
 
-import com.google.firebase.database.DatabaseReference;
-
 import com.google.firebase.firestore.DocumentSnapshot;
 
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -29,12 +26,11 @@ import com.google.firebase.firestore.Query;
 
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class HomeActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView1, recyclerView2, recyclerView3;
-    private StoryAdapter storyAdapter1, storyAdapter2;
+    private HomeStoryAdapter storyAdapter1, storyAdapter2;
     private SliderAdapter sliderAdapter;
     private FavoriteStoryAdapter favoriteStoryAdapter;
     private ArrayList<Story> storyList1, storyList2, storyList3;
@@ -89,8 +85,8 @@ public class HomeActivity extends AppCompatActivity {
         storyList3 = new ArrayList<Story>();
         sliderList = new ArrayList<Story>();
 
-        storyAdapter1 = new StoryAdapter(storyList1, HomeActivity.this);
-        storyAdapter2 = new StoryAdapter(storyList2, HomeActivity.this);
+        storyAdapter1 = new HomeStoryAdapter(storyList1, HomeActivity.this);
+        storyAdapter2 = new HomeStoryAdapter(storyList2, HomeActivity.this);
         favoriteStoryAdapter = new FavoriteStoryAdapter(HomeActivity.this, storyList3);
 
         recyclerView1.setAdapter(storyAdapter1);
