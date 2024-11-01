@@ -40,11 +40,11 @@
                 tools:layout_editor_absoluteY="45dp" />
 
             <ImageView
-                android:id="@+id/bell"
+                android:id="@+id/user"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_alignParentEnd="true"
-                android:layout_marginLeft="220dp"
+                android:layout_marginLeft="210dp"
                 android:contentDescription="User"
                 android:src="@drawable/avartar_default" />
 

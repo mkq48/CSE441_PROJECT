@@ -42,7 +42,7 @@ public class HomeActivity extends AppCompatActivity {
     private ViewPager2 viewPager2;
     private Handler sliderHandler;
     private Runnable sliderRunnable;
-    private ImageView btnUser;
+    private ImageView btnUser, user;
     private TextView btnMoreFavorites, btnMoreViews, btnMoreNew;
 
     FirebaseFirestore db;
@@ -77,6 +77,7 @@ public class HomeActivity extends AppCompatActivity {
         btnMoreFavorites = findViewById(R.id.btnMoreFavorites);
         btnMoreViews = findViewById(R.id.btnMoreViews);
         btnUser = findViewById(R.id.btnUser);
+        user = findViewById(R.id.user);
         recyclerView1 = findViewById(R.id.recycleviewNewStory);
         recyclerView2 = findViewById(R.id.recycleviewRcmt);
         recyclerView3 = findViewById(R.id.recycleviewTop);
@@ -137,6 +138,14 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(HomeActivity.this, ViewActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        user.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(HomeActivity.this, UserActivity.class);
                 startActivity(intent);
             }
         });
