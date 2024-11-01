@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -40,7 +41,17 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.StoryViewHol
     @Override
     public void onBindViewHolder(@NonNull StoryViewHolder holder, int position) {
         holder.tv_name.setText(storiesList.get(holder.getAdapterPosition()).getName());
+//        holder.tv_author.setText(storiesList.get(holder.getAdapterPosition()).getAuthor());
+        Story story = storiesList.get(position);
+        holder.tv_like_count.setText(storiesList.get(holder.getAdapterPosition()).getFavorites()+"");
         Glide.with(context).asBitmap().load(storiesList.get(holder.getAdapterPosition()).getImageUrl()).into(holder.img);
+
+//        if (story.getCategories() != null && !story.getCategories().isEmpty()) {
+//            CategoryAdapter categoryAdapter = new CategoryAdapter(story.getCategories());
+//            holder.categories_rv.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
+//            holder.categories_rv.setAdapter(categoryAdapter);
+//        }
+
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -60,13 +71,18 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.StoryViewHol
     }
 
     static class StoryViewHolder extends RecyclerView.ViewHolder{
-        private TextView tv_name;
-        private ImageView img;
-//        private CardView cardview;
+        private TextView tv_name, tv_author, tv_like_count;
+        private ImageView img, img_heart;
+        private RecyclerView categories_rv;
+
+        //        private CardView cardview;
         public StoryViewHolder(@NonNull View itemView) {
             super(itemView);
             tv_name=itemView.findViewById(R.id.tv_name);
             img=itemView.findViewById(R.id.img);
+//            tv_author=itemView.findViewById(R.id.tv_author);
+//            categories_rv = itemView.findViewById(R.id.categories_rv);
+            tv_like_count=itemView.findViewById(R.id.tv_like_count);
         }
     }
 }
