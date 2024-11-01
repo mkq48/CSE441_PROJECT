@@ -44,10 +44,7 @@ public class HomeActivity extends AppCompatActivity {
     private Runnable sliderRunnable;
 
     FirebaseFirestore db;
-    DatabaseReference dbRef;
     ProgressDialog progressDialog;
-
-
 
 
     @SuppressLint("ClickableViewAccessibility")
