@@ -7,6 +7,7 @@ import android.content.ContentValues;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -38,10 +39,16 @@ import androidx.annotation.Nullable;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -65,6 +72,9 @@ public class UpdateAvatar extends AppCompatActivity {
     FirebaseAuth mAuth;
     FirebaseUser currentUser;
 
+    FirebaseStorage storage;
+    StorageReference storageReference;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,6 +85,9 @@ public class UpdateAvatar extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        storage = FirebaseStorage.getInstance();
+        storageReference = storage.getReference();
 
         initUI();
         initListener();
@@ -154,31 +167,35 @@ public class UpdateAvatar extends AppCompatActivity {
         }
     }
 
-    private void updateAvatar(){
+//    private void updateAvatar(){
+//
+//        progressDialog = new ProgressDialog(UpdateAvatar.this);
+//        progressDialog.setMessage("Đang cập nhật ảnh...");
+//        progressDialog.setCancelable(false);
+//        progressDialog.show();
+//
+//        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+//                .setPhotoUri(imageUri)
+//                .build();
+//
+//        currentUser.updateProfile(profileUpdates)
+//                .addOnCompleteListener(new OnCompleteListener<Void>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<Void> task) {
+//                        progressDialog.dismiss();
+//                        if (task.isSuccessful()) {
+//                            Toast.makeText(UpdateAvatar.this, "Cập nhật ảnh đại diện thành công", Toast.LENGTH_SHORT).show();
+//                            navigateToProfile();
+//                        } else {
+//                            Toast.makeText(UpdateAvatar.this, "Cập nhật ảnh đại diện thất bại", Toast.LENGTH_SHORT).show();
+//                        }
+//                    }
+//                });
+//    }
 
-        progressDialog = new ProgressDialog(UpdateAvatar.this);
-        progressDialog.setMessage("Đang cập nhật ảnh...");
-        progressDialog.setCancelable(false);
-        progressDialog.show();
 
-        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                .setPhotoUri(imageUri)
-                .build();
 
-        currentUser.updateProfile(profileUpdates)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        progressDialog.dismiss();
-                        if (task.isSuccessful()) {
-                            Toast.makeText(UpdateAvatar.this, "Cập nhật ảnh đại diện thành công", Toast.LENGTH_SHORT).show();
-                            navigateToProfile();
-                        } else {
-                            Toast.makeText(UpdateAvatar.this, "Cập nhật ảnh đại diện thất bại", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-    }
+
 
     private void navigateToProfile(){
         Intent intent = new Intent(UpdateAvatar.this, ProfileActivity.class);
@@ -293,5 +310,52 @@ public class UpdateAvatar extends AppCompatActivity {
         mActivityResultLauncher.launch(Intent.createChooser(intent, "Chọn ảnh"));
     }
 
+
+    private void updateAvatar() {
+        progressDialog = new ProgressDialog(UpdateAvatar.this);
+        progressDialog.setMessage("Đang cập nhật ảnh...");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+
+        StorageReference avatarRef = storageReference.child("avatars/" + currentUser.getUid() + ".jpg");
+
+        avatarRef.putFile(imageUri)
+                .addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            avatarRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri downloadUri) {
+                                    updateUserProfile(downloadUri);
+                                }
+                            });
+                        } else {
+                            progressDialog.dismiss();
+                            Toast.makeText(UpdateAvatar.this, "Cập nhật ảnh thất bại", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+    }
+
+    private void updateUserProfile(Uri downloadUri) {
+        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                .setPhotoUri(downloadUri)
+                .build();
+
+        currentUser.updateProfile(profileUpdates)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        progressDialog.dismiss();
+                        if (task.isSuccessful()) {
+                            Toast.makeText(UpdateAvatar.this, "Cập nhật ảnh đại diện thành công", Toast.LENGTH_SHORT).show();
+                            navigateToProfile();
+                        } else {
+                            Toast.makeText(UpdateAvatar.this, "Cập nhật ảnh đại diện thất bại", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+    }
 
 }

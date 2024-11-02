@@ -38,7 +38,6 @@ public class ViewActivity extends AppCompatActivity {
     ProgressDialog progressDialog;
 
 
-    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
