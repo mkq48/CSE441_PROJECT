@@ -61,15 +61,23 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
             binding.likeTv.setOnClickListener(v->{
                 int position = getAdapterPosition();
                 if(position!=RecyclerView.NO_POSITION){
+
+                    //Lay comment o vi tri view holder nguoi dung chon
                     Comment comment = comments.get(position);
+
+                    //Kiem tra nguoi dung da like chua
                     Boolean hasLiked = comment.getLikes().getOrDefault(FirebaseAuth.getInstance().getCurrentUser().getUid(), false);
                     if(hasLiked){
+                        //Neu nguoi dung da like thi bo like
                         comment.getLikes().put(FirebaseAuth.getInstance().getCurrentUser().getUid(), false);
                         comment.setNumberOfLike(comment.getNumberOfLike()-1);
                     }else{
+                        //Neu nguoi dung chua like thi like
                         comment.getLikes().put(FirebaseAuth.getInstance().getCurrentUser().getUid(), true);
                         comment.setNumberOfLike(comment.getNumberOfLike()+1);
                     }
+
+                    //Cap nhat lai like cho comment
                     CommentFragment.commentsRef.child(comment.getId()).setValue(comment, (error, ref) -> {
                         if (error!=null){
                             Log.d("err", "loi gi do");
@@ -79,8 +87,11 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
             });
         }
         public void bind(Comment comment) {
-            //UserProfile userProfile = new UserProfile();
+
+            //Lay avatar va ten hien thi cua nguoi dung tren firestore theo id nguoi dung luu tren binh luan
             FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+            //Them chieu den document nguoi dung qua duong dan
             DocumentReference docRef = db.collection("users").document(comment.getUserID());
             docRef.get().addOnCompleteListener(task -> {
                 DocumentSnapshot document = task.getResult();
@@ -94,6 +105,8 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
             });
             binding.contentTv.setText(comment.getContent());
             binding.likeTv.setText(String.valueOf(comment.getNumberOfLike()));
+
+            //set icon dua theo nguoi dung da like chua
             Boolean hasLiked = comment.getLikes().getOrDefault(FirebaseAuth.getInstance().getCurrentUser().getUid(), false);
             if (hasLiked) {
                 binding.likeTv.setCompoundDrawablesWithIntrinsicBounds(R.drawable.thumb_up, 0, 0, 0);

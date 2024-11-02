@@ -33,15 +33,15 @@ public class SignInActivity extends AppCompatActivity {
         binding.toggle.setOnClickListener(view -> {
             passwordVisible=!passwordVisible;
             if(passwordVisible){
-                //password visible
+                //Hien mat khau
                 binding.dnMatKhau.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
                 binding.toggle.setText(R.string.toggle_off);
             }else{
-                //password invisible
+                //An mat khau
                 binding.dnMatKhau.setTransformationMethod(PasswordTransformationMethod.getInstance());
                 binding.toggle.setText(R.string.toggle_on);
             }
-            //move cursor to end of text
+            //Chuyen con tro den cuoi mat khau
             binding.dnMatKhau.setSelection(binding.dnMatKhau.getText().length());
         });
 
@@ -63,7 +63,8 @@ public class SignInActivity extends AppCompatActivity {
                     progressDialog.dismiss();
                     if (task.isSuccessful()) {
                         Toast.makeText(SignInActivity.this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
-                        //go to user activity
+
+                        //Chuyen den trang chu
                         Intent intent = new Intent(SignInActivity.this, MainActivity.class);
                         startActivity(intent);
                         finish();

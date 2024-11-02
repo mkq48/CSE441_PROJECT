@@ -49,12 +49,13 @@ public class CommentFragment extends Fragment {
         commentsRef = database.getReference("comments").
                 child(storyID).child(chapID);
 
+        //Set adapter cho recycler view
         commentList = new ArrayList<>();
         adapter = new CommentAdapter(commentList);
         binding.commentSectionRe.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.commentSectionRe.setAdapter(adapter);
 
-        //retrieval firebase data
+        //Lay du lieu tu firebase
         getComments(false);
 
         binding.pushBtn.setOnClickListener(v->{
@@ -64,6 +65,8 @@ public class CommentFragment extends Fragment {
                 Map<String, Boolean> likes = new HashMap<>();
                 likes.put(userID, false);
                 Comment comment = new Comment(userID,binding.commentEdt.getText().toString(),0,likes,System.currentTimeMillis());
+                binding.commentEdt.setText("");
+                binding.commentEdt.clearFocus();
                 commentsRef.push().setValue(comment, (error, ref) -> {
                     if (error!=null){
                         Log.d("err", "loi gi do");
@@ -71,7 +74,7 @@ public class CommentFragment extends Fragment {
                 });
             }
         });
-        //Toast.makeText(getContext(), FirebaseAuth.getInstance().getCurrentUser().getDisplayName(), Toast.LENGTH_SHORT).show();
+
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
                 R.array.spinner_items, android.R.layout.simple_spinner_item);
         binding.spinner.setAdapter(adapter);
@@ -99,9 +102,11 @@ public class CommentFragment extends Fragment {
                     Objects.requireNonNull(comment).setId(ds.getKey());
                     commentList.add(comment);
                 }
-                for(Comment c:commentList) Log.d("c",c.toString());
+                //Dao nguoc danh sách neu nguoi dung chon sap xep moi xep truoc
                 if (moiXepTrc) Collections.reverse(commentList);
                 adapter.updateData(commentList);
+
+                //Hien thi so luong binh luan
                 binding.numberOfCommentTv.setText(commentList.size()+" "+getContext().getString(R.string.binh_luan));
             }
 

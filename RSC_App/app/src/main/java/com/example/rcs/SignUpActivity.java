@@ -57,6 +57,8 @@ public class SignUpActivity extends AppCompatActivity implements DatePickerDialo
                                 Toast.makeText(this, "Đăng ký thành công", Toast.LENGTH_SHORT).show();
                                 FirebaseUser user = auth.getCurrentUser();
                                 if (user != null) {
+
+                                    //Thay doi ten hien thi
                                     UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
                                             .setDisplayName(tenDangNhap)
                                             .setPhotoUri(Uri.parse("https://icons.iconarchive.com/icons/martin-berube/character/128/Devil-icon.png"))
@@ -66,6 +68,8 @@ public class SignUpActivity extends AppCompatActivity implements DatePickerDialo
                                             Log.d("onUpdate", "user profile updated");
                                         }else Log.d("onUpdate", "user profile not updated");
                                     });
+
+                                    //Luu thong tin vao Firestore
                                     FirebaseFirestore db = FirebaseFirestore.getInstance();
                                     CollectionReference usersRef = db.collection("users");
                                     UserProfile userProfile = new UserProfile(tenDangNhap, "https://icons.iconarchive.com/icons/martin-berube/character/128/Devil-icon.png");
@@ -83,7 +87,6 @@ public class SignUpActivity extends AppCompatActivity implements DatePickerDialo
                             } else {
                                 Toast.makeText(this, "Đăng ký thất bại", Toast.LENGTH_SHORT).show();
                             }
-
                         });
             }
         });
@@ -129,7 +132,7 @@ public class SignUpActivity extends AppCompatActivity implements DatePickerDialo
         Calendar selectedDate = Calendar.getInstance();
         selectedDate.set(year, month, dayOfMonth);
 
-        //use the selected date
+        //Gan ngay thang vao edit text
         //format: dd/MM/yyyy
         @SuppressLint("DefaultLocale") String date = String.format("%02d/%02d/%04d", dayOfMonth, month + 1, year);
         binding.ngaySinh.setText(date);
